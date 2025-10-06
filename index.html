@@ -5,184 +5,203 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Kauntey Acharya</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
 /* ---------- BASE ---------- */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{
-  font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  font-weight:500;
-  scroll-snap-type:y mandatory;
-  transition:background-color 0.9s ease,color 0.9s ease;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  scroll-snap-type: y mandatory;
+  transition: background-color 0.9s ease, color 0.9s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #07040a;
+  color: #fff;
 }
 
 /* ---------- THEMES ---------- */
-body.light{background:#fdf6e3;color:#000}
-body.dark{background:#07040a;color:#fff}
+body.light { background: #fff; color: #000; }
+body.dark  { background: #000; color: #fff; }
 
 /* ---------- THEME TOGGLE ---------- */
-.theme-toggle{
-  position:fixed;top:18px;right:18px;z-index:240;
-  background:transparent;border:0;font-size:20px;cursor:pointer;padding:6px;
+.theme-toggle {
+  position: fixed;
+  top: 16px; right: 16px; z-index: 400;
+  background: transparent; border: 0; font-size: 20px; cursor: pointer; padding: 6px;
 }
 
 /* ---------- TOP LEFT / CENTER TITLES ---------- */
-#cornerName{
-  position:fixed;left:24px;top:20px;z-index:220;
-  font-size:clamp(16px,1.6vw,20px);opacity:0;
-  transition:opacity .9s ease;pointer-events:none;font-weight:600;
+#cornerName {
+  position: fixed; left: 20px; top: 16px; z-index: 380;
+  font-size: clamp(14px, 1.6vw, 18px);
+  opacity: 0; transition: opacity .9s ease; pointer-events: none; font-weight: 450;
 }
-#cornerName.visible{opacity:1}
+#cornerName.visible { opacity: 1; }
 
-#centerName{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:210;font-size:clamp(26px,5vw,46px);
-  transition:opacity .8s ease;opacity:1;pointer-events:none;font-weight:600;
+#centerName {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 370; font-size: clamp(24px, 6vw, 48px);
+  transition: opacity .8s ease; opacity: 1; pointer-events: none; font-weight: 450; text-align: center;
+  padding: 0 12px;
 }
-#centerName.fade-out{opacity:0}
+#centerName.fade-out { opacity: 0; }
 
 /* ---------- ROTATING PILL + ANALYST ---------- */
-#analyst{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:205;font-size:clamp(18px,3.2vw,32px);
-  opacity:0;transition:opacity .6s ease;letter-spacing:0.2px;
-  display:flex;align-items:center;gap:.7rem;pointer-events:none;
+#analyst {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 360; font-size: clamp(16px, 3.2vw, 32px);
+  opacity: 0; transition: opacity .6s ease; letter-spacing: 0.2px;
+  display: flex; align-items: center; gap: .8rem; pointer-events: none;
 }
-#analyst.visible{opacity:1}
+#analyst.visible { opacity: 1; }
 
 /* static "Analyst" word styling */
-.analyst-static { font-weight:500; color:inherit; }
+.analyst-static { font-weight: 500; color: inherit; }
 
-/* rotating pill visual */
+/* rotating pill visual (taller, more padding) */
 .rotating-pill {
   position: relative;
   display: inline-block;
-  padding: 0.55em 1.1em;      /* increased padding for better height */
-  border-radius: 12px;        /* slightly more rounded for proportion */
-  min-width: 6ch;
+  padding: 0.6em 1.15em;        /* increased vertical padding for breathing room */
+  border-radius: 12px;
+  min-width: 8.5ch;
   text-align: center;
-  font-weight: 700;
+  font-weight: 500;
   color: #fff;
-  background: #4f46ff;
-  box-shadow: 0 8px 30px rgba(79,70,255,0.16);
-  line-height: 1.2;           /* adds vertical breathing space */
+  background: linear-gradient(180deg,#5b2bff 0%, #4a21e6 100%);
+  box-shadow: 0 12px 36px rgba(79,70,255,0.18);
+  line-height: 1.2;
   overflow: hidden;
   vertical-align: middle;
 }
 
 /* light mode pill tone */
 body.light .rotating-pill {
-  background: #4363ff;
-  box-shadow: 0 8px 20px rgba(67,99,255,0.12);
+  background: linear-gradient(180deg,#6a4dff 0%, #5b3ef0 100%);
+  box-shadow: 0 8px 20px rgba(106,77,255,0.12);
 }
 
-
-/* stacked words inside pill — absolutely centered */
+/* each stacked word absolutely centered and crossfading via .active */
 .rotating-pill .word {
   position: absolute;
   left: 0; right: 0;
   top: 50%;
-  transform: translateY(-50%) scale(1);
+  transform: translateY(-50%) scale(.98);
   text-align: center;
   opacity: 0;
-  will-change: opacity, transform;
+  transition: opacity 400ms cubic-bezier(.2,.9,.2,1), transform 400ms cubic-bezier(.2,.9,.2,1);
+  pointer-events: none;
+  font-size: 1em;
 }
-
-/* crossfade: only animate opacity + scale (no vertical move) */
-.rotating-pill .word.data { animation: pillFade 6s linear infinite; animation-delay: 0s; }
-.rotating-pill .word.quant { animation: pillFade 6s linear infinite; animation-delay: 2s; }
-.rotating-pill .word.research { animation: pillFade 6s linear infinite; animation-delay: 4s; }
-
-@keyframes pillFade {
-  0%   { opacity: 0; transform: translateY(-50%) scale(.96); }
-  8%   { opacity: 1; transform: translateY(-50%) scale(1); }
-  45%  { opacity: 1; transform: translateY(-50%) scale(1); }
-  53%  { opacity: 0; transform: translateY(-50%) scale(.96); }
-  100% { opacity: 0; transform: translateY(-50%) scale(.96); }
+.rotating-pill .word.active {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
 }
 
 /* ---------- SECTIONS ---------- */
-section{min-height:100vh;display:grid;place-items:center;scroll-snap-align:start}
+section { min-height: 100vh; display: grid; place-items: center; scroll-snap-align: start; }
 
 /* ---------- ABOUT ---------- */
-.about{
-  display:flex;align-items:center;justify-content:center;
-  padding:8vh 6vw;gap:50px;
+.about {
+  display: flex; align-items: center; justify-content: center;
+  padding: 8vh 6vw; gap: 42px;
 }
-.about-inner{
-  max-width:1200px;display:grid;
-  grid-template-columns:1fr 420px;gap:50px;align-items:center;
+.about-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: center;
 }
-.about-text{
-  line-height:1.6;font-size:18px;color:inherit;
-  opacity:0;transform:translateY(10px);
-  transition:opacity .9s ease, transform .9s ease;
+.about-text {
+  line-height: 1.8; font-size: 18px; color: inherit;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .9s ease, transform .9s ease;
 }
-.about.visible .about-text,.about.visible .about-img{
-  opacity:1;transform:translateY(0);
+.about.visible .about-text, .about.visible .about-img {
+  opacity: 1; transform: translateY(0);
 }
-.about-img{
-  background:#fff;display:grid;place-items:center;
-  padding:24px;box-shadow:0 6px 30px rgba(0,0,0,.18);
-  opacity:0;transform:translateY(10px);
-  transition:opacity .9s ease, transform .9s ease;
+.about-img {
+  background: #fff; display: grid; place-items: center;
+  padding: 22px; box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .9s ease, transform .9s ease;
 }
-.about-img img{width:100%;height:auto;border-radius:50%}
-@media(max-width:900px){
-  .about-inner{grid-template-columns:1fr;gap:30px}
-  .about-img{max-width:300px;margin:0 auto}
+.about-img img { width: 100%; height: auto; border-radius: 50%; }
+
+/* ---------- MOBILE ADJUSTMENTS ---------- */
+@media (max-width: 880px) {
+  #centerName { font-size: clamp(20px, 8vw, 34px); }
+  #analyst { font-size: clamp(14px, 5vw, 20px); gap: .5rem; left: 50%; top: 54%; } /* slight lower on small screens */
+  .rotating-pill { padding: 0.5em 0.9em; border-radius: 12px; min-width: 4.5ch; }
+  .about-inner { grid-template-columns: 1fr; gap: 24px; }
+  .about-img { max-width: 300px; margin: 0 auto; }
+  body.light .rotating-pill { background: linear-gradient(180deg,#6a4dff, #5b3ef0); }
+  .about { padding: 6vh 4vw; gap: 28px; }
+}
+
+/* reduce visual noise on very small screens */
+@media (max-width: 420px) {
+  .rotating-pill { padding: 0.44em 0.8em; border-radius: 10px; }
+  #cornerName { left: 12px; top: 10px; }
+  .analyst-static { font-size: 0.95em; }
 }
 </style>
 </head>
+
 <body class="dark">
-<button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+  <button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌙</button>
 
-<div id="cornerName">Kauntey Acharya</div>
-<div id="centerName">Kauntey Acharya</div>
+  <div id="cornerName">Kauntey Acharya</div>
+  <div id="centerName">Kauntey Acharya</div>
 
-<div id="analyst" aria-hidden="true">
-  <div class="rotating-pill" aria-hidden="true" role="img" title="rotating keywords">
-    <div class="word data">DATA</div>
-    <div class="word quant">QUANT</div>
-    <div class="word research">RESEARCH</div>
-  </div>
-  <div class="analyst-static">Analyst</div>
-</div>
-
-<section class="screen one" id="introScreen"></section>
-<section class="screen two" id="analystScreen"></section>
-
-<section class="screen about" id="aboutSection">
-  <div class="about-inner">
-    <div class="about-text" id="aboutText">
-      <p>
-        I'm Kauntey Acharya, an AI analyst with a strong foundation in theoretical physics,
-        mathematics, and computational modeling. My work focuses on applying machine learning,
-        statistical methods, and data analysis to understand complex systems and uncover actionable insights.
-      </p>
-      <p>
-        While my current expertise lies in AI and data-driven modeling, I'm actively building the skills and
-        projects necessary to transition into quantitative analyst roles.
-      </p>
-      <p>
-        Proficient in Python, SQL, and advanced ML libraries, I aim to integrate AI techniques with financial modeling
-        to design intelligent, data-centric solutions for analytics and quantitative research environments.
-      </p>
+  <!-- Rotating pill: add/remove <div class="word">X</div> as needed -->
+  <div id="analyst" aria-hidden="true">
+    <div class="rotating-pill" aria-hidden="true" role="img" title="rotating keywords">
+      <div class="word">DATA</div>
+      <div class="word">QUANT</div>
+      <div class="word">RESEARCH</div>
     </div>
-
-    <div class="about-img" aria-hidden="true">
-      <img src="portrait.png" alt="Kauntey Acharya portrait">
-    </div>
+    <div class="analyst-static">Analyst</div>
   </div>
-</section>
+
+  <section class="screen one" id="introScreen"></section>
+  <section class="screen two" id="analystScreen"></section>
+
+  <section class="screen about" id="aboutSection">
+    <div class="about-inner">
+      <div class="about-text" id="aboutText">
+        <p>
+          I'm Kauntey Acharya, an AI analyst with a strong foundation in theoretical physics,
+          mathematics, and computational modeling. My work focuses on applying machine learning,
+          statistical methods, and data analysis to understand complex systems and uncover actionable insights.
+        </p>
+        <p>
+          While my current expertise lies in AI and data-driven modeling, I'm actively building the skills and
+          projects necessary to transition into quantitative analyst roles.
+        </p>
+        <p>
+          Proficient in Python, SQL, and advanced ML libraries, I aim to integrate AI techniques with financial modeling
+          to design intelligent, data-centric solutions for analytics and quantitative research environments.
+        </p>
+      </div>
+
+      <div class="about-img" aria-hidden="true">
+        <img src="portrait.png" alt="Kauntey Acharya portrait">
+      </div>
+    </div>
+  </section>
 
 <script>
-// ---------- PAGE STATE + BEHAVIOR ----------
-(function(){
+/* ---------- ROTATION + PAGE BEHAVIOR ----------
+   - JS-driven rotation prevents overlap and scales to any number of words.
+   - Rotation only runs while the Analyst screen is visible (saves CPU).
+   - Respects prefers-reduced-motion.
+------------------------------------------------*/
+document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const themeBtn = document.getElementById('themeBtn');
   const corner = document.getElementById('cornerName');
@@ -191,35 +210,67 @@ section{min-height:100vh;display:grid;place-items:center;scroll-snap-align:start
   const intro = document.getElementById('introScreen');
   const mid = document.getElementById('analystScreen');
   const about = document.getElementById('aboutSection');
+  const pill = document.querySelector('.rotating-pill');
+  const words = pill ? Array.from(pill.querySelectorAll('.word')) : [];
+  let rotateIntervalId = null;
+  let currentIndex = 0;
+  const rotateDelay = 2000; // ms per word
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Theme toggle (respects OS pref)
-  function setTheme(isDark){
+  // Theme toggle
+  const setTheme = isDark => {
     body.classList.toggle('dark', !!isDark);
     body.classList.toggle('light', !isDark);
     themeBtn.textContent = isDark ? '🌞' : '🌙';
-  }
+  };
   setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  themeBtn.addEventListener('click', ()=> setTheme(!body.classList.contains('dark')));
+  themeBtn.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
 
+  // Rotation control
+  function showWord(idx) {
+    if (!words.length) return;
+    words.forEach((w, i) => w.classList.toggle('active', i === idx));
+    currentIndex = idx;
+  }
+  function nextWord() { showWord((currentIndex + 1) % words.length); }
+  function startRotation() {
+    if (reduceMotion) { showWord(0); return; }
+    if (rotateIntervalId) return;
+    showWord(currentIndex % words.length);
+    rotateIntervalId = setInterval(nextWord, rotateDelay);
+  }
+  function stopRotation() {
+    if (rotateIntervalId) {
+      clearInterval(rotateIntervalId);
+      rotateIntervalId = null;
+    }
+    // keep the currently shown word visible
+    showWord(currentIndex % words.length);
+  }
+
+  // Page state machine (Intro -> Analyst -> About)
   let inIntro = false, inMid = false, inAbout = false;
-
-  function applyState(){
-    if(inAbout){
+  function applyState() {
+    if (inAbout) {
       corner.classList.add('visible');
       center.classList.add('fade-out');
       analyst.classList.remove('visible');
-    } else if(inMid){
+      stopRotation();
+    } else if (inMid) {
       corner.classList.add('visible');
       center.classList.add('fade-out');
       analyst.classList.add('visible');
+      startRotation();
     } else {
       corner.classList.remove('visible');
       center.classList.remove('fade-out');
       analyst.classList.remove('visible');
+      stopRotation();
       about.classList.remove('visible');
     }
   }
 
+  // Observers
   const introObs = new IntersectionObserver(entries => {
     entries.forEach(e => { inIntro = e.isIntersecting; applyState(); });
   }, { threshold: 0.6 });
@@ -233,25 +284,16 @@ section{min-height:100vh;display:grid;place-items:center;scroll-snap-align:start
   const aboutObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       inAbout = e.isIntersecting;
-      if(inAbout) about.classList.add('visible'); else about.classList.remove('visible');
+      if (inAbout) about.classList.add('visible'); else about.classList.remove('visible');
       applyState();
     });
   }, { threshold: 0.35 });
   aboutObs.observe(about);
 
-  // Respect reduced motion
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){
-    const style = document.createElement('style');
-    style.innerHTML = `.rotating-pill .word { animation: none !important; opacity: 1 !important; transform: translateY(-50%) scale(1) !important; }`;
-    document.head.appendChild(style);
-  }
-})();
+  // init: ensure words hidden, show first for reduced-motion
+  words.forEach(w => w.classList.remove('active'));
+  if (reduceMotion && words.length) showWord(0);
+});
 </script>
 </body>
 </html>
-
-
-
-
-
