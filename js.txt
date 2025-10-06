@@ -1,0 +1,87 @@
+// ---------- VARIABLE PROXIMITY ANIMATION ----------
+document.addEventListener("DOMContentLoaded", () => {
+  const text = document.getElementById("proximityText");
+  if (text) {
+    // Wrap each letter in span
+    const words = text.textContent.split(" ");
+    text.innerHTML = words.map(
+      word =>
+        `<span class="vp-word">${[...word]
+          .map(ch => `<span class="vp-letter">${ch}</span>`)
+          .join("")}</span>`
+    ).join(" ");
+
+    const letters = document.querySelectorAll(".vp-letter");
+    const maxDist = 50; // proximity radius
+
+    window.addEventListener("mousemove", e => {
+      letters.forEach(l => {
+        const r = l.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const dist = Math.hypot(dx, dy);
+        if (dist < maxDist) {
+          const intensity = 1 - dist / maxDist;
+          l.style.transform = `scale(${0.5 + intensity * 0.8})`;
+          l.style.color = `rgba(100,100,100,${0.9 + intensity * 0.7})`;
+        } else {
+          l.style.transform = `scale(1)`;
+          l.style.color = "";
+        }
+      });
+    });
+  }
+});
+
+// ---------- DECRYPTED ANALYST TEXT ----------
+function DecryptedTextController({ el, text = '', speed = 60, chars = 'A1X4-N7Δ|D2L9-Φ3|Q3T9-ZK7Σ-77α' }) {
+  let revealed = new Set(), id = null, running = false;
+  const scramble = () => text.split('').map((c,i)=> revealed.has(i)?c:chars[Math.floor(Math.random()*chars.length)]).join('');
+  function step(){ if(!running)return;
+    for(let i=0;i<text.length;i++) if(!revealed.has(i)){revealed.add(i);break;}
+    el.textContent=scramble(); if(revealed.size>=text.length) stop(true);
+  }
+  function start(){ if(running)return; running=true; revealed=new Set(); el.textContent=scramble(); id=setInterval(step,speed);}
+  function stop(final=false){ if(!running)return; clearInterval(id); running=false; if(final) el.textContent=text; }
+  return {start,stop};
+}
+
+// ---------- PAGE LOGIC ----------
+(function(){
+  const body=document.body, themeBtn=document.getElementById('themeBtn'),
+        corner=document.getElementById('cornerName'), center=document.getElementById('centerName'),
+        analyst=document.getElementById('analyst'),
+        intro=document.getElementById('introScreen'), mid=document.getElementById('analystScreen'),
+        about=document.getElementById('aboutSection');
+
+  const decrypted=DecryptedTextController({el:analyst,text:"AI Analyst, Data Analyst, Quant Analyst",speed:60});
+
+  // Theme toggle
+  const setTheme=isDark=>{body.classList.toggle('dark',isDark);body.classList.toggle('light',!isDark);
+    themeBtn.textContent=isDark?'🌞':'🌙';};
+  setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  themeBtn.addEventListener('click',()=>setTheme(!body.classList.contains('dark')));
+
+  let inIntro=false,inMid=false,inAbout=false;
+  function applyState(){
+    if(inAbout){
+      corner.classList.add('visible'); center.classList.add('fade-out');
+      decrypted.stop(false); analyst.classList.remove('visible');
+    }else if(inMid){
+      corner.classList.add('visible'); center.classList.add('fade-out');
+      setTimeout(()=>{ if(inMid&&!inAbout){analyst.classList.add('visible'); decrypted.start();}},600);
+    }else{
+      corner.classList.remove('visible'); center.classList.remove('fade-out');
+      decrypted.stop(false); analyst.classList.remove('visible'); analyst.textContent='';
+    }
+  }
+
+  const introObs=new IntersectionObserver(e=>{e.forEach(x=>{inIntro=x.isIntersecting;applyState();});},{threshold:.6});
+  introObs.observe(intro);
+  const midObs=new IntersectionObserver(e=>{e.forEach(x=>{inMid=x.isIntersecting;applyState();});},{threshold:.55});
+  midObs.observe(mid);
+  const aboutObs=new IntersectionObserver(e=>{e.forEach(x=>{
+    inAbout=x.isIntersecting; if(inAbout)about.classList.add('visible'); else about.classList.remove('visible'); applyState();
+  });},{threshold:.35});
+  aboutObs.observe(about);
+})();
