@@ -143,6 +143,22 @@ section { min-height: 100vh; display: grid; place-items: center; scroll-snap-ali
   .about { padding: 6vh 4vw; gap: 28px; }
 }
 
+  /* --- Responsive scaling for rotating pill on mobile --- */
+@media (max-width: 768px) {
+  .rotating-pill {
+    padding: 0.75em 1.3em;     /* more padding for taller box */
+    min-width: 7ch;            /* slightly wider */
+    border-radius: 14px;       /* more rounded on mobile */
+    font-size: 1.1em;          /* increase text size inside */
+  }
+
+  /* optional: also make 'Analyst' text slightly smaller if needed */
+  .analyst-static {
+    font-size: clamp(22px, 6vw, 36px);
+  }
+}
+
+
 /* reduce visual noise on very small screens */
 @media (max-width: 420px) {
   .rotating-pill { padding: 0.44em 0.8em; border-radius: 10px; }
@@ -288,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
