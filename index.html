@@ -1,4 +1,4 @@
-<!doctype html><!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -53,22 +53,27 @@ body.dark  { background: #000; color: #fff; }
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
   z-index: 360; font-size: clamp(26px, 5vw, 46px);
   opacity: 0; transition: opacity .6s ease; letter-spacing: 0.2px;
-  display: flex; align-items: center; gap: .8rem; pointer-events: none;
+  display: flex; align-items: center; gap: .7rem; pointer-events: none;
 }
 #analyst.visible { opacity: 1; }
 
-/* static "Analyst" word styling */
-.analyst-static { font-weight: 500; color: inherit; }
+/* static "Analyst" word styling (to match center size if needed) */
+.analyst-static {
+  font-weight: 600;
+  font-size: clamp(26px, 5vw, 46px); /* matches center heading */
+  line-height: 1;
+  color: inherit;
+}
 
 /* rotating pill visual (taller, more padding) */
 .rotating-pill {
   position: relative;
   display: inline-block;
-  padding: 0.6em 1.15em;        /* increased vertical padding for breathing room */
-  border-radius: 13px;
+  padding: 0.6em 1.15em;        /* vertical breathing room */
+  border-radius: 14px;
   min-width: 8.5ch;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
   background: linear-gradient(180deg,#5b2bff 0%, #4a21e6 100%);
   box-shadow: 0 12px 36px rgba(79,70,255,0.18);
@@ -82,19 +87,9 @@ body.light .rotating-pill {
   background: linear-gradient(180deg,#6a4dff 0%, #5b3ef0 100%);
   box-shadow: 0 8px 20px rgba(106,77,255,0.12);
 }
-  
-  function flashPill() {
-  pill.classList.add('pulse');
-  setTimeout(()=> pill.classList.remove('pulse'), 260);
-}
-function nextWord() { 
-  const next = (currentIndex + 1) % words.length;
-  showWord(next);
-  flashPill();
-}
 
-  .rotating-pill.pulse { box-shadow: 0 14px 44px rgba(79,70,255,0.28); transform: translateY(-1px); transition: box-shadow .25s, transform .25s; }
-
+/* pulse visual helper (JS toggles this) */
+.rotating-pill.pulse { box-shadow: 0 14px 44px rgba(79,70,255,0.28); transform: translateY(-1px); transition: box-shadow .25s, transform .25s; }
 
 /* each stacked word absolutely centered and crossfading via .active */
 .rotating-pill .word {
@@ -104,29 +99,23 @@ function nextWord() {
   transform: translateY(-50%) scale(.98);
   text-align: center;
   opacity: 0;
-  transition: opacity 100ms cubic-bezier(.2,.9,.2,1), transform 100ms cubic-bezier(.2,.9,.2,1);
+  transition: opacity 240ms cubic-bezier(.2,.9,.2,1), transform 240ms cubic-bezier(.2,.9,.2,1);
   pointer-events: none;
   font-size: 1em;
 }
-
-  
-  .rotating-pill .word.active {
+.rotating-pill .word.active {
   opacity: 1;
-  transform: translateY(-50%) scale(1.06); /* slight pop */
-  transition: opacity 100ms, transform 100ms;
+  transform: translateY(-50%) scale(1.02); /* small pop */
 }
-  
-  .rotating-pill .word { transform: translateY(-50%) translateX(-8px) scale(.98); }
-.rotating-pill .word.active { transform: translateY(-50%) translateX(0) scale(1); transition: transform 100ms, opacity 100ms; }
-  
-  
 
-
+/* tiny horizontal entrance polish */
+.rotating-pill .word { transform: translateY(-50%) translateX(-6px) scale(.98); }
+.rotating-pill .word.active { transform: translateY(-50%) translateX(0) scale(1.02); transition: transform 220ms, opacity 220ms; }
 
 /* ---------- SECTIONS ---------- */
 section { min-height: 100vh; display: grid; place-items: center; scroll-snap-align: start; }
 
-/* ---------- ABOUT ---------- */
+/* ---------- ABOUT: improved typography & layout ---------- */
 .about {
   display: flex; align-items: center; justify-content: center;
   padding: 8vh 6vw; gap: 42px;
@@ -134,36 +123,60 @@ section { min-height: 100vh; display: grid; place-items: center; scroll-snap-ali
 .about-inner {
   width: 100%;
   max-width: 1100px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1fr 380px; /* text | image */
+  gap: 48px;
+  align-items: start;
 }
+
+/* readable measure, generous leading, hyphenation, justified look */
 .about-text {
-  line-height: 1.8; font-size: 22px; color: inherit;
-  opacity: 0; transform: translateY(10px);
+  line-height: 1.75;
+  font-size: clamp(17px, 1.9vw, 20px);
+  color: inherit;
+  opacity: 0; transform: translateY(8px);
   transition: opacity .9s ease, transform .9s ease;
+  max-width: 72ch;            /* ideal line measure */
+  text-align: justify;        /* even edges */
+  hyphens: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.01em;
+  word-break: break-word;
+  margin-left: 6px;
 }
-.about.visible .about-text, .about.visible .about-img {
-  opacity: 1; transform: translateY(0);
-}
+.about-text p { margin-bottom: 1.05em; }
+
+/* image column: fixed size, visually separated */
 .about-img {
-  background: #fff; display: grid; place-items: center;
-  padding: 22px; box-shadow: 0 8px 28px rgba(0,0,0,0.16);
-  opacity: 0; transform: translateY(10px);
+  width: 100%;
+  max-width: 380px;
+  justify-self: center;
+  align-self: start;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+  opacity: 0; transform: translateY(8px);
   transition: opacity .9s ease, transform .9s ease;
 }
 .about-img img { width: 100%; height: auto; border-radius: 50%; }
 
+/* when about visible: fade in */
+.about.visible .about-text, .about.visible .about-img {
+  opacity: 1; transform: translateY(0);
+}
+
 /* ---------- MOBILE ADJUSTMENTS ---------- */
 @media (max-width: 880px) {
-  #centerName { font-size: clamp(26px, 8vw, 46px); }
-  #analyst { font-size: clamp(14px, 5vw, 20px); gap: .5rem; left: 50%; top: 54%; } /* slight lower on small screens */
-  .rotating-pill { padding: 0.5em 0.9em; border-radius: 12px; min-width: 8.5ch; }
+  #centerName { font-size: clamp(22px, 8vw, 40px); }
+  #analyst { font-size: clamp(16px, 6vw, 30px); gap: .6rem; left: 50%; top: 54%; }
+  .rotating-pill { padding: 0.5em 1.05em; border-radius: 12px; min-width: 6.5ch; }
   .about-inner { grid-template-columns: 1fr; gap: 24px; }
-  .about-img { max-width: 300px; margin: 0 auto; }
-  body.light .rotating-pill { background: linear-gradient(180deg,#6a4dff, #5b3ef0); }
+  .about-img { max-width: 320px; margin: 0 auto; padding: 18px; }
   .about { padding: 6vh 4vw; gap: 28px; }
+  .analyst-static { font-size: clamp(20px, 6vw, 40px); }
+  .about-text { margin-left: 0; font-size: clamp(15px, 3.6vw, 18px); max-width: 66ch; }
 }
 
 /* reduce visual noise on very small screens */
@@ -174,14 +187,13 @@ section { min-height: 100vh; display: grid; place-items: center; scroll-snap-ali
 }
 </style>
 </head>
-
 <body class="dark">
   <button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌙</button>
 
   <div id="cornerName">Kauntey Acharya</div>
   <div id="centerName">Kauntey Acharya</div>
 
-  <!-- Rotating pill: add/remove <div class="word">X</div> as needed -->
+  <!-- Rotating pill: edit words here -->
   <div id="analyst" aria-hidden="true">
     <div class="rotating-pill" aria-hidden="true" role="img" title="rotating keywords">
       <div class="word">DATA</div>
@@ -191,8 +203,8 @@ section { min-height: 100vh; display: grid; place-items: center; scroll-snap-ali
     <div class="analyst-static">Analyst</div>
   </div>
 
-  <section class="screen one" id="introScreen"></section>
-  <section class="screen two" id="analystScreen"></section>
+  <section class="screen one" id="introScreen" aria-hidden="true"></section>
+  <section class="screen two" id="analystScreen" aria-hidden="true"></section>
 
   <section class="screen about" id="aboutSection">
     <div class="about-inner">
@@ -237,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const words = pill ? Array.from(pill.querySelectorAll('.word')) : [];
   let rotateIntervalId = null;
   let currentIndex = 0;
-  const rotateDelay = 2000; // ms per word
+  const rotateDelay = 1000; // ms per word (faster so quick scrollers notice)
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Theme toggle
@@ -249,13 +261,24 @@ document.addEventListener('DOMContentLoaded', () => {
   setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   themeBtn.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
 
+  // small visual pulse on swap to draw eye
+  function flashPill() {
+    if (!pill) return;
+    pill.classList.add('pulse');
+    setTimeout(()=> pill.classList.remove('pulse'), 260);
+  }
+
   // Rotation control
   function showWord(idx) {
     if (!words.length) return;
     words.forEach((w, i) => w.classList.toggle('active', i === idx));
     currentIndex = idx;
   }
-  function nextWord() { showWord((currentIndex + 1) % words.length); }
+  function nextWord() {
+    const next = (currentIndex + 1) % words.length;
+    showWord(next);
+    flashPill();
+  }
   function startRotation() {
     if (reduceMotion) { showWord(0); return; }
     if (rotateIntervalId) return;
@@ -320,6 +343,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
-
-
