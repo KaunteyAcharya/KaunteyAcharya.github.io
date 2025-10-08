@@ -8,7 +8,7 @@
 <style>
 /* ---------- BASE ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { height: 100%; }
+html,body { min-height: 100%; }
 html { scroll-behavior: smooth; }
 body {
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -19,6 +19,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #07040a;
   color: #fff;
+  overflow-y: auto; /* ensure page scroll */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- SPLASH CANVAS (cursor) ---------- */
+#splashCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+  mix-blend-mode: screen; /* subtle blending on dark bg */
+  opacity: 0.95;
 }
 
 /* ---------- THEMES ---------- */
@@ -27,14 +41,13 @@ body.dark  { background: #000; color: #fff; }
 
 /* ---------- THEME TOGGLE ---------- */
 .theme-toggle {
-  position: fixed;
-  top: 16px; right: 16px; z-index: 400;
+  position: fixed; top: 16px; right: 16px; z-index: 450;
   background: transparent; border: 0; font-size: 20px; cursor: pointer; padding: 6px;
 }
 
 /* ---------- TOP LEFT / CENTER TITLES ---------- */
 #cornerName {
-  position: fixed; left: 20px; top: 16px; z-index: 380;
+  position: fixed; left: 20px; top: 16px; z-index: 420;
   font-size: clamp(14px, 1.6vw, 18px);
   opacity: 0; transition: opacity .9s ease; pointer-events: none; font-weight: 450;
 }
@@ -42,7 +55,7 @@ body.dark  { background: #000; color: #fff; }
 
 #centerName {
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  z-index: 370; font-size: clamp(24px, 6vw, 48px);
+  z-index: 410; font-size: clamp(24px, 6vw, 48px);
   transition: opacity .8s ease; opacity: 1; pointer-events: none; font-weight: 450; text-align: center;
   padding: 0 12px;
 }
@@ -51,25 +64,24 @@ body.dark  { background: #000; color: #fff; }
 /* ---------- ROTATING PILL + ANALYST ---------- */
 #analyst {
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  z-index: 360; font-size: clamp(26px, 5vw, 46px);
-  opacity: 0; transition: opacity .6s ease; letter-spacing: 0.2px;
+  z-index: 405; font-size: clamp(26px, 5vw, 46px);
+  opacity: 0; transition:opacity .6s ease; letter-spacing: 0.2px;
   display: flex; align-items: center; gap: .7rem; pointer-events: none;
 }
 #analyst.visible { opacity: 1; }
 
-/* static "Analyst" word styling (to match center size if needed) */
 .analyst-static {
   font-weight: 600;
-  font-size: clamp(26px, 5vw, 46px); /* matches center heading */
+  font-size: clamp(26px, 5vw, 46px);
   line-height: 1;
   color: inherit;
 }
 
-/* rotating pill visual (taller, more padding) */
+/* pill */
 .rotating-pill {
   position: relative;
   display: inline-block;
-  padding: 0.6em 1.15em;        /* vertical breathing room */
+  padding: 0.6em 1.15em;
   border-radius: 14px;
   min-width: 8.5ch;
   text-align: center;
@@ -79,121 +91,60 @@ body.dark  { background: #000; color: #fff; }
   box-shadow: 0 12px 36px rgba(79,70,255,0.18);
   line-height: 1.2;
   overflow: hidden;
-  vertical-align: middle;
 }
-
-/* light mode pill tone */
-body.light .rotating-pill {
-  background: linear-gradient(180deg,#6a4dff 0%, #5b3ef0 100%);
-  box-shadow: 0 8px 20px rgba(106,77,255,0.12);
-}
-
-/* pulse visual helper (JS toggles this) */
 .rotating-pill.pulse { box-shadow: 0 14px 44px rgba(79,70,255,0.28); transform: translateY(-1px); transition: box-shadow .25s, transform .25s; }
 
-/* each stacked word absolutely centered and crossfading via .active */
 .rotating-pill .word {
-  position: absolute;
-  left: 0; right: 0;
-  top: 50%;
-  transform: translateY(-50%) scale(.98);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 240ms cubic-bezier(.2,.9,.2,1), transform 240ms cubic-bezier(.2,.9,.2,1);
-  pointer-events: none;
-  font-size: 1em;
+  position: absolute; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%) translateX(-6px) scale(.98); opacity: 0;
+  transition: opacity 220ms cubic-bezier(.2,.9,.2,1), transform 220ms cubic-bezier(.2,.9,.2,1);
+  pointer-events: none; font-size: 1em;
 }
-.rotating-pill .word.active {
-  opacity: 1;
-  transform: translateY(-50%) scale(1.02); /* small pop */
-}
-
-/* tiny horizontal entrance polish */
-.rotating-pill .word { transform: translateY(-50%) translateX(-6px) scale(.98); }
-.rotating-pill .word.active { transform: translateY(-50%) translateX(0) scale(1.02); transition: transform 220ms, opacity 220ms; }
+.rotating-pill .word.active { opacity: 1; transform: translateY(-50%) translateX(0) scale(1.02); }
 
 /* ---------- SECTIONS ---------- */
 section { min-height: 100vh; display: grid; place-items: center; scroll-snap-align: start; }
 
-/* ---------- ABOUT: improved typography & layout ---------- */
+/* ---------- ABOUT ---------- */
 .about {
   display: flex; align-items: center; justify-content: center;
   padding: 8vh 6vw; gap: 42px;
 }
 .about-inner {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 380px; /* text | image */
-  gap: 48px;
-  align-items: start;
+  width: 100%; max-width: 1100px;
+  display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start;
 }
-
-/* readable measure, generous leading, hyphenation, justified look */
 .about-text {
   line-height: 1.75;
   font-size: clamp(17px, 1.9vw, 20px);
   color: inherit;
   opacity: 0; transform: translateY(8px);
   transition: opacity .9s ease, transform .9s ease;
-  max-width: 72ch;            /* ideal line measure */
-  text-align: justify;        /* even edges */
-  hyphens: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.01em;
-  word-break: break-word;
-  margin-left: 6px;
+  max-width: 72ch; text-align: justify; hyphens: auto;
 }
 .about-text p { margin-bottom: 1.05em; }
+.about-img { width: 100%; max-width: 380px; background: #fff; padding: 20px; box-shadow: 0 8px 28px rgba(0,0,0,0.16); opacity: 0; transform: translateY(8px); transition: opacity .9s ease, transform .9s ease; }
+.about-img img { width: 100%; border-radius: 50%; }
+.about.visible .about-text, .about.visible .about-img { opacity: 1; transform: translateY(0); }
 
-/* image column: fixed size, visually separated */
-.about-img {
-  width: 100%;
-  max-width: 380px;
-  justify-self: center;
-  align-self: start;
-  background: #fff;
-  padding: 20px;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.16);
-  opacity: 0; transform: translateY(8px);
-  transition: opacity .9s ease, transform .9s ease;
-}
-.about-img img { width: 100%; height: auto; border-radius: 50%; }
-
-/* when about visible: fade in */
-.about.visible .about-text, .about.visible .about-img {
-  opacity: 1; transform: translateY(0);
-}
-
-/* ---------- MOBILE ADJUSTMENTS ---------- */
+/* small screens */
 @media (max-width: 880px) {
-  #centerName { font-size: clamp(22px, 8vw, 40px); }
-  #analyst { font-size: clamp(16px, 6vw, 30px); gap: .6rem; left: 50%; top: 54%; }
-  .rotating-pill { padding: 0.5em 1.05em; border-radius: 12px; min-width: 6.5ch; }
   .about-inner { grid-template-columns: 1fr; gap: 24px; }
   .about-img { max-width: 320px; margin: 0 auto; padding: 18px; }
-  .about { padding: 6vh 4vw; gap: 28px; }
-  .analyst-static { font-size: clamp(20px, 6vw, 40px); }
-  .about-text { margin-left: 0; font-size: clamp(15px, 3.6vw, 18px); max-width: 66ch; }
-}
-
-/* reduce visual noise on very small screens */
-@media (max-width: 420px) {
-  .rotating-pill { padding: 0.44em 0.8em; border-radius: 10px; }
-  #cornerName { left: 12px; top: 10px; }
-  .analyst-static { font-size: 0.95em; }
+  #centerName { font-size: clamp(22px, 8vw, 40px); }
+  #analyst { font-size: clamp(18px, 6vw, 34px); top: 54%; }
 }
 </style>
 </head>
 <body class="dark">
+  <!-- Splash canvas for colorful cursor -->
+  <canvas id="splashCanvas" aria-hidden="true"></canvas>
+
   <button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌙</button>
 
   <div id="cornerName">Kauntey Acharya</div>
   <div id="centerName">Kauntey Acharya</div>
 
-  <!-- Rotating pill: edit words here -->
   <div id="analyst" aria-hidden="true">
     <div class="rotating-pill" aria-hidden="true" role="img" title="rotating keywords">
       <div class="word">DATA</div>
@@ -231,92 +182,194 @@ section { min-height: 100vh; display: grid; place-items: center; scroll-snap-ali
   </section>
 
 <script>
-/* ---------- ROTATION + PAGE BEHAVIOR ----------
-   - JS-driven rotation prevents overlap and scales to any number of words.
-   - Rotation only runs while the Analyst screen is visible (saves CPU).
-   - Respects prefers-reduced-motion.
-------------------------------------------------*/
+/* ============================
+   Cursor splash (subtle + auto-fade)
+   ============================ */
+(function () {
+  const canvas = document.getElementById('splashCanvas');
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let w = 0, h = 0, dpr = 1;
+  let splats = [];
+  const MAX_SPLATS = 80;
+  let lastMoveTime = 0;
+  const INACTIVITY_MS = 1400; // after this it fades faster
+
+  function resize() {
+    dpr = Math.max(1, window.devicePixelRatio || 1);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // gentle color set (not fully-white)
+  const colors = [
+    [103, 58, 183], // purple
+    [79, 70, 255],  // indigo
+    [66, 165, 245], // light blue
+    [0, 200, 160],  // teal
+    [255, 165, 90]  // warm
+  ];
+
+  function spawn(x, y, force = 1) {
+    // small, soft splats
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    const r = 28 + Math.random() * 46 * Math.min(1.6, force);
+    const vx = (Math.random() - 0.5) * 0.9 * force;
+    const vy = (Math.random() - 0.5) * 0.9 * force;
+    // small base alpha; will be multiplied by life
+    splats.push({ x, y, vx, vy, r, life: 1.0, decay: 0.008 + Math.random() * 0.006, color: c });
+    if (splats.length > MAX_SPLATS) splats.shift();
+  }
+
+  // track input
+  window.addEventListener('mousemove', (e) => {
+    lastMoveTime = Date.now();
+    spawn(e.clientX, e.clientY, 1);
+  }, { passive: true });
+
+  window.addEventListener('click', (e) => {
+    lastMoveTime = Date.now();
+    spawn(e.clientX, e.clientY, 1.6);
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (ev) => {
+    lastMoveTime = Date.now();
+    const t = ev.touches[0];
+    if (t) spawn(t.clientX, t.clientY, 1.2);
+  }, { passive: true });
+
+  // ensure scroll still works on some edge browsers (if canvas catches wheel)
+  canvas.addEventListener('wheel', (e) => {
+    // If wheel reaches the canvas, forward to page
+    // This handler is passive: false to allow preventDefault controlling. We won't prevent default.
+    window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+  }, { passive: true });
+
+  function draw(now) {
+    // fade background a little every frame so trails gradually vanish
+    const isDark = document.body.classList.contains('dark');
+    if (isDark) ctx.fillStyle = 'rgba(0,0,0,0.06)';
+    else ctx.fillStyle = 'rgba(255,255,255,0.04)';
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillRect(0, 0, w, h);
+
+    // compute inactivity factor
+    const inactivity = Math.max(0, Date.now() - lastMoveTime);
+    const inactFactor = Math.min(1, Math.max(0, (inactivity - INACTIVITY_MS) / 2000));
+
+    // render splats
+    for (let i = splats.length - 1; i >= 0; i--) {
+      const s = splats[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      // increase decay if user inactive -> fade faster
+      const extraDecay = inactFactor * 0.03;
+      s.life -= (s.decay + extraDecay);
+      if (s.life <= 0) { splats.splice(i, 1); continue; }
+
+      // radial gradient: soft center alpha of ~0.06 * life
+      const [rcol, gcol, bcol] = s.color;
+      const alphaCenter = 0.06 * s.life;        // small alpha to avoid bright white
+      const alphaMid = alphaCenter * 0.28;
+      const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
+      grad.addColorStop(0, `rgba(${rcol},${gcol},${bcol},${alphaCenter})`);
+      grad.addColorStop(0.55, `rgba(${rcol},${gcol},${bcol},${alphaMid})`);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+      // draw softly; use screen blend for subtle glow on dark
+      ctx.globalCompositeOperation = isDark ? 'screen' : 'lighter';
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // occasionally, when there's been long inactivity we continue to eat the canvas by increasing the fade rect
+    if (inactFactor > 0.6 && splats.length === 0) {
+      // clear more aggressively if totally idle
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = isDark ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.08)';
+      ctx.fillRect(0,0,w,h);
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+
+})();
+
+/* ============================
+   Rotating pill & page state
+   ============================ */
 document.addEventListener('DOMContentLoaded', () => {
+  // rotation for pill
+  const words = Array.from(document.querySelectorAll('.rotating-pill .word'));
+  let idx = 0;
+  const rotateDelay = 900; // faster (so quick scrollers notice)
+  function show(i) {
+    words.forEach((w, ii) => w.classList.toggle('active', ii === i));
+  }
+  if (words.length) {
+    show(0);
+    setInterval(() => {
+      idx = (idx + 1) % words.length;
+      // brief pulse
+      const pill = document.querySelector('.rotating-pill');
+      if (pill) {
+        pill.classList.add('pulse');
+        setTimeout(()=> pill.classList.remove('pulse'), 250);
+      }
+      show(idx);
+    }, rotateDelay);
+  }
+
+  // theme toggle
   const body = document.body;
   const themeBtn = document.getElementById('themeBtn');
+  function setTheme(isDark) {
+    body.classList.toggle('dark', !!isDark);
+    body.classList.toggle('light', !isDark);
+    themeBtn.textContent = isDark ? '🌞' : '🌙';
+  }
+  setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  themeBtn.addEventListener('click', ()=> setTheme(!body.classList.contains('dark')));
+
+  // Intersection observers for page state (intro -> analyst -> about)
   const corner = document.getElementById('cornerName');
   const center = document.getElementById('centerName');
   const analyst = document.getElementById('analyst');
   const intro = document.getElementById('introScreen');
   const mid = document.getElementById('analystScreen');
   const about = document.getElementById('aboutSection');
-  const pill = document.querySelector('.rotating-pill');
-  const words = pill ? Array.from(pill.querySelectorAll('.word')) : [];
-  let rotateIntervalId = null;
-  let currentIndex = 0;
-  const rotateDelay = 1000; // ms per word (faster so quick scrollers notice)
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Theme toggle
-  const setTheme = isDark => {
-    body.classList.toggle('dark', !!isDark);
-    body.classList.toggle('light', !isDark);
-    themeBtn.textContent = isDark ? '🌞' : '🌙';
-  };
-  setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  themeBtn.addEventListener('click', () => setTheme(!body.classList.contains('dark')));
-
-  // small visual pulse on swap to draw eye
-  function flashPill() {
-    if (!pill) return;
-    pill.classList.add('pulse');
-    setTimeout(()=> pill.classList.remove('pulse'), 260);
-  }
-
-  // Rotation control
-  function showWord(idx) {
-    if (!words.length) return;
-    words.forEach((w, i) => w.classList.toggle('active', i === idx));
-    currentIndex = idx;
-  }
-  function nextWord() {
-    const next = (currentIndex + 1) % words.length;
-    showWord(next);
-    flashPill();
-  }
-  function startRotation() {
-    if (reduceMotion) { showWord(0); return; }
-    if (rotateIntervalId) return;
-    showWord(currentIndex % words.length);
-    rotateIntervalId = setInterval(nextWord, rotateDelay);
-  }
-  function stopRotation() {
-    if (rotateIntervalId) {
-      clearInterval(rotateIntervalId);
-      rotateIntervalId = null;
-    }
-    // keep the currently shown word visible
-    showWord(currentIndex % words.length);
-  }
-
-  // Page state machine (Intro -> Analyst -> About)
   let inIntro = false, inMid = false, inAbout = false;
   function applyState() {
     if (inAbout) {
       corner.classList.add('visible');
       center.classList.add('fade-out');
       analyst.classList.remove('visible');
-      stopRotation();
+      about.classList.add('visible');
     } else if (inMid) {
       corner.classList.add('visible');
       center.classList.add('fade-out');
       analyst.classList.add('visible');
-      startRotation();
+      about.classList.remove('visible');
     } else {
       corner.classList.remove('visible');
       center.classList.remove('fade-out');
       analyst.classList.remove('visible');
-      stopRotation();
       about.classList.remove('visible');
     }
   }
 
-  // Observers
   const introObs = new IntersectionObserver(entries => {
     entries.forEach(e => { inIntro = e.isIntersecting; applyState(); });
   }, { threshold: 0.6 });
@@ -330,15 +383,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const aboutObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       inAbout = e.isIntersecting;
-      if (inAbout) about.classList.add('visible'); else about.classList.remove('visible');
       applyState();
     });
   }, { threshold: 0.35 });
   aboutObs.observe(about);
 
-  // init: ensure words hidden, show first for reduced-motion
-  words.forEach(w => w.classList.remove('active'));
-  if (reduceMotion && words.length) showWord(0);
+  // Accessibility: if prefers-reduced-motion, static fallback
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    document.querySelectorAll('.rotating-pill .word').forEach((w,i)=> w.classList.toggle('active', i===0));
+  }
+
 });
 </script>
 </body>
