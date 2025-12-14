@@ -1,257 +1,374 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Kauntey Acharya</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kauntey Acharya | Quant & Research Analyst</title>
+  
 <style>
-/* ---------- BASE ---------- */
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{min-height:100%;}
-html{scroll-behavior:smooth;}
+/* ========== RESET ========== */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+/* ========== BASE TYPOGRAPHY ========== */
 body{
-  font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+font-family: monospace;
+  background:#000;
+  color:#fff;
+  font-size:17px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ========== HERO ========== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:5rem 4rem;
+}
+
+.hero h1{
+  font-size:clamp(2.5rem,5vw,4.0rem);
+  font-weight:450;
+  letter-spacing:.4px;
+}
+
+.roles{
+  margin-top:1.6rem;
+  font-size:1.8rem;
+  opacity:.9;
+}
+  
+  .hireme{
+  margin-top:.6rem;
+  font-size:1.5rem;
+  opacity:.8;
+}
+
+.tagline{
+  margin-top:.6rem;
+  font-size:1.4rem;
+  opacity:.8;
+  max-width:950px;
+}
+
+.location{
+  margin-top:.6rem;
+  font-size:1.4rem;
+  opacity:.8;
+}
+
+/* ========== ICONS ========== */
+.icons{
+  display:flex;
+  gap:1.4rem;
+  margin-top:1.8rem;
+}
+
+.icon-btn{
+  width:38px;
+  height:38px;
+  border:1px solid rgba(255,255,255,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.3s ease;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.7);
+}
+
+.icon-btn svg{
+  width:20px;
+  height:20px;
+  fill:#fff;
+  opacity:.85;
+}
+
+/* ========== SECTIONS ========== */
+.section{
+  padding:5rem 4rem;
+  max-width:1300px;
+}
+
+h2{
+  font-size:2rem;
   font-weight:500;
-  scroll-snap-type:y mandatory;
-  transition:background-color .9s ease,color .9s ease;
-  background:#07040a;color:#fff;
-  overflow-y:auto;
+  margin-bottom:2.2rem;
+  border-bottom:1px solid rgba(255,255,255,.25);
+  padding-bottom:.6rem;
 }
 
-/* ---------- THEMES ---------- */
-body.light{background:#fff;color:#000;}
-body.dark{background:#000;color:#fff;}
-
-/* ---------- THEME TOGGLE ---------- */
-.theme-toggle{
-  position:fixed;top:16px;right:16px;z-index:450;
-  background:transparent;border:0;font-size:20px;
-  cursor:pointer;padding:6px;
+.section p{
+  font-size:1.2rem;
+  max-width:1150px;
+  margin-bottom: 1em;
 }
 
-/* ---------- TOP LEFT / CENTER TITLES ---------- */
-#cornerName{
-  position:fixed;left:20px;top:16px;z-index:420;
-  font-size:clamp(14px,1.6vw,18px);
-  opacity:0;transition:opacity .9s ease;
-  pointer-events:none;font-weight:450;
-}
-#cornerName.visible{opacity:1;}
-
-#centerName{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:410;font-size:clamp(24px,6vw,48px);
-  transition:opacity .8s ease;opacity:1;
-  pointer-events:none;font-weight:450;text-align:center;
-  padding:0 12px;
-}
-#centerName.fade-out{opacity:0;}
-
-/* ---------- ROTATING PILL + ANALYST ---------- */
-#analyst{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:405;font-size:clamp(26px,5vw,46px);
-  opacity:0;transition:opacity .6s ease;
-  letter-spacing:.2px;display:flex;align-items:center;
-  gap:.7rem;pointer-events:none;
-}
-#analyst.visible{opacity:1;}
-.analyst-static{font-weight:600;font-size:inherit;line-height:1;}
-
-/* pill */
-.rotating-pill{
-  position:relative;display:inline-block;
-  padding:.6em 1.15em;border-radius:14px;min-width:8.5ch;
-  text-align:center;font-weight:600;color:#fff;
-  background:linear-gradient(180deg,#5b2bff 0%,#4a21e6 100%);
-  box-shadow:0 12px 36px rgba(79,70,255,.18);
-  line-height:1.2;overflow:hidden;
-}
-.rotating-pill.pulse{
-  box-shadow:0 14px 44px rgba(79,70,255,.28);
-  transform:translateY(-1px);transition:box-shadow .25s,transform .25s;
+/* ========== CARDS ========== */
+.card{
+  border:1px solid rgba(255,255,255,.14);
+  padding:1.7rem;
+  margin-bottom:1rem;
+  transition:.35s ease;
 }
 
-.rotating-pill .word{
-  position:absolute;left:0;right:0;top:50%;
-  transform:translateY(-50%) translateX(-6px) scale(.98);
-  opacity:0;transition:opacity .22s,transform .22s;
-  pointer-events:none;font-size:1em;
-}
-.rotating-pill .word.active{
-  opacity:1;transform:translateY(-50%) translateX(0) scale(1.02);
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,255,255,.4);
+  background:rgba(255,255,255,.03);
 }
 
-/* ---------- SECTIONS ---------- */
-section{min-height:100vh;display:grid;place-items:center;scroll-snap-align:start;}
-
-/* ---------- ABOUT ---------- */
-.about{
-  display:flex;align-items:center;justify-content:center;
-  padding:8vh 6vw;gap:42px;
-}
-.about-inner{
-  width:100%;max-width:1100px;
-  display:grid;grid-template-columns:1fr 380px;
-  gap:48px;align-items:start;
-}
-.about-text{
-  line-height:1.75;font-size:clamp(17px,1.9vw,20px);
-  opacity:0;transform:translateY(8px);
-  transition:opacity .9s ease,transform .9s ease;
-  max-width:72ch;text-align:justify;
-}
-.about-text p{margin-bottom:1.05em;}
-
-.about-img{
-  width:100%;max-width:380px;background:#fff;
-  padding:20px;box-shadow:0 8px 28px rgba(0,0,0,.16);
-  opacity:0;transform:translateY(8px);
-  transition:opacity .9s ease,transform .9s ease;
-}
-.about-img img{width:100%;border-radius:50%;}
-
-.about.visible .about-text,
-.about.visible .about-img{
-  opacity:1;transform:translateY(0);
+.card h3{
+  font-size:1.3rem;
+  font-weight:500;
 }
 
-/* small screens */
-@media(max-width:880px){
-  .about-inner{grid-template-columns:1fr;gap:24px;}
-  .about-img{max-width:320px;margin:0 auto;padding:18px;}
-  #centerName{font-size:clamp(22px,8vw,40px);}
-  #analyst{font-size:clamp(18px,6vw,34px);top:54%;}
+.meta{
+  font-size:1.2rem;
+  opacity:.8;
+  margin:.4rem 0 1rem;
+}
+
+/* ========== ACTION LINKS ========== */
+.action-link{
+  display:inline-block;
+  margin-top:1rem;
+  font-size: 1rem;
+  color:#fff;
+  opacity:.85;
+  border-bottom:1px solid rgba(255,255,255,.3);
+  transition:.3s ease;
+}
+
+.action-link:visited{
+  color:#fff;
+}
+
+.action-link:hover{
+  opacity:0.5;
+  border-bottom-color:#fff;
+}
+
+/* ========== SKILLS ========== */
+.skills{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+}
+
+.skills span{
+  border:1px solid rgba(255,255,255,.45);
+  padding: 0.75rem;
+  text-align:center;
+  transition: 1s ease;
+}
+
+.skills span:hover{
+  background:#fff;
+  color:#000;
+}
+
+/* ========== FOOTER ========== */
+footer{
+  padding:2rem 4rem;
+  font-size:.9rem;
+  opacity:.55;
+}
+
+/* ========== ANIMATION ========== */
+.reveal{
+  opacity:0;
+  transform:translateY(50px);
+  transition:1.5s ease;
+}
+
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:800px){
+  .hero,.section{padding:3rem 2rem}
 }
 </style>
 </head>
 
-<body class="dark">
+<body>
 
-<!-- Theme -->
-<button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+<!-- HERO -->
+<section class="hero">
+  <h1>Kauntey Acharya</h1>
+  <div class="roles">Quant Analyst · Research Analyst · Data Analyst</div>
+  <div class="hireme"> [ Open to New Corporate Opportunities & Research Collaborations ] </div>
+  <div class="tagline"> From Theoretical Physics Research to Data Science</div>
+  <div class="location"> 𖤣 Ahmedabad, India</div>
 
-<!-- Name -->
-<div id="cornerName">Kauntey Acharya</div>
-<div id="centerName">Kauntey Acharya</div>
+  <div class="icons">
+    <a class="icon-btn" href="https://github.com/KaunteyAcharya" target="_blank" aria-label="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.43 7.86 10.96.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.55-3.88-1.55-.53-1.35-1.3-1.7-1.3-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.45.11-3.03 0 0 .97-.31 3.18 1.18.92-.26 1.9-.38 2.88-.38s1.96.13 2.88.38c2.2-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.74.11 3.03.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55 4.56-1.53 7.85-5.86 7.85-10.96C23.5 5.74 18.27.5 12 .5z"/></svg>
+    </a>
 
-<!-- Rotating pill -->
-<div id="analyst" aria-hidden="true">
-  <div class="rotating-pill">
-    <div class="word">DATA</div>
-    <div class="word">QUANT</div>
-    <div class="word">RESEARCH</div>
-  </div>
-  <div class="analyst-static">Analyst</div>
-</div>
+    <a class="icon-btn" href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.38-1.11 2.5-2.48 2.5A2.49 2.49 0 0 1 0 6c0-1.38 1.11-2.5 2.5-2.5s2.48 1.12 2.48 2.5zM.5 24h4.96V7.98H.5V24zM8.48 7.98H13v2.2h.06c.63-1.2 2.18-2.48 4.48-2.48 4.8 0 5.68 3.16 5.68 7.26V24h-4.98v-7.52c0-1.8-.04-4.12-2.5-4.12-2.5 0-2.88 1.96-2.88 3.98V24H8.48V7.98z"/></svg>
+    </a>
 
-<!-- Screens -->
-<section class="screen one" id="introScreen"></section>
-<section class="screen two" id="analystScreen"></section>
-
-<!-- ABOUT -->
-<section class="screen about" id="aboutSection">
-  <div class="about-inner">
-
-    <div class="about-text" id="aboutText">
-      <p>
-        I’m Kauntey Acharya, an AI and data analyst with a foundation in theoretical physics and mathematics.
-        I enjoy working on complex and uncertain systems, turning raw information into measurable,
-        testable quantitative ideas.
-      </p>
-
-      <p>
-        My current focus includes exploratory data analysis, model-building, probabilistic reasoning,
-        and lightweight research-style experimentation. I’m actively developing projects that sit between
-        machine learning and quantitative thinking.
-      </p>
-
-      <p>
-        I work primarily with Python, SQL, and modern ML frameworks. I aim to design solutions that feel
-        practical, interpretable, and genuinely useful for analytics, research, and decision-making.
-      </p>
-    </div>
-
-    <div class="about-img" aria-hidden="true">
-      <img src="portrait.png" alt="Kauntey Acharya portrait">
-    </div>
-
+    <a class="icon-btn" href="mailto:kaunteyacharya2000@gmail.com" aria-label="Email">
+      <svg viewBox="0 0 24 24"><path d="M12 13.065L.015 4.5h23.97L12 13.065zM0 6.75v10.5C0 18.99 1.01 20 2.25 20h19.5c1.24 0 2.25-1.01 2.25-2.25V6.75l-12 8.25L0 6.75z"/></svg>
+    </a>
   </div>
 </section>
 
+<!-- ABOUT -->
+<section class="section reveal">
+  <h2>About Me</h2>
+  <p>
+    I am a data and research analyst with a background in theoretical physics.
+I work on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods. I am eager to use my quantitative skills for analyst roles. 
+  </p>
+  
+  <p>
+I like to read research papers and play chess. I could also be found chilling watching Big Bang Theory or Sci-Fi shows. Apart from physics and tech, I am interested in neuroscience, cognitive science, and evolutionary biology. 
+  </p>
+  
+    <p>
+If you are interested in research collaboration, you can reach out via mail or linkedin.
+  </p>
+</section>
+
+<!-- SKILLS -->
+<section class="section reveal">
+  <h2>Skills</h2>
+  <div class="skills">
+    <span>Python</span>
+    <span>NumPy </span> 
+    <span>Pandas</span>
+    <span>C++ (Basic)</span>
+    <span>Statistical Analysis</span>
+    <span>Time Series Modeling</span>
+    <span>Bayesian Inference</span>
+    <span>Machine Learning</span>
+    <span>MATLAB · Mathematica</span>
+    <span>Research Writing</span>
+    <span>Scientific Research</span>
+    <span>LaTeX</span>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section reveal">
+  <h2>Experience</h2>
+
+  <div class="card">
+    <h3>Artificial Intelligence Analyst · Prompt Engineer</h3>
+    <div class="meta">Innodata India Pvt. Ltd. · Aug 2024 – Present</div>
+    <p>LLM evaluation, response quality analysis, role-specific behavior testing, and multimodal AI workflows.</p>
+  </div>
+
+  <div class="card">
+    <h3>Content Writer & Creator · AI Content Writer</h3>
+    <div class="meta">NetBotPro Technologies · Apr 2024 – Aug 2024</div>
+    <p>Research-driven technical scripts, academic content review, SEO-aware writing, and prompt engineering.</p>
+  </div>
+
+  <div class="card">
+    <h3>Pre-Doctoral Research Fellow</h3>
+    <div class="meta">Ahmedabad University · May 2022 – Mar 2024</div>
+    <p>Theoretical and numerical research on electromagnetic fields and particle dynamics in curved spacetime.</p>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section reveal">
+  <h2>Projects</h2>
+
+  <div class="card">
+    <h3>Banking & Financial Stock Analysis<h3>
+    <p>Quantitative analysis of banking stocks including returns, volatility, correlations, and risk metrics.</p>
+    <a class="action-link" href="https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis" target="_blank">
+      → GitHub Project Link
+    </a>
+  </div>
+
+  <div class="card">
+    <h3>Gravitational-Wave Tests of GR (PPE Formalism)</h3>
+    <p>Bayesian inference pipelines for testing deviations from General Relativity using GW observations.</p>
+    <a class="action-link" href="https://github.com/KaunteyAcharya/GW-GR-Test-ppe-formalism" target="_blank">
+      → GitHub Project Link
+    </a>
+  </div>
+
+  <div class="card">
+    <h3>Credit Score Data Analysis</h3>
+    <p>EDA of credit datasets focusing on default risk, imbalance, correlations, and interpretability.</p>
+    <a class="action-link" href="https://github.com/KaunteyAcharya/Credit-Score-Data-Analysis" target="_blank">
+      → GitHub Project Link
+    </a>
+  </div>
+
+  <div class="card">
+    <h3>Indian Startup Investment EDA</h3>
+    <p>Exploratory analysis of Indian startup funding trends, sectors, and investor activity.</p>
+    <a class="action-link" href="https://github.com/KaunteyAcharya/start-ups-data-analysis" target="_blank">
+      → GitHub Project Link
+    </a>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section class="section reveal">
+  <h2>Publications</h2>
+
+  <div class="card">
+    <h3>JMN-1 Singularity in Weak Magnetic Field</h3>
+    <a class="action-link" href="https://link.springer.com/article/10.1140/epjc/s10052-024-12905-4" target="_blank">
+      → Eur. Phys. J. C 84, 535
+    </a>
+  </div>
+  
+    <div class="card">
+    <h3>High energy particle collision in vicinity of naked singularity</h3>
+    <a class="action-link" href="https://doi.org/10.1016/j.dark.2025.102101" target="_blank">
+      → Physics of the Dark Universe
+    </a>
+  </div>
+  
+   <div class="card">
+    <h3>Rotational energy extraction from Kerr black hole's mimickers</h3>
+    <a class="action-link" href="https://doi.org/10.3390/universe8110571" target="_blank">
+      → Universe 2022, 8(11), 571
+    </a>
+  </div>
+  
+  
+
+  <div class="card">
+    <h3>Energy Extraction from Janis–Newman–Winicour Naked Singularity</h3>
+    <a class="action-link" href="https://doi.org/10.1103/PhysRevD.107.064036" target="_blank">
+      → Phys. Rev. D 107, 064036
+    </a>
+  </div>
+</section>
+
+<footer>© 2025 Kauntey Acharya</footer>
+
 <script>
-/* ============================
-   Rotating pill + theme + state
-   ============================ */
-document.addEventListener("DOMContentLoaded",()=>{
-
-  /* word rotation */
-  const words=[...document.querySelectorAll(".rotating-pill .word")];
-  let idx=0;
-  function show(i){
-    words.forEach((w,ii)=>w.classList.toggle("active",ii===i));
-  }
-  if(words.length){
-    show(0);
-    setInterval(()=>{
-      idx=(idx+1)%words.length;
-      const pill=document.querySelector(".rotating-pill");
-      pill.classList.add("pulse");
-      setTimeout(()=>pill.classList.remove("pulse"),250);
-      show(idx);
-    },900);
-  }
-
-  /* theme toggle */
-  const body=document.body;
-  const themeBtn=document.getElementById("themeBtn");
-  function setTheme(isDark){
-    body.classList.toggle("dark",!!isDark);
-    body.classList.toggle("light",!isDark);
-    themeBtn.textContent=isDark?"🌞":"🌙";
-  }
-  setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-  themeBtn.addEventListener("click",()=>setTheme(!body.classList.contains("dark")));
-
-  /* scroll states */
-  const corner=document.getElementById("cornerName");
-  const center=document.getElementById("centerName");
-  const analyst=document.getElementById("analyst");
-  const intro=document.getElementById("introScreen");
-  const mid=document.getElementById("analystScreen");
-  const about=document.getElementById("aboutSection");
-
-  let inIntro=false,inMid=false,inAbout=false;
-  function applyState(){
-    if(inAbout){
-      corner.classList.add("visible");
-      center.classList.add("fade-out");
-      analyst.classList.remove("visible");
-      about.classList.add("visible");
-    } else if(inMid){
-      corner.classList.add("visible");
-      center.classList.add("fade-out");
-      analyst.classList.add("visible");
-      about.classList.remove("visible");
-    } else {
-      corner.classList.remove("visible");
-      center.classList.remove("fade-out");
-      analyst.classList.remove("visible");
-      about.classList.remove("visible");
+const reveals=document.querySelectorAll(".reveal");
+const revealOnScroll=()=>{
+  const h=window.innerHeight;
+  reveals.forEach(el=>{
+    if(el.getBoundingClientRect().top<h-120){
+      el.classList.add("active");
     }
-  }
-
-  const io1=new IntersectionObserver(e=>{inIntro=e[0].isIntersecting;applyState();},{threshold:.6});
-  const io2=new IntersectionObserver(e=>{inMid=e[0].isIntersecting;applyState();},{threshold:.52});
-  const io3=new IntersectionObserver(e=>{inAbout=e[0].isIntersecting;applyState();},{threshold:.35});
-
-  io1.observe(intro);
-  io2.observe(mid);
-  io3.observe(about);
-
-});
+  });
+};
+window.addEventListener("scroll",revealOnScroll);
+revealOnScroll();
 </script>
 
 </body>
