@@ -11,15 +11,8 @@
 html{scroll-behavior:smooth}
 
 /* ========== THEME VARIABLES ========== */
+/* DEFAULT = LIGHT THEME */
 :root{
-  --bg:#000;
-  --text:#fff;
-  --border:rgba(255,255,255,.25);
-  --border-soft:rgba(255,255,255,.14);
-  --hover-bg:rgba(255,255,255,.03);
-}
-
-body.light{
   --bg:#fff;
   --text:#000;
   --border:rgba(0,0,0,.25);
@@ -27,107 +20,17 @@ body.light{
   --hover-bg:rgba(0,0,0,.03);
 }
 
+/* DARK THEME WHEN body.dark */
+body.dark{
+  --bg:#000;
+  --text:#fff;
+  --border:rgba(255,255,255,.25);
+  --border-soft:rgba(255,255,255,.14);
+  --hover-bg:rgba(255,255,255,.03);
+}
+
 /* ========== BASE TYPOGRAPHY ========== */
 body{
-  
-  /* ================= MOBILE OPTIMIZATIONS ONLY ================= */
-@media (max-width: 900px) {
-
-  body {
-    font-size: 15px;
-    line-height: 1.65;
-  }
-
-  /* HERO */
-  .hero {
-    padding: 4rem 1.6rem;
-  }
-
-  .hero h1 {
-    font-size: 2.4rem;
-  }
-
-  .roles {
-    font-size: 1.25rem;
-  }
-
-  .hireme,
-  .tagline,
-  .location {
-    font-size: 1.05rem;
-  }
-
-  /* ICONS */
-  .icons {
-    gap: 1rem;
-  }
-
-  .icon-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  /* SECTIONS */
-  .section {
-    padding: 3.5rem 1.6rem;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-  }
-
-  .section p {
-    font-size: 1.05rem;
-  }
-
-  /* CARDS */
-  .card {
-    padding: 1.4rem;
-  }
-
-  .card h3 {
-    font-size: 1.15rem;
-  }
-
-  .meta {
-    font-size: 1rem;
-  }
-
-  /* SKILLS GRID */
-  .skills {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-
-  .skills span {
-    font-size: 0.95rem;
-    padding: 0.65rem;
-  }
-
-  /* FOOTER */
-  footer {
-    padding: 2rem 1.6rem;
-    text-align: center;
-  }
-}
-
-/* EXTRA SMALL PHONES */
-@media (max-width: 420px) {
-
-  .hero h1 {
-    font-size: 2.1rem;
-  }
-
-  .roles {
-    font-size: 1.1rem;
-  }
-
-  h2 {
-    font-size: 1.45rem;
-  }
-}
-
-  
-  
   font-family: monospace;
   background:var(--bg);
   color:var(--text);
@@ -142,13 +45,26 @@ body{
   position:fixed;
   top:18px;
   right:20px;
-  font-size:1.4rem;
+  width:42px;
+  height:42px;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
   user-select:none;
-  opacity:.85;
   transition:.3s ease;
+  background:transparent;
 }
-.theme-toggle:hover{opacity:.5}
+.theme-toggle:hover{opacity:.6}
+
+.theme-toggle svg{
+  width:20px;
+  height:20px;
+  stroke:var(--text);
+  fill:none;
+  stroke-width:1.7;
+}
 
 /* ========== HERO ========== */
 .hero{
@@ -291,13 +207,108 @@ footer{
 @media(max-width:800px){
   .hero,.section{padding:3rem 2rem}
 }
+
+/* ================= MOBILE OPTIMIZATIONS ONLY ================= */
+@media (max-width: 900px) {
+
+  body {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .hero {
+    padding: 4rem 1.6rem;
+  }
+
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+
+  .roles {
+    font-size: 1.25rem;
+  }
+
+  .hireme,
+  .tagline,
+  .location {
+    font-size: 1.05rem;
+  }
+
+  .icons {
+    gap: 1rem;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section {
+    padding: 3.5rem 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .section p {
+    font-size: 1.05rem;
+  }
+
+  .card {
+    padding: 1.4rem;
+  }
+
+  .card h3 {
+    font-size: 1.15rem;
+  }
+
+  .meta {
+    font-size: 1rem;
+  }
+
+  .skills {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .skills span {
+    font-size: 0.95rem;
+    padding: 0.65rem;
+  }
+
+  footer {
+    padding: 2rem 1.6rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .roles {
+    font-size: 1.1rem;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- THEME TOGGLE -->
-<div class="theme-toggle" onclick="toggleTheme()" id="themeIcon">◐</div>
+<!-- THEME TOGGLE (SVG ICON) -->
+<div class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Toggle Theme">
+  <!-- DEFAULT ICON = SUN (LIGHT MODE) -->
+  <svg id="sunIcon" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -429,21 +440,19 @@ If you are interested in research collaboration, you can reach out via mail or l
     </a>
   </div>
   
-    <div class="card">
+  <div class="card">
     <h3>High energy particle collision in vicinity of naked singularity</h3>
     <a class="action-link" href="https://doi.org/10.1016/j.dark.2025.102101" target="_blank">
       → Physics of the Dark Universe
     </a>
   </div>
   
-   <div class="card">
+  <div class="card">
     <h3>Rotational energy extraction from Kerr black hole's mimickers</h3>
     <a class="action-link" href="https://doi.org/10.3390/universe8110571" target="_blank">
       → Universe 2022, 8(11), 571
     </a>
   </div>
-  
-  
 
   <div class="card">
     <h3>Energy Extraction from Janis–Newman–Winicour Naked Singularity</h3>
@@ -468,14 +477,27 @@ const revealOnScroll=()=>{
 window.addEventListener("scroll",revealOnScroll);
 revealOnScroll();
 
+/* --------- SVG ICONS (BLACK & WHITE) --------- */
+const SUN = `
+<svg id="sunIcon" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="4"></circle>
+  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+</svg>`;
+
+const MOON = `
+<svg id="moonIcon" viewBox="0 0 24 24">
+  <path d="M21 12.8A7.5 7.5 0 0 1 11.2 3a6.5 6.5 0 1 0 9.8 9.8z"></path>
+</svg>`;
+
+/* DEFAULT = LIGHT THEME (SUN ICON) */
+document.getElementById("themeIcon").innerHTML = SUN;
+
 function toggleTheme(){
-  document.body.classList.toggle("light");
+  document.body.classList.toggle("dark");
   const icon=document.getElementById("themeIcon");
-  icon.textContent=document.body.classList.contains("light") ? "◑" : "◐";
+  icon.innerHTML = document.body.classList.contains("dark") ? MOON : SUN;
 }
 </script>
 
 </body>
 </html>
-
-
