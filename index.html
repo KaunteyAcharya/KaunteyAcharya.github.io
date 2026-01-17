@@ -5,13 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kauntey Acharya | Quant & Research Analyst</title>
 
+<!-- ====== FAVICON: "KA" (INLINE SVG DATA URL) ====== -->
+<link rel="icon" type="image/svg+xml"
+href='data:image/svg+xml;utf8,
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+  <rect width="100%25" height="100%25" fill="black"/>
+  <text x="50%25" y="54%25"
+        font-size="30"
+        font-family="monospace"
+        fill="white"
+        text-anchor="middle"
+        dominant-baseline="middle">KA</text>
+</svg>'>
+
 <style>
 /* =========+= RESET ========== */
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 
 /* ========== THEME VARIABLES ========== */
-/* DEFAULT = LIGHT THEME */
+/* DEFAULT = LIGHT */
 :root{
   --bg:#fff;
   --text:#000;
@@ -20,7 +33,7 @@ html{scroll-behavior:smooth}
   --hover-bg:rgba(0,0,0,.03);
 }
 
-/* DARK THEME WHEN body.dark */
+/* DARK when body.dark */
 body.dark{
   --bg:#000;
   --text:#fff;
@@ -45,8 +58,8 @@ body{
   position:fixed;
   top:18px;
   right:20px;
-  width:42px;
-  height:42px;
+  width:44px;
+  height:44px;
   border:1px solid var(--border);
   display:flex;
   align-items:center;
@@ -55,16 +68,10 @@ body{
   user-select:none;
   transition:.3s ease;
   background:transparent;
+  font-size:1.35rem;
+  opacity:.85;
 }
-.theme-toggle:hover{opacity:.6}
-
-.theme-toggle svg{
-  width:20px;
-  height:20px;
-  stroke:var(--text);
-  fill:none;
-  stroke-width:1.7;
-}
+.theme-toggle:hover{opacity:.55}
 
 /* ========== HERO ========== */
 .hero{
@@ -211,104 +218,51 @@ footer{
 /* ================= MOBILE OPTIMIZATIONS ONLY ================= */
 @media (max-width: 900px) {
 
-  body {
-    font-size: 15px;
-    line-height: 1.65;
-  }
+  body { font-size: 15px; line-height: 1.65; }
 
-  .hero {
-    padding: 4rem 1.6rem;
-  }
+  .hero { padding: 4rem 1.6rem; }
 
-  .hero h1 {
-    font-size: 2.4rem;
-  }
+  .hero h1 { font-size: 2.4rem; }
 
-  .roles {
-    font-size: 1.25rem;
-  }
+  .roles { font-size: 1.25rem; }
 
-  .hireme,
-  .tagline,
-  .location {
-    font-size: 1.05rem;
-  }
+  .hireme, .tagline, .location { font-size: 1.05rem; }
 
-  .icons {
-    gap: 1rem;
-  }
+  .icons { gap: 1rem; }
 
-  .icon-btn {
-    width: 40px;
-    height: 40px;
-  }
+  .icon-btn { width: 40px; height: 40px; }
 
-  .section {
-    padding: 3.5rem 1.6rem;
-  }
+  .section { padding: 3.5rem 1.6rem; }
 
-  h2 {
-    font-size: 1.6rem;
-  }
+  h2 { font-size: 1.6rem; }
 
-  .section p {
-    font-size: 1.05rem;
-  }
+  .section p { font-size: 1.05rem; }
 
-  .card {
-    padding: 1.4rem;
-  }
+  .card { padding: 1.4rem; }
 
-  .card h3 {
-    font-size: 1.15rem;
-  }
+  .card h3 { font-size: 1.15rem; }
 
-  .meta {
-    font-size: 1rem;
-  }
+  .meta { font-size: 1rem; }
 
-  .skills {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
+  .skills { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
 
-  .skills span {
-    font-size: 0.95rem;
-    padding: 0.65rem;
-  }
+  .skills span { font-size: 0.95rem; padding: 0.65rem; }
 
-  footer {
-    padding: 2rem 1.6rem;
-    text-align: center;
-  }
+  footer { padding: 2rem 1.6rem; text-align: center; }
 }
 
 @media (max-width: 420px) {
-
-  .hero h1 {
-    font-size: 2.1rem;
-  }
-
-  .roles {
-    font-size: 1.1rem;
-  }
-
-  h2 {
-    font-size: 1.45rem;
-  }
+  .hero h1 { font-size: 2.1rem; }
+  .roles { font-size: 1.1rem; }
+  h2 { font-size: 1.45rem; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- THEME TOGGLE (SVG ICON) -->
-<div class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Toggle Theme">
-  <!-- DEFAULT ICON = SUN (LIGHT MODE) -->
-  <svg id="sunIcon" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="4"></circle>
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-  </svg>
-</div>
+<!-- THEME TOGGLE -->
+<div class="theme-toggle" onclick="toggleTheme()" id="themeIcon">◑</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -338,15 +292,15 @@ footer{
   <h2>About Me</h2>
   <p>
     I am a data and research analyst with a background in theoretical physics.
-I work on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods. I am eager to use my quantitative skills for analyst roles. 
+    I work on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods. I am eager to use my quantitative skills for analyst roles.
   </p>
-  
+
   <p>
-I like to read research papers and play chess. I could also be found chilling watching Big Bang Theory or Sci-Fi shows. Apart from physics and tech, I am interested in neuroscience, cognitive science, and evolutionary biology. 
+    I like to read research papers and play chess. I could also be found chilling watching Big Bang Theory or Sci-Fi shows. Apart from physics and tech, I am interested in neuroscience, cognitive science, and evolutionary biology.
   </p>
-  
-    <p>
-If you are interested in research collaboration, you can reach out via mail or linkedin.
+
+  <p>
+    If you are interested in research collaboration, you can reach out via mail or linkedin.
   </p>
 </section>
 
@@ -355,7 +309,7 @@ If you are interested in research collaboration, you can reach out via mail or l
   <h2>Skills</h2>
   <div class="skills">
     <span>Python</span>
-    <span>NumPy </span> 
+    <span>NumPy</span>
     <span>Pandas</span>
     <span>C++ (Basic)</span>
     <span>Statistical Analysis</span>
@@ -439,14 +393,14 @@ If you are interested in research collaboration, you can reach out via mail or l
       → Eur. Phys. J. C 84, 535
     </a>
   </div>
-  
+
   <div class="card">
     <h3>High energy particle collision in vicinity of naked singularity</h3>
     <a class="action-link" href="https://doi.org/10.1016/j.dark.2025.102101" target="_blank">
       → Physics of the Dark Universe
     </a>
   </div>
-  
+
   <div class="card">
     <h3>Rotational energy extraction from Kerr black hole's mimickers</h3>
     <a class="action-link" href="https://doi.org/10.3390/universe8110571" target="_blank">
@@ -477,25 +431,11 @@ const revealOnScroll=()=>{
 window.addEventListener("scroll",revealOnScroll);
 revealOnScroll();
 
-/* --------- SVG ICONS (BLACK & WHITE) --------- */
-const SUN = `
-<svg id="sunIcon" viewBox="0 0 24 24">
-  <circle cx="12" cy="12" r="4"></circle>
-  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-</svg>`;
-
-const MOON = `
-<svg id="moonIcon" viewBox="0 0 24 24">
-  <path d="M21 12.8A7.5 7.5 0 0 1 11.2 3a6.5 6.5 0 1 0 9.8 9.8z"></path>
-</svg>`;
-
-/* DEFAULT = LIGHT THEME (SUN ICON) */
-document.getElementById("themeIcon").innerHTML = SUN;
-
+/* DEFAULT LIGHT => show ◑ (sun-like). DARK => ◐ */
 function toggleTheme(){
   document.body.classList.toggle("dark");
   const icon=document.getElementById("themeIcon");
-  icon.innerHTML = document.body.classList.contains("dark") ? MOON : SUN;
+  icon.textContent=document.body.classList.contains("dark") ? "◐" : "◑";
 }
 </script>
 
