@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kauntey Acharya | Quant & Research Analyst</title>
 
-<!-- ====== FAVICON: "KA" (INLINE SVG DATA URL) ====== -->
+<!-- ====== FAVICON: "KA" (BIGGER TEXT) ====== -->
 <link rel="icon" type="image/svg+xml"
 href='data:image/svg+xml;utf8,
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
   <rect width="100%25" height="100%25" fill="black"/>
   <text x="50%25" y="54%25"
-        font-size="30"
+        font-size="38"
         font-family="monospace"
+        font-weight="700"
         fill="white"
         text-anchor="middle"
         dominant-baseline="middle">KA</text>
@@ -53,14 +54,13 @@ body{
   transition:background .35s ease,color .35s ease;
 }
 
-/* ========== THEME TOGGLE ========== */
+/* ========== THEME TOGGLE (NO BORDER) ========== */
 .theme-toggle{
   position:fixed;
   top:18px;
   right:20px;
   width:44px;
   height:44px;
-  border:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -68,8 +68,10 @@ body{
   user-select:none;
   transition:.3s ease;
   background:transparent;
-  font-size:1.35rem;
+  font-size:1.55rem;
   opacity:.85;
+  border:none;           /* ✅ removed border */
+  outline:none;
 }
 .theme-toggle:hover{opacity:.55}
 
@@ -431,7 +433,7 @@ const revealOnScroll=()=>{
 window.addEventListener("scroll",revealOnScroll);
 revealOnScroll();
 
-/* DEFAULT LIGHT => show ◑ (sun-like). DARK => ◐ */
+/* DEFAULT LIGHT => show ◑. DARK => ◐ */
 function toggleTheme(){
   document.body.classList.toggle("dark");
   const icon=document.getElementById("themeIcon");
