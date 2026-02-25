@@ -8,7 +8,21 @@
 <title>Kauntey Acharya | Research Analyst | Data Analyst | Quant Analyst</title>
 <meta name="description" content="Portfolio of Kauntey Acharya, a Research, Data, and Quant Analyst based in Ahmedabad. Specializing in Theoretical Physics and AI Research.">
 <meta name="keywords" content="Kauntey Acharya, Research Analyst, Data Analyst, Quant Analyst, Theoretical Physics, AI Analyst, Ahmedabad India">
+<meta name="author" content="Kauntey Acharya">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kaunteyacharya.github.io/">
+
+<!-- OPEN GRAPH -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://kaunteyacharya.github.io/">
+<meta property="og:title"       content="Kauntey Acharya | Research Analyst | Data Analyst | Quant Analyst">
+<meta property="og:description" content="Portfolio of Kauntey Acharya, Research and Data Analyst with a background in Theoretical Physics. Based in Ahmedabad, India.">
+<meta property="og:site_name"   content="Kauntey Acharya">
+
+<!-- TWITTER CARD -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Kauntey Acharya | Research Analyst | Data Analyst | Quant Analyst">
+<meta name="twitter:description" content="Portfolio of Kauntey Acharya, Research and Data Analyst with a background in Theoretical Physics.">
 
 <!-- JSON-LD SCHEMA -->
 <script type="application/ld+json">
@@ -16,18 +30,27 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Kauntey Acharya",
+  "url": "https://kaunteyacharya.github.io/",
+  "email": "kaunteyacharya2000@gmail.com",
+  "jobTitle": "Research Analyst, Data Analyst, Quant Analyst",
+  "description": "Research and Data Analyst with a background in theoretical physics. Works on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Ahmedabad",
-    "addressCountry": "India"
+    "addressCountry": "IN"
   },
-  "jobTitle": "Research Analyst & Data Analyst",
-  "url": "https://kaunteyacharya.github.io/",
   "sameAs": [
     "https://github.com/KaunteyAcharya",
     "https://www.linkedin.com/in/kauntey-acharya",
     "https://kaunteyacharya.wordpress.com/"
-  ]
+  ],
+  "knowsAbout": [
+    "Python", "Machine Learning", "Bayesian Inference", "Time Series Modeling",
+    "Theoretical Physics", "Gravitational Waves", "Data Analysis",
+    "NumPy", "Pandas", "Statistical Analysis", "LaTeX"
+  ],
+  "alumniOf": { "@type": "Organization", "name": "Ahmedabad University" },
+  "worksFor": { "@type": "Organization", "name": "Innodata India Pvt. Ltd." }
 }
 </script>
 
@@ -40,388 +63,455 @@ href='data:image/svg+xml;utf8,
 </svg>'>
 
 <style>
-/* =========+= RESET ========== */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+/* ========== RESET ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 /* ========== THEME VARIABLES ========== */
-:root{
-  --bg:#F5F5DC;
-  --text:#000;
-  --border:rgba(0,0,0,.25);
-  --border-soft:rgba(0,0,0,.14);
-  --hover-bg:rgba(0,0,0,.03);
+:root {
+  --bg: #F5F5DC;
+  --text: #000;
+  --border: rgba(0,0,0,.25);
+  --border-soft: rgba(0,0,0,.14);
+  --hover-bg: rgba(0,0,0,.03);
+  /* Single source of truth for all horizontal spacing */
+  --page-pad: 4rem;
+  --page-max: 1300px;
 }
 
-body.dark{
-  --bg:#000;
-  --text:#fff;
-  --border:rgba(255,255,255,.25);
-  --border-soft:rgba(255,255,255,.14);
-  --hover-bg:rgba(255,255,255,.03);
+body.dark {
+  --bg: #000;
+  --text: #fff;
+  --border: rgba(255,255,255,.25);
+  --border-soft: rgba(255,255,255,.14);
+  --hover-bg: rgba(255,255,255,.03);
 }
 
-/* ========== BASE TYPOGRAPHY ========== */
-body{
+/* ========== BASE ========== */
+body {
   font-family: monospace;
-  background:var(--bg);
-  color:var(--text);
-  font-size:17px;
-  line-height:1.75;
-  -webkit-font-smoothing:antialiased;
-  transition:background .35s ease, color .35s ease;
-}
-
-/* ========== THEME TOGGLE (FIXED CENTERING) ========== */
-.theme-toggle{
-  position:fixed;
-  top:18px;
-  right:20px;
-  width:44px;
-  height:44px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  background:transparent;
-  font-size:1.55rem;
+  background: var(--bg);
   color: var(--text);
-  opacity:.85;
-  border:none;         
-  outline:none;
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  transition: background .35s ease, color .35s ease;
+}
+
+/* ========== THEME TOGGLE ========== */
+.theme-toggle {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: transparent;
+  font-size: 1.55rem;
+  color: var(--text);
+  opacity: .85;
+  border: none;
+  outline: none;
   z-index: 9999;
+  transition: opacity .3s ease;
 }
-.theme-toggle:hover{opacity:.55}
+.theme-toggle:hover { opacity: .5; }
 
-/* ========== HERO ========== */
-header.hero{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:5rem 4rem;
+/* =============================================================
+   LAYOUT SYSTEM
+   Both hero and every section use IDENTICAL --page-pad
+   so every left edge lines up on a single vertical axis.
+   Root cause of the screenshot misalignment was:
+     hero  → padding: 5rem 4rem (raw px, left-flush)
+     .section → padding: 5rem 4rem + margin: 0 auto (centred)
+   Now both use the same CSS variable and neither uses margin:auto.
+============================================================= */
+
+/* ── HERO ── */
+header.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;      /* vertical centering without pushing h1 off-screen */
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+  max-width: var(--page-max);
 }
 
-header h1{
-  font-size:clamp(2.5rem,5vw,4.0rem);
-  font-weight:450;
+/* FIX 1: h1 name is now always the first visible element.
+   font-weight 450 renders as barely-there in monospace — bumped to 700. */
+header.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4.0rem);
+  font-weight: 700;
   margin-bottom: 1.5rem;
+  line-height: 1.1;
 }
 
-.roles{ font-size:1.8rem; margin-bottom: 0.8rem; font-weight: bold; }
-.hireme{ font-size:1.5rem; opacity:.8; margin-bottom: 1.2rem; }
+.roles  { font-size: 1.8rem; margin-bottom: 0.8rem; font-weight: bold; }
+.hireme { font-size: 1.5rem; opacity: .8; margin-bottom: 1.2rem; }
 
-/* FIX: Grouping tagline and location on one line */
 .hero-details {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 1.5rem; /* horizontal spacing */
+  gap: 0 1.5rem;
   align-items: center;
   font-size: 1.4rem;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .location-box {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: .4rem;
 }
 
-/* ========== ICONS (FIXED CENTERING) ========== */
-.icons{
-  display:flex;
-  gap:1.4rem;
-  margin-top:2rem;
+/* ========== ICONS ========== */
+.icons {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 2rem;
 }
 
-.icon-btn{
-  width:40px;
-  height:40px;
-  border:1px solid var(--border);
-  display: grid; /* Best for centering */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  display: grid;
   place-items: center;
-  transition:.3s ease;
   text-decoration: none;
+  transition: .3s ease;
 }
 
-.icon-btn:hover{
-  transform:translateY(-2px);
+.icon-btn:hover {
+  transform: translateY(-2px);
   background: var(--hover-bg);
 }
 
-.icon-btn svg{
-  width:20px;
-  height:20px;
-  fill:var(--text);
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text);
 }
 
-/* ========== SECTIONS ========== */
-.section{
-  padding:5rem 4rem;
-  max-width:1300px;
-  margin: 0 auto;
+/* ── SECTIONS ── */
+/* FIX 2: removed margin: 0 auto — sections now left-align
+   identically to the hero via the same --page-pad variable */
+.section {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+  max-width: var(--page-max);
 }
 
-h2{
-  font-size:2rem;
-  margin-bottom:2.2rem;
-  border-bottom:1px solid var(--border);
-  padding-bottom:.6rem;
+h2 {
+  font-size: 2rem;
+  margin-bottom: 2.2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: .6rem;
 }
 
-.section p{
-  font-size:1.2rem;
-  max-width:1150px;
-  margin-bottom:1em;
+.section p {
+  font-size: 1.2rem;
+  max-width: 1150px;
+  margin-bottom: 1em;
 }
 
 /* ========== CARDS ========== */
-.card{
-  border:1px solid var(--border-soft);
-  padding:1.7rem;
-  margin-bottom:1rem;
-  transition:.35s ease;
+.card {
+  border: 1px solid var(--border-soft);
+  padding: 1.7rem;
+  margin-bottom: 1rem;
+  transition: .35s ease;
 }
 
-.card:hover{ transform:translateY(-6px); background:var(--hover-bg); }
+.card:hover { transform: translateY(-6px); background: var(--hover-bg); }
+.card h3 { font-size: 1.3rem; }
 
-.card h3{ font-size:1.3rem; }
-
-.meta{
-  font-size:1.2rem;
-  opacity:.8;
-  margin:.4rem 0 1rem;
+.meta {
+  font-size: 1.2rem;
+  opacity: .8;
+  margin: .4rem 0 1rem;
 }
 
-.action-link{
-  display:inline-block;
-  margin-top:1rem;
-  font-size:1rem;
-  color:var(--text);
-  border-bottom:1px solid var(--border);
-  text-decoration:none;
+.action-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
 }
+.action-link:hover { opacity: .6; }
 
 /* ========== SKILLS ========== */
-.skills{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:1rem;
+.skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
-.skills span{
-  border:1px solid var(--border);
-  padding:.75rem;
-  text-align:center;
+.skills span {
+  border: 1px solid var(--border);
+  padding: .75rem;
+  text-align: center;
 }
 
-.skills span:hover{ background:var(--text); color:var(--bg); }
+.skills span:hover { background: var(--text); color: var(--bg); }
 
 /* ========== FOOTER ========== */
-footer{ padding:2rem 4rem; font-size:.9rem; opacity:.6; }
+footer {
+  padding: 2rem var(--page-pad);
+  font-size: .9rem;
+  opacity: .6;
+}
 
 /* ========== ANIMATION ========== */
-.reveal{ opacity:0; transform:translateY(40px); transition:1.2s ease; }
-.reveal.active{ opacity:1; transform:none; }
+.reveal { opacity: 0; transform: translateY(40px); transition: 1.2s ease; }
+.reveal.active { opacity: 1; transform: none; }
 
 /* ========== RESPONSIVE ========== */
-@media(max-width:900px){
-  header.hero, .section{padding:3.5rem 1.6rem}
+@media (max-width: 900px) {
+  /* Changing the variable propagates to hero + every section automatically */
+  :root { --page-pad: 1.6rem; }
+
+  body { font-size: 15px; line-height: 1.65; }
   header.hero h1 { font-size: 2.4rem; }
   .roles { font-size: 1.25rem; }
   .hireme { font-size: 1.1rem; }
-  .hero-details { font-size: 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .hero-details { font-size: 1rem; flex-direction: column; align-items: flex-start; gap: .5rem; }
+  h2 { font-size: 1.6rem; }
+  .section p { font-size: 1.05rem; }
+  .card { padding: 1.4rem; }
+  .card h3 { font-size: 1.15rem; }
+  .meta { font-size: 1rem; }
+  .skills { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .skills span { font-size: .95rem; padding: .65rem; }
+  footer { text-align: center; }
+}
+
+@media (max-width: 420px) {
+  header.hero h1 { font-size: 2.1rem; }
+  .roles { font-size: 1.1rem; }
+  h2 { font-size: 1.45rem; }
 }
 </style>
 </head>
 
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Switch Theme">◑</button>
+<button class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Switch theme">◑</button>
 
-<main>
-<header class="hero">
-  <h1>Kauntey Acharya</h1>
-  <div class="roles">Research Analyst · Data Analyst · Quant Analyst</div>
-  <div class="hireme">[ Open to New Corporate Opportunities & Research Collaborations ]</div>
-  
-  <!-- Grouped Line: Tagline and Location on one line -->
-  <div class="hero-details">
-    <span class="tagline">From Theoretical Physics Research to AI & Industry Research</span>
-    <span class="location-box">
-        <span style="font-size: 1.2rem; line-height: 1;">📍</span> Ahmedabad, India
-    </span>
-  </div>
+<main id="main-content">
 
-  <nav class="icons" aria-label="Social Profiles">
-    <a class="icon-btn" href="https://github.com/KaunteyAcharya" target="_blank" rel="noopener" aria-label="GitHub">
-      <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.43 7.86 10.96.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.55-3.88-1.55-.53-1.35-1.3-1.7-1.3-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.45.11-3.03 0 0 .97-.31 3.18 1.18.92-.26 1.9-.38 2.88-.38s1.96.13 2.88.38c2.2-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.74.11 3.03.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55 4.56-1.53 7.85-5.86 7.85-10.96C23.5 5.74 18.27.5 12 .5z"/></svg>
-    </a>
-    <a class="icon-btn" href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener" aria-label="LinkedIn">
-      <svg viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.38-1.11 2.5-2.48 2.5A2.49 2.49 0 0 1 0 6c0-1.38 1.11-2.5 2.5-2.5s2.48 1.12 2.48 2.5zM.5 24h4.96V7.98H.5V24zM8.48 7.98H13v2.2h.06c.63-1.2 2.18-2.48 4.48-2.48 4.8 0 5.68 3.16 5.68 7.26V24h-4.98v-7.52c0-1.8-.04-4.12-2.5-4.12-2.5 0-2.88 1.96-2.88 3.98V24H8.48V7.98z"/></svg>
-    </a>
-    <a class="icon-btn" href="https://kaunteyacharya.wordpress.com/" target="_blank" rel="noopener" aria-label="Wordpress">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.93 7.19c-.15-.03-.3-.05-.45-.05-.9 0-1.54.68-1.54 1.42 0 .66.39 1.23.81 1.92.32.56.7 1.27.7 2.3 0 .72-.28 1.56-.64 2.73l-.84 2.8-3.05-9.07c.92 0 1.76-.14 1.76-.14.46-.06.4-.74-.06-.71 0 0-1.39.11-2.29.11-.85 0-2.28-.11-2.28-.11-.46-.03-.52.68-.06.71 0 0 .77.1 1.59.13l2.36 6.47 1.42-4.72c.62-1.99.84-3.4.84-4.61 0-.5-.03-.95-.1-1.36.99.59 1.7 1.66 1.7 2.89 0 .9-.35 1.92-.78 3.28l-.8 2.67c2.3-1.34 3.84-3.82 3.84-6.66 0-1.34-.36-2.59-.99-3.65z"/></svg>
-    </a>
-    <a class="icon-btn" href="mailto:kaunteyacharya2000@gmail.com" aria-label="Email">
-      <svg viewBox="0 0 24 24"><path d="M12 13.065L.015 4.5h23.97L12 13.065zM0 6.75v10.5C0 18.99 1.01 20 2.25 20h19.5c1.24 0 2.25-1.01 2.25-2.25V6.75l-12 8.25L0 6.75z"/></svg>
-    </a>
-  </nav>
-</header>
+  <!-- ═══ HERO ═══ -->
+  <header class="hero" aria-labelledby="hero-name">
 
-<!-- ABOUT -->
-<section class="section reveal" id="about">
-  <h2>About Me</h2>
-  <p>
-    I am a data and research analyst with a background in theoretical physics.
-    I work on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods. I am eager to use my quantitative skills for analyst roles.
-  </p>
+    <!-- h1 is always the first visible element — name anchors the page -->
+    <div style="display:flex;flex-direction:column;width:100%">
+      <h1 id="hero-name">Kauntey Acharya</h1>
 
-  <p>
-    I like to read research papers and play chess. I could also be found chilling watching Big Bang Theory or Sci-Fi shows. Apart from physics and tech, I am interested in neuroscience, cognitive science, and evolutionary biology.
-  </p>
+      <div class="roles">Research Analyst · Data Analyst · Quant Analyst</div>
+      <div class="hireme">[ Open to New Corporate Opportunities &amp; Research Collaborations ]</div>
 
-  <p>
-    If you are interested in research collaboration, you can reach out via mail or linkedin.
-  </p>
-</section>
+      <div class="hero-details">
+        <span class="tagline">From Theoretical Physics Research to AI &amp; Industry Research</span>
+        <span class="location-box">
+          <span aria-hidden="true" style="font-size:1.2rem;line-height:1">📍</span>
+          Ahmedabad, India
+        </span>
+      </div>
 
-<!-- SKILLS -->
-<section class="section reveal" id="skills">
-  <h2>Skills</h2>
-  <div class="skills">
-    <span>Python</span>
-    <span>NumPy</span>
-    <span>Pandas</span>
-    <span>C++ (Basic)</span>
-    <span>Statistical Analysis</span>
-    <span>Time Series Modeling</span>
-    <span>Bayesian Inference</span>
-    <span>Machine Learning</span>
-    <span>MATLAB · Mathematica</span>
-    <span>Research Writing</span>
-    <span>Scientific Research</span>
-    <span>LaTeX</span>
-  </div>
-</section>
+      <nav class="icons" aria-label="Social profiles">
+        <a class="icon-btn" href="https://github.com/KaunteyAcharya"
+           target="_blank" rel="noopener noreferrer" aria-label="Kauntey Acharya on GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.43 7.86 10.96.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.55-3.88-1.55-.53-1.35-1.3-1.7-1.3-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.45.11-3.03 0 0 .97-.31 3.18 1.18.92-.26 1.9-.38 2.88-.38s1.96.13 2.88.38c2.2-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.74.11 3.03.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55 4.56-1.53 7.85-5.86 7.85-10.96C23.5 5.74 18.27.5 12 .5z"/>
+          </svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/kauntey-acharya"
+           target="_blank" rel="noopener noreferrer" aria-label="Kauntey Acharya on LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4.98 3.5c0 1.38-1.11 2.5-2.48 2.5A2.49 2.49 0 0 1 0 6c0-1.38 1.11-2.5 2.5-2.5s2.48 1.12 2.48 2.5zM.5 24h4.96V7.98H.5V24zM8.48 7.98H13v2.2h.06c.63-1.2 2.18-2.48 4.48-2.48 4.8 0 5.68 3.16 5.68 7.26V24h-4.98v-7.52c0-1.8-.04-4.12-2.5-4.12-2.5 0-2.88 1.96-2.88 3.98V24H8.48V7.98z"/>
+          </svg>
+        </a>
+        <a class="icon-btn" href="https://kaunteyacharya.wordpress.com/"
+           target="_blank" rel="noopener noreferrer" aria-label="Kauntey Acharya's WordPress Blog" title="WordPress">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.93 7.19c-.15-.03-.3-.05-.45-.05-.9 0-1.54.68-1.54 1.42 0 .66.39 1.23.81 1.92.32.56.7 1.27.7 2.3 0 .72-.28 1.56-.64 2.73l-.84 2.8-3.05-9.07c.92 0 1.76-.14 1.76-.14.46-.06.4-.74-.06-.71 0 0-1.39.11-2.29.11-.85 0-2.28-.11-2.28-.11-.46-.03-.52.68-.06.71 0 0 .77.1 1.59.13l2.36 6.47 1.42-4.72c.62-1.99.84-3.4.84-4.61 0-.5-.03-.95-.1-1.36.99.59 1.7 1.66 1.7 2.89 0 .9-.35 1.92-.78 3.28l-.8 2.67c2.3-1.34 3.84-3.82 3.84-6.66 0-1.34-.36-2.59-.99-3.65z"/>
+          </svg>
+        </a>
+        <a class="icon-btn" href="mailto:kaunteyacharya2000@gmail.com"
+           aria-label="Email Kauntey Acharya" title="Email">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 13.065L.015 4.5h23.97L12 13.065zM0 6.75v10.5C0 18.99 1.01 20 2.25 20h19.5c1.24 0 2.25-1.01 2.25-2.25V6.75l-12 8.25L0 6.75z"/>
+          </svg>
+        </a>
+      </nav>
+    </div>
 
-<!-- EXPERIENCE -->
-<section class="section reveal" id="experience">
-  <h2>Experience</h2>
+  </header>
 
-  <article class="card">
-    <h3>Artificial Intelligence Analyst · Prompt Engineer</h3>
-    <div class="meta">Innodata India Pvt. Ltd. · Aug 2024 – Present</div>
-    <p>LLM evaluation, response quality analysis, role-specific behavior testing, and multimodal AI workflows.</p>
-  </article>
+  <!-- ═══ ABOUT ═══ -->
+  <section class="section reveal" id="about" aria-labelledby="about-heading">
+    <h2 id="about-heading">About Me</h2>
+    <p>I am a data and research analyst with a background in theoretical physics.
+       I work on extracting actionable insights from complex datasets using rigorous, reproducible, and interpretable methods. I am eager to use my quantitative skills for analyst roles.</p>
+    <p>I like to read research papers and play chess. I could also be found chilling watching Big Bang Theory or Sci-Fi shows. Apart from physics and tech, I am interested in neuroscience, cognitive science, and evolutionary biology.</p>
+    <p>If you are interested in research collaboration, you can reach out via mail or LinkedIn.</p>
+  </section>
 
-  <article class="card">
-    <h3>Research Articles Reviewer and Tech Writer</h3>
-    <div class="meta">NetBotPro Technologies · Apr 2024 – Aug 2024</div>
-    <p>Research-driven technical scripts, academic content review, SEO-aware writing, reviewing latest research, and prompt engineering.</p>
-  </article>
+  <!-- ═══ SKILLS ═══ -->
+  <section class="section reveal" id="skills" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills</h2>
+    <div class="skills">
+      <span>Python</span>
+      <span>NumPy</span>
+      <span>Pandas</span>
+      <span>C++ (Basic)</span>
+      <span>Statistical Analysis</span>
+      <span>Time Series Modeling</span>
+      <span>Bayesian Inference</span>
+      <span>Machine Learning</span>
+      <span>MATLAB · Mathematica</span>
+      <span>Research Writing</span>
+      <span>Scientific Research</span>
+      <span>LaTeX</span>
+    </div>
+  </section>
 
-  <article class="card">
-    <h3>Pre-Doctoral Research Fellow</h3>
-    <div class="meta">Ahmedabad University · May 2022 – Mar 2024</div>
-    <p>Theoretical and numerical research on electromagnetic fields and particle dynamics in curved spacetime.</p>
-  </article>
-</section>
+  <!-- ═══ EXPERIENCE ═══ -->
+  <section class="section reveal" id="experience" aria-labelledby="experience-heading">
+    <h2 id="experience-heading">Experience</h2>
 
-<!-- PROJECTS -->
-<section class="section reveal" id="projects">
-  <h2>Projects</h2>
+    <article class="card" itemscope itemtype="https://schema.org/OrganizationRole">
+      <h3 itemprop="roleName">Artificial Intelligence Analyst · Prompt Engineer</h3>
+      <div class="meta">
+        <span itemprop="memberOf" itemscope itemtype="https://schema.org/Organization">
+          <span itemprop="name">Innodata India Pvt. Ltd.</span>
+        </span>
+        · <time itemprop="startDate" datetime="2024-08">Aug 2024</time> – Present
+      </div>
+      <p>LLM evaluation, response quality analysis, role-specific behavior testing, and multimodal AI workflows.</p>
+    </article>
 
-  <article class="card">
-    <h3>Banking & Financial Stock Analysis</h3>
-    <p>Quantitative analysis of banking stocks including returns, volatility, correlations, and risk metrics.</p>
-    <a class="action-link" href="https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis" target="_blank" rel="noopener">
-      → GitHub Project Link
-    </a>
-  </article>
+    <article class="card" itemscope itemtype="https://schema.org/OrganizationRole">
+      <h3 itemprop="roleName">Research Articles Reviewer and Tech Writer</h3>
+      <div class="meta">
+        <span itemprop="memberOf" itemscope itemtype="https://schema.org/Organization">
+          <span itemprop="name">NetBotPro Technologies</span>
+        </span>
+        · <time itemprop="startDate" datetime="2024-04">Apr 2024</time> – <time itemprop="endDate" datetime="2024-08">Aug 2024</time>
+      </div>
+      <p>Research-driven technical scripts, academic content review, SEO-aware writing, reviewing latest research, and prompt engineering.</p>
+    </article>
 
-  <article class="card">
-    <h3>Gravitational-Wave Tests of GR (PPE Formalism)</h3>
-    <p>Bayesian inference pipelines for testing deviations from General Relativity using GW observations.</p>
-    <a class="action-link" href="https://github.com/KaunteyAcharya/GW-GR-Test-ppe-formalism" target="_blank" rel="noopener">
-      → GitHub Project Link
-    </a>
-  </article>
+    <article class="card" itemscope itemtype="https://schema.org/OrganizationRole">
+      <h3 itemprop="roleName">Pre-Doctoral Research Fellow</h3>
+      <div class="meta">
+        <span itemprop="memberOf" itemscope itemtype="https://schema.org/Organization">
+          <span itemprop="name">Ahmedabad University</span>
+        </span>
+        · <time itemprop="startDate" datetime="2022-05">May 2022</time> – <time itemprop="endDate" datetime="2024-03">Mar 2024</time>
+      </div>
+      <p>Theoretical and numerical research on electromagnetic fields and particle dynamics in curved spacetime.</p>
+    </article>
+  </section>
 
-  <article class="card">
-    <h3>Credit Score Data Analysis</h3>
-    <p>EDA of credit datasets focusing on default risk, imbalance, correlations, and interpretability</p>
-    <a class="action-link" href="https://github.com/KaunteyAcharya/Credit-Score-Data-Analysis" target="_blank" rel="noopener">
-      → GitHub Project Link
-    </a>
-  </article>
+  <!-- ═══ PROJECTS ═══ -->
+  <section class="section reveal" id="projects" aria-labelledby="projects-heading">
+    <h2 id="projects-heading">Projects</h2>
 
-  <article class="card">
-    <h3>Indian Startup Investment EDA</h3>
-    <p>Exploratory analysis of Indian startup funding trends, sectors, and investor activity.</p>
-    <a class="action-link" href="https://github.com/KaunteyAcharya/start-ups-data-analysis" target="_blank" rel="noopener">
-      → GitHub Project Link
-    </a>
-  </article>
-</section>
+    <article class="card" itemscope itemtype="https://schema.org/SoftwareSourceCode">
+      <h3 itemprop="name">Banking &amp; Financial Stock Analysis</h3>
+      <p itemprop="description">Quantitative analysis of banking stocks including returns, volatility, correlations, and risk metrics.</p>
+      <a class="action-link" href="https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis"
+         target="_blank" rel="noopener noreferrer" itemprop="codeRepository">→ GitHub Project Link</a>
+    </article>
 
-<!-- PUBLICATIONS -->
-<section class="section reveal" id="publications">
-  <h2>Publications</h2>
+    <article class="card" itemscope itemtype="https://schema.org/SoftwareSourceCode">
+      <h3 itemprop="name">Gravitational-Wave Tests of GR (PPE Formalism)</h3>
+      <p itemprop="description">Bayesian inference pipelines for testing deviations from General Relativity using gravitational wave observations.</p>
+      <a class="action-link" href="https://github.com/KaunteyAcharya/GW-GR-Test-ppe-formalism"
+         target="_blank" rel="noopener noreferrer" itemprop="codeRepository">→ GitHub Project Link</a>
+    </article>
 
-  <article class="card">
-    <h3>JMN-1 Singularity in Weak Magnetic Field</h3>
-    <a class="action-link" href="https://link.springer.com/article/10.1140/epjc/s10052-024-12905-4" target="_blank" rel="noopener">
-      → Eur. Phys. J. C 84, 535
-    </a>
-  </article>
+    <article class="card" itemscope itemtype="https://schema.org/SoftwareSourceCode">
+      <h3 itemprop="name">Credit Score Data Analysis</h3>
+      <p itemprop="description">EDA of credit datasets focusing on default risk, class imbalance, correlations, and interpretability.</p>
+      <a class="action-link" href="https://github.com/KaunteyAcharya/Credit-Score-Data-Analysis"
+         target="_blank" rel="noopener noreferrer" itemprop="codeRepository">→ GitHub Project Link</a>
+    </article>
 
-  <article class="card">
-    <h3>High energy particle collision in vicinity of naked singularity</h3>
-    <a class="action-link" href="https://doi.org/10.1016/j.dark.2025.102101" target="_blank" rel="noopener">
-      → Physics of the Dark Universe
-    </a>
-  </article>
+    <article class="card" itemscope itemtype="https://schema.org/SoftwareSourceCode">
+      <h3 itemprop="name">Indian Startup Investment EDA</h3>
+      <p itemprop="description">Exploratory analysis of Indian startup funding trends, sectors, and investor activity.</p>
+      <a class="action-link" href="https://github.com/KaunteyAcharya/start-ups-data-analysis"
+         target="_blank" rel="noopener noreferrer" itemprop="codeRepository">→ GitHub Project Link</a>
+    </article>
+  </section>
 
-  <article class="card">
-    <h3>Rotational energy extraction from Kerr black hole's mimickers</h3>
-    <a class="action-link" href="https://doi.org/10.3390/universe8110571" target="_blank" rel="noopener">
-      → Universe 2022, 8(11), 571
-    </a>
-  </article>
+  <!-- ═══ PUBLICATIONS ═══ -->
+  <section class="section reveal" id="publications" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">Publications</h2>
 
-  <article class="card">
-    <h3>Energy Extraction from Janis–Newman–Winicour Naked Singularity</h3>
-    <a class="action-link" href="https://doi.org/10.1103/PhysRevD.107.064036" target="_blank" rel="noopener">
-      → Phys. Rev. D 107, 064036
-    </a>
-  </article>
-</section>
+    <article class="card" itemscope itemtype="https://schema.org/ScholarlyArticle">
+      <h3 itemprop="name">JMN-1 Singularity in Weak Magnetic Field</h3>
+      <a class="action-link" href="https://link.springer.com/article/10.1140/epjc/s10052-024-12905-4"
+         target="_blank" rel="noopener noreferrer" itemprop="url">→ Eur. Phys. J. C 84, 535</a>
+    </article>
+
+    <article class="card" itemscope itemtype="https://schema.org/ScholarlyArticle">
+      <h3 itemprop="name">High energy particle collision in vicinity of naked singularity</h3>
+      <a class="action-link" href="https://doi.org/10.1016/j.dark.2025.102101"
+         target="_blank" rel="noopener noreferrer" itemprop="url">→ Physics of the Dark Universe</a>
+    </article>
+
+    <article class="card" itemscope itemtype="https://schema.org/ScholarlyArticle">
+      <h3 itemprop="name">Rotational energy extraction from Kerr black hole's mimickers</h3>
+      <a class="action-link" href="https://doi.org/10.3390/universe8110571"
+         target="_blank" rel="noopener noreferrer" itemprop="url">→ Universe 2022, 8(11), 571</a>
+    </article>
+
+    <article class="card" itemscope itemtype="https://schema.org/ScholarlyArticle">
+      <h3 itemprop="name">Energy Extraction from Janis–Newman–Winicour Naked Singularity</h3>
+      <a class="action-link" href="https://doi.org/10.1103/PhysRevD.107.064036"
+         target="_blank" rel="noopener noreferrer" itemprop="url">→ Phys. Rev. D 107, 064036</a>
+    </article>
+  </section>
+
 </main>
 
-<footer>© 2025 Kauntey Acharya | Research & Data Analyst</footer>
+<footer role="contentinfo">© 2025 Kauntey Acharya | Research &amp; Data Analyst</footer>
 
 <script>
-/* REVEAL ON SCROLL LOGIC */
-const reveals=document.querySelectorAll(".reveal");
-const revealOnScroll=()=>{
-  const h=window.innerHeight;
-  reveals.forEach(el=>{
-    if(el.getBoundingClientRect().top<h-120){
-      el.classList.add("active");
-    }
+/* ── Scroll reveal ── */
+const reveals = document.querySelectorAll(".reveal");
+const revealOnScroll = () => {
+  const h = window.innerHeight;
+  reveals.forEach(el => {
+    if (el.getBoundingClientRect().top < h - 120) el.classList.add("active");
   });
 };
-window.addEventListener("scroll",revealOnScroll);
+window.addEventListener("scroll", revealOnScroll, { passive: true });
 revealOnScroll();
 
-/* THEME TOGGLE LOGIC */
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-  const icon=document.getElementById("themeIcon");
-  // Update character based on presence of dark class
-  icon.textContent=document.body.classList.contains("dark") ? "◐" : "◑";
+/* ── Theme toggle with localStorage persistence ── */
+function toggleTheme() {
+  const isDark = document.body.classList.toggle("dark");
+  document.getElementById("themeIcon").textContent = isDark ? "◐" : "◑";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 }
+
+(function () {
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    document.getElementById("themeIcon").textContent = "◐";
+  }
+})();
 </script>
 
 </body>
