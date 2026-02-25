@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO META TAGS: Helping Google understand who you are -->
+<!-- SEO META TAGS: Crucial for ranking "Kauntey Acharya" -->
 <title>Kauntey Acharya | Research Analyst | Data Analyst | Quant Analyst</title>
 <meta name="description" content="Official portfolio of Kauntey Acharya, a Research, Data, and Quant Analyst based in Ahmedabad. Specializing in Theoretical Physics, AI workflows, and Statistical Analysis.">
 <meta name="keywords" content="Kauntey Acharya, Research Analyst, Data Analyst, Quant Analyst, Theoretical Physics, AI Prompt Engineer, Ahmedabad India">
-<link rel="canonical" href="https://kaunteyacharya.com/">
+<link rel="canonical" href="https://kaunteyacharya.github.io/">
 
-<!-- JSON-LD SCHEMA: This tells Google Kauntey is a real person with these specific skills -->
+<!-- JSON-LD SCHEMA: Tells Google exactly who you are for the 'Knowledge Panel' -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -22,10 +22,11 @@
     "addressCountry": "India"
   },
   "jobTitle": "Research Analyst & Data Analyst",
-  "url": "https://kaunteyacharya.wordpress.com/",
+  "url": "https://kaunteyacharya.github.io/",
   "sameAs": [
     "https://github.com/KaunteyAcharya",
-    "https://www.linkedin.com/in/kauntey-acharya"
+    "https://www.linkedin.com/in/kauntey-acharya",
+    "https://kaunteyacharya.wordpress.com/"
   ]
 }
 </script>
@@ -66,7 +67,7 @@ body.dark{
   --hover-bg:rgba(255,255,255,.03);
 }
 
-/* ========== BASE TYPOGRAPHY (Original font preserved) ========== */
+/* ========== BASE TYPOGRAPHY ========== */
 body{
   font-family: monospace;
   background:var(--bg);
@@ -74,10 +75,10 @@ body{
   font-size:17px;
   line-height:1.75;
   -webkit-font-smoothing:antialiased;
-  transition:background .35s ease,color .35s ease;
+  transition:background .35s ease, color .35s ease;
 }
 
-/* ========== THEME TOGGLE (NO BORDER) ========== */
+/* ========== THEME TOGGLE (FIXED VISIBILITY) ========== */
 .theme-toggle{
   position:fixed;
   top:18px;
@@ -92,14 +93,15 @@ body{
   transition:.3s ease;
   background:transparent;
   font-size:1.55rem;
+  color: var(--text); /* CRITICAL FIX: Ensures icon turns white in dark mode */
   opacity:.85;
   border:none;         
   outline:none;
-  z-index: 999;
+  z-index: 9999; /* Ensures it stays above all content */
 }
 .theme-toggle:hover{opacity:.55}
 
-/* ========== HERO (Semantic Header) ========== */
+/* ========== HERO ========== */
 header.hero{
   min-height:100vh;
   display:flex;
@@ -138,6 +140,7 @@ header h1{
 
 .icon-btn:hover{
   transform:translateY(-2px);
+  background: var(--hover-bg);
 }
 
 .icon-btn svg{
@@ -150,6 +153,7 @@ header h1{
 .section{
   padding:5rem 4rem;
   max-width:1300px;
+  margin: 0 auto;
 }
 
 h2{
@@ -165,7 +169,7 @@ h2{
   margin-bottom:1em;
 }
 
-/* ========== CARDS (Semantic Article) ========== */
+/* ========== CARDS ========== */
 .card{
   border:1px solid var(--border-soft);
   padding:1.7rem;
@@ -239,7 +243,7 @@ footer{
 
 /* ========== RESPONSIVE ========== */
 @media(max-width:800px){
-  .hero,.section{padding:3rem 2rem}
+  header.hero, .section{padding:3rem 2rem}
 }
 
 @media (max-width: 900px) {
@@ -271,11 +275,11 @@ footer{
 
 <body>
 
-<!-- THEME TOGGLE -->
-<button class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Toggle Dark Mode">◑</button>
+<!-- THEME TOGGLE (Aria-label added for SEO/A11y) -->
+<button class="theme-toggle" onclick="toggleTheme()" id="themeIcon" aria-label="Switch Theme">◑</button>
 
 <main>
-<!-- HERO (Now using Semantic Header for SEO) -->
+<!-- HERO (Semantic Header) -->
 <header class="hero">
   <h1>Kauntey Acharya</h1>
   <div class="roles"> Research Analyst · Data Analyst · Quant Analyst</div>
@@ -283,16 +287,16 @@ footer{
   <div class="tagline"> From Theoretical Physics Research to AI & Industry Research</div>
   <div class="location">𖤣 Ahmedabad, India</div>
 
-  <nav class="icons" aria-label="Social Links">
-    <a class="icon-btn" href="https://github.com/KaunteyAcharya" target="_blank" rel="noopener" aria-label="GitHub Profile">
+  <nav class="icons" aria-label="Social Profiles">
+    <a class="icon-btn" href="https://github.com/KaunteyAcharya" target="_blank" rel="noopener" aria-label="GitHub">
       <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.43 7.86 10.96.57.1.78-.25.78-.55v-2.1c-3.2.7-3.88-1.55-3.88-1.55-.53-1.35-1.3-1.7-1.3-1.7-1.06-.72.08-.7.08-.7 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.45.11-3.03 0 0 .97-.31 3.18 1.18.92-.26 1.9-.38 2.88-.38s1.96.13 2.88.38c2.2-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.74.11 3.03.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55 4.56-1.53 7.85-5.86 7.85-10.96C23.5 5.74 18.27.5 12 .5z"/></svg>
     </a>
 
-    <a class="icon-btn" href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener" aria-label="LinkedIn Profile">
+    <a class="icon-btn" href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener" aria-label="LinkedIn">
       <svg viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.38-1.11 2.5-2.48 2.5A2.49 2.49 0 0 1 0 6c0-1.38 1.11-2.5 2.5-2.5s2.48 1.12 2.48 2.5zM.5 24h4.96V7.98H.5V24zM8.48 7.98H13v2.2h.06c.63-1.2 2.18-2.48 4.48-2.48 4.8 0 5.68 3.16 5.68 7.26V24h-4.98v-7.52c0-1.8-.04-4.12-2.5-4.12-2.5 0-2.88 1.96-2.88 3.98V24H8.48V7.98z"/></svg>
     </a>
 
-    <a class="icon-btn" href="https://kaunteyacharya.wordpress.com/" target="_blank" rel="noopener" aria-label="Wordpress Blog">
+    <a class="icon-btn" href="https://kaunteyacharya.wordpress.com/" target="_blank" rel="noopener" aria-label="Wordpress">
       <svg viewBox="0 0 24 24">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.93 7.19c-.15-.03-.3-.05-.45-.05-.9 0-1.54.68-1.54 1.42 0 .66.39 1.23.81 1.92.32.56.7 1.27.7 2.3 0 .72-.28 1.56-.64 2.73l-.84 2.8-3.05-9.07c.92 0 1.76-.14 1.76-.14.46-.06.4-.74-.06-.71 0 0-1.39.11-2.29.11-.85 0-2.28-.11-2.28-.11-.46-.03-.52.68-.06.71 0 0 .77.1 1.59.13l2.36 6.47 1.42-4.72c.62-1.99.84-3.4.84-4.61 0-.5-.03-.95-.1-1.36.99.59 1.7 1.66 1.7 2.89 0 .9-.35 1.92-.78 3.28l-.8 2.67c2.3-1.34 3.84-3.82 3.84-6.66 0-1.34-.36-2.59-.99-3.65z"/>
       </svg>
@@ -437,6 +441,7 @@ footer{
 <footer>© 2025 Kauntey Acharya | Research & Data Analyst</footer>
 
 <script>
+/* REVEAL ON SCROLL LOGIC */
 const reveals=document.querySelectorAll(".reveal");
 const revealOnScroll=()=>{
   const h=window.innerHeight;
@@ -449,10 +454,11 @@ const revealOnScroll=()=>{
 window.addEventListener("scroll",revealOnScroll);
 revealOnScroll();
 
-/* DEFAULT LIGHT => show ◑. DARK => ◐ */
+/* THEME TOGGLE LOGIC */
 function toggleTheme(){
   document.body.classList.toggle("dark");
   const icon=document.getElementById("themeIcon");
+  // Update character based on presence of dark class
   icon.textContent=document.body.classList.contains("dark") ? "◐" : "◑";
 }
 </script>
