@@ -1,8 +1,6 @@
 Every morning I used to do the same thing: open arXiv, scroll through the new submissions in my categories, skim abstracts to guess which papers mattered, download a few PDFs, and then paste them into an LLM to walk me through the derivations. It was useful, but it quietly ate a big chunk of my morning. So I automated it.
 
-The result is the [ArXiv Research Analysis Agent](https://github.com/KaunteyAcharya/n8n-arxiv-research-automation).
-
-https://github.com/user-attachments/assets/5bdf103d-7664-4d79-a67d-37209a50aa7b
+The result is the [ArXiv Research Analysis Agent](https://github.com/KaunteyAcharya/n8n-arxiv-research-automation). This repo's readme file also includes a 2 minute video demonstration of this workflow.
 
 ## What it does
 
