@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "local-rag-agent",
+    "title": "Building a fully local RAG agent",
+    "date": "2026-09-22",
+    "tags": [
+      "AI",
+      "automation",
+      "projects"
+    ],
+    "summary": "Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine."
+  },
+  {
+    "slug": "creating-focuspulse",
+    "title": "Creating FocusPulse",
+    "date": "2026-08-17",
+    "tags": [
+      "projects",
+      "productivity"
+    ],
+    "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome."
+  },
+  {
+    "slug": "creating-easyautofill",
+    "title": "Creating EasyAutoFill",
+    "date": "2026-07-20",
+    "tags": [
+      "projects"
+    ],
+    "summary": "A local, open-source browser extension that fills any form from your own profile file."
+  },
+  {
+    "slug": "stats-with-first-principles",
+    "title": "Starting a statistics series on Medium",
+    "date": "2026-06-24",
+    "tags": [
+      "statistics",
+      "writing"
+    ],
+    "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time."
+  },
+  {
+    "slug": "automating-arxiv",
+    "title": "Automating my morning arXiv routine",
+    "date": "2026-06-02",
+    "tags": [
+      "automation",
+      "AI"
+    ],
+    "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
+  }
+]
