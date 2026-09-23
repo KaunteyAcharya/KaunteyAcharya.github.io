@@ -1,6 +1,6 @@
 ---
 title: Building a fully local RAG agent
-date: 2026-09-22
+date: 2026-09-04
 tags: [AI, automation, projects]
 summary: Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine.
 ---
