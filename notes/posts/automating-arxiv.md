@@ -2,6 +2,8 @@ Every morning I used to do the same thing: open arXiv, scroll through the new su
 
 The result is the [ArXiv Research Analysis Agent](https://github.com/KaunteyAcharya/n8n-arxiv-research-automation).
 
+https://github.com/user-attachments/assets/5bdf103d-7664-4d79-a67d-37209a50aa7b
+
 ## What it does
 
 1. Each morning it checks arXiv's new-submissions listing for the categories I care about (General Relativity and Quantum Cosmology, and Quantitative Finance by default).
