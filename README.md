@@ -1,1 +1,1 @@
-https://kaunteyacharya.github.io/index.html#about
+https://kaunteyacharya.github.io
