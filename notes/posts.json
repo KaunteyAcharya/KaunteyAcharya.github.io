@@ -1,8 +1,20 @@
 [
   {
+    "slug": "ml-drift-alert-agent",
+    "title": "Building a model drift alert agent",
+    "date": "2026-09-29",
+    "tags": [
+      "AI",
+      "automation",
+      "MLOps",
+      "projects"
+    ],
+    "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack."
+  },
+  {
     "slug": "local-rag-agent",
     "title": "Building a fully local RAG agent",
-    "date": "2026-09-04",
+    "date": "2026-09-22",
     "tags": [
       "AI",
       "automation",
@@ -48,5 +60,35 @@
       "AI"
     ],
     "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
+  },
+  {
+    "slug": "jmn-magnetic-field",
+    "title": "My quickest paper, and an unexpected collaboration",
+    "date": "2023-10-12",
+    "tags": [
+      "physics",
+      "research"
+    ],
+    "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks."
+  },
+  {
+    "slug": "first-paper-penrose",
+    "title": "My first paper: stealing energy from spinning black holes",
+    "date": "2022-06-02",
+    "tags": [
+      "physics",
+      "research"
+    ],
+    "summary": "The Penrose process in plain words, and what my first paper asked about black hole look-alikes."
+  },
+  {
+    "slug": "msc-thesis",
+    "title": "My MSc thesis: following light and matter around black holes",
+    "date": "2022-04-21",
+    "tags": [
+      "physics",
+      "research"
+    ],
+    "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes."
   }
 ]
