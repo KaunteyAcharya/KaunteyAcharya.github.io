@@ -95,7 +95,15 @@
         body.innerHTML = html;
 
         body.querySelectorAll('a[href^="http"]').forEach(a => { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
-        body.querySelectorAll('img').forEach(img => { img.loading = 'lazy'; });
+        body.querySelectorAll('img').forEach(img => {
+          img.loading = 'lazy';
+          // Click an image to open it full size in a new tab
+          if (!img.closest('a')) {
+            const link = document.createElement('a');
+            link.href = img.src; link.target = '_blank'; link.rel = 'noopener'; link.title = 'Open full size';
+            img.replaceWith(link); link.appendChild(img);
+          }
+        });
         if (stash.length) loadMath(body);
       })
       .catch(() => { body.innerHTML = '<p class="empty">Couldn’t load this note.</p>'; });

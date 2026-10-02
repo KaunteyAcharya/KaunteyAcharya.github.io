@@ -1,5 +1,17 @@
 [
   {
+    "slug": "tickerbrief",
+    "title": "Building TickerBrief, an equity research agent",
+    "date": "2026-10-01",
+    "tags": [
+      "AI",
+      "automation",
+      "finance",
+      "projects"
+    ],
+    "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. All local and free."
+  },
+  {
     "slug": "ml-drift-alert-agent",
     "title": "Building a model drift alert agent",
     "date": "2026-09-29",

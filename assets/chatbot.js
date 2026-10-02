@@ -31,10 +31,13 @@
     { id: 'phone', weight: 3, keys: ['phone', 'mobile', 'cell', 'whatsapp', 'call him', 'contact number', 'phone number', 'number', 'telephone', 'ring'],
       answer: `Kauntey doesn’t share a phone number publicly. The best ways to reach him are:\n${CONTACT}\n\nIf a call makes sense, you can arrange one over email or LinkedIn.` },
     { id: 'contact', weight: 2, keys: ['contact', 'reach', 'email', 'mail', 'linkedin', 'get in touch', 'connect', 'message him', 'dm', 'talk to', 'ping'],
-      answer: `Ping Kauntey for opportunities, a research collab, or just a good paper to discuss:\n${CONTACT}` },
+      answer: `Ping Kauntey for opportunities related to AI roles, agent builds, research collabs, or just a good paper to discuss:\n${CONTACT}` },
     { id: 'hire', weight: 2, keys: ['hire', 'hiring', 'job', 'opportunity', 'opportunities', 'available', 'open to', 'recruit', 'recruiter', 'position', 'role for', 'collaborate', 'collaboration', 'collab', 'freelance'],
-      answer: `Kauntey is open to AI automation engineering and quantitative analyst roles, as well as research collaborations in AI or physics.\n\nTo start a conversation:\n${CONTACT}`,
+      answer: `Kauntey is open to AI roles (AI automation engineering, AI strategy and consulting, and quantitative analysis), agent builds, and research collaborations in AI or physics.\n\nTo start a conversation:\n${CONTACT}`,
       chips: ['Experience', 'Skills', 'Projects'] },
+    { id: 'consulting', weight: 3, keys: ['consult', 'consultant', 'consulting', 'strategy', 'strategist', 'ai strategy', 'advise', 'advisor', 'advisory', 'business', 'use case', 'use cases', 'roi', 'prototype', 'my company', 'our team', 'help us', 'automate our', 'agent build', 'build an agent'],
+      answer: `Kauntey works as an AI strategist and consultant as well as an engineer. He helps identify where AI can create practical leverage, translates business problems into AI solutions, and builds working prototypes: agentic workflows, RAG systems, API automations, and human-in-the-loop systems.\n\nSee TickerBrief and the Drift Alert Agent in Projects for examples. To discuss a project:\n${CONTACT}`,
+      chips: ['Projects', 'Skills', 'How to contact'] },
     { id: 'resume', keys: ['resume', 'cv', 'curriculum vitae', 'portfolio pdf'],
       answer: `A CV is available on request. Email [${EMAIL}](mailto:${EMAIL}) or message him on [LinkedIn](${LINKEDIN}).` },
     { id: 'location', keys: ['where is he', 'where does he live', 'where is kauntey', 'location', 'based', 'city', 'ahmedabad', 'india', 'timezone', 'time zone', 'relocate', 'remote'],
@@ -42,7 +45,7 @@
 
     /* ---------- About ---------- */
     { id: 'about', keys: ['about', 'who', 'what does he do', 'what does kauntey do', 'background', 'kauntey', 'profile', 'bio', 'introduce', 'yourself', 'summary'],
-      answer: 'Kauntey Acharya is an AI Automation Engineer and Quantitative Analyst. At Innodata Inc. he designs and builds AI automations and evaluates large language models. He also builds fully local AI tools (RAG pipelines and research agents) with n8n, Ollama, and ChromaDB. Before that, he was a pre-doctoral research fellow in theoretical physics and published four peer-reviewed papers on naked singularities, energy extraction, and particle collisions in general relativity.',
+      answer: 'Kauntey Acharya is an AI Automation Engineer, AI Strategist & Consultant, and Quantitative Analyst. He designs AI-powered workflows, agents, and automation systems that turn repetitive processes into reliable, scalable solutions. At Innodata Inc. he designs and builds AI automations and evaluates large language models. He also builds fully local AI tools (RAG pipelines and research agents) with n8n, Ollama, and ChromaDB. Before that, he was a pre-doctoral research fellow in theoretical physics and published four peer-reviewed papers on naked singularities, energy extraction, and particle collisions in general relativity.',
       chips: ['Experience', 'Publications', 'Projects'] },
     { id: 'education', keys: ['education', 'degree', 'study', 'studied', 'university', 'college', 'masters', 'msc', 'phd', 'academic', 'qualification'],
       answer: 'Kauntey trained in physics and then worked as a Pre-Doctoral Research Fellow at Ahmedabad University (May 2022 to Mar 2024), doing theoretical and numerical research in general relativity. For full academic details, see his [LinkedIn](' + LINKEDIN + ').' },
@@ -62,8 +65,8 @@
       chips: ['Publications'] },
 
     /* ---------- Skills ---------- */
-    { id: 'skills', keys: ['skill', 'skills', 'stack', 'tools', 'tech', 'python', 'sql', 'pytorch', 'pandas', 'numpy', 'machine learning', 'ml', 'statistics', 'statistical', 'bayesian', 'time series', 'latex', 'matlab', 'mathematica', 'c++', 'programming', 'languages', 'zapier', 'api', 'apis', 'api integration', 'obsidian'],
-      answer: 'AI & automation: n8n, Zapier, API integration, RAG pipelines, LLM evaluation, prompt engineering, Ollama, ChromaDB, and Docker.\nLanguages & libraries: Python, SQL, NumPy, Pandas, PyTorch, C++ (basic), MATLAB, and Mathematica.\nQuantitative methods: statistical analysis, time-series modelling, Bayesian inference, parameter estimation, and machine learning.\nResearch & writing: scientific research, research writing, peer-reviewed publishing, literature review, technical writing, LaTeX, and Obsidian.' },
+    { id: 'skills', keys: ['skill', 'skills', 'stack', 'tools', 'tech', 'python', 'sql', 'pytorch', 'pandas', 'numpy', 'machine learning', 'ml', 'statistics', 'statistical', 'bayesian', 'time series', 'latex', 'matlab', 'mathematica', 'c++', 'programming', 'languages', 'zapier', 'api', 'apis', 'api integration', 'obsidian', 'git', 'github', 'ci', 'cd', 'ci/cd', 'cicd', 'github actions', 'docker', 'fastapi', 'scikit-learn', 'devops'],
+      answer: 'AI & agents: LLMs, agentic workflows, RAG, prompt engineering, LLM evaluation, and human-in-the-loop design.\nAutomation & engineering: n8n, Zapier, API integration, FastAPI, Docker, Git, and CI/CD (GitHub Actions).\nLanguages & data: Python, SQL, NumPy, Pandas, PyTorch, scikit-learn, Postgres, ChromaDB, and Grafana.\nQuant & research: statistics, time-series modelling, Bayesian inference, research writing, LaTeX, MATLAB, and Mathematica.' },
 
     /* ---------- Research & publications ---------- */
     { id: 'research', keys: ['research', 'physics', 'theoretical', 'relativity', 'general relativity', 'gravity', 'spacetime', 'black hole', 'singularity', 'naked singularity', 'astrophysics', 'cosmology'],
@@ -88,8 +91,10 @@
 
     /* ---------- Projects ---------- */
     { id: 'projects', weight: 2, keys: ['project', 'projects', 'github', 'repo', 'repos', 'code', 'built', 'build', 'portfolio'],
-      answer: `Projects:\n• Model Monitoring + Drift Alert Agent (n8n, Evidently AI, Ollama, and Grafana)\n• FocusPulse (Chrome extension)\n• EasyAutoFill (browser extension)\n• ArXiv Research Analysis Agent (n8n, Ollama, and Telegram)\n• Local RAG Document Q&A Agent (n8n, Ollama, and ChromaDB)\n• Banking & Financial Stock Analysis\n• Gravitational-Wave Tests of GR (ppE, Bayesian parameter estimation)\n• Credit Score Data Analysis\n• Indian Startup Investment EDA\n\nAll on [GitHub](${GH}).`,
+      answer: `Projects:\n• TickerBrief: automated equity research reports (n8n, Python, and Ollama)\n• Model Monitoring + Drift Alert Agent (n8n, Evidently AI, Ollama, and Grafana)\n• FocusPulse (Chrome extension)\n• EasyAutoFill (browser extension)\n• ArXiv Research Analysis Agent (n8n, Ollama, and Telegram)\n• Local RAG Document Q&A Agent (n8n, Ollama, and ChromaDB)\n• Banking & Financial Stock Analysis\n• Gravitational-Wave Tests of GR (ppE, Bayesian parameter estimation)\n• Credit Score Data Analysis\n• Indian Startup Investment EDA\n\nAll on [GitHub](${GH}).`,
       chips: ['RAG agent', 'ArXiv agent', 'Stock analysis'] },
+    { id: 'proj_ticker', weight: 3, keys: ['tickerbrief', 'ticker brief', 'ticker', 'equity research', 'equity', 'research report', 'stock report', 'sec', 'edgar', 'technical indicators', 'rsi', 'macd'],
+      answer: 'TickerBrief: type a ticker and get a full equity research report (interactive web page and PDF). An n8n workflow pulls prices, fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technicals, and sentiment; and a local LLM (Ollama) writes the narrative in three structured passes, with rule-based fallbacks.\n\n[GitHub](https://github.com/KaunteyAcharya/tickerbrief) · [Demo](https://github.com/KaunteyAcharya/tickerbrief#readme) · [Note](notes.html?post=tickerbrief)' },
     { id: 'proj_drift', weight: 3, keys: ['drift', 'model drift', 'data drift', 'mlops', 'monitoring', 'model monitoring', 'evidently', 'grafana', 'postgres', 'slack', 'alert', 'alerts'],
       answer: 'Model Monitoring + Drift Alert Agent: a local MLOps stack. An n8n workflow scores new traffic, logs predictions to Postgres, and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM (Ollama) explains the likely root cause and posts it to Slack, with a Grafana dashboard for history.\n\n[GitHub](https://github.com/KaunteyAcharya/ML-model-drift-alert-agent) · [Demo](https://github.com/KaunteyAcharya/ML-model-drift-alert-agent#readme) · [Note](notes.html?post=ml-drift-alert-agent)' },
     { id: 'proj_rag', weight: 3, keys: ['rag', 'retrieval', 'document q&a', 'doc qa', 'chromadb', 'chroma', 'embedding', 'embeddings', 'vector', 'llama', 'nomic'],
@@ -117,7 +122,7 @@
 
   const START_CHIPS = ['Who is Kauntey?', 'Publications', 'Projects', 'How to contact'];
   const FALLBACK = {
-    answer: `I’m a small local assistant, so I only know what’s on this site. Try one of these, or ask Kauntey directly:\n${CONTACT}`,
+    answer: 'I can help with that, but I don’t have enough context here to give you a reliable answer. I’m primarily designed to answer questions about Kauntey’s research, projects, experience, publications, and technical work. If your question connects to any of those, ask away.',
     chips: ['Experience', 'Publications', 'Projects', 'Skills']
   };
 
@@ -194,10 +199,31 @@
     'stock analysis': 'stock', 'research fellowship': 'fellowship', 'energy extraction': 'energy extraction'
   };
 
+  // Show a "typing" bubble for about a second before each answer
+  const TYPING_MS = 1000;
+  let busy = false;
+  function showTyping() {
+    const d = document.createElement('div');
+    d.className = 'msg bot typing';
+    d.setAttribute('aria-label', 'Assistant is typing');
+    d.innerHTML = '<span class="typing-label">Typing</span><span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+
   function ask(q) {
+    if (busy) return;
+    busy = true;
     add(q, 'user');
     const e = answer(CHIP_ALIASES[q.toLowerCase()] || q);
-    setTimeout(() => { add(e.answer, 'bot'); addChips(e.chips); }, 220);
+    const t = showTyping();
+    setTimeout(() => {
+      t.remove();
+      add(e.answer, 'bot');
+      addChips(e.chips);
+      busy = false;
+    }, TYPING_MS);
   }
 
   let greeted = false;
