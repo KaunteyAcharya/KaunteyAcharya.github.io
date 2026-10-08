@@ -112,20 +112,29 @@
   /* ---------- KaTeX, loaded only when a post contains math ---------- */
   function loadMath(el) {
     const base = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/';
-    const css = document.createElement('link');
-    css.rel = 'stylesheet'; css.href = base + 'katex.min.css';
-    document.head.appendChild(css);
-    loadScript(base + 'katex.min.js')
-      .then(() => loadScript(base + 'contrib/auto-render.min.js'))
-      .then(() => renderMathInElement(el, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '\\[', right: '\\]', display: true },
-          { left: '$', right: '$', display: false },
-          { left: '\\(', right: '\\)', display: false }
-        ],
-        throwOnError: false
-      }))
+    // KaTeX's HTML output needs its stylesheet. If the stylesheet can't load,
+    // fall back to the browser's built-in MathML so equations never render half-styled.
+    const cssReady = new Promise(res => {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet'; css.href = base + 'katex.min.css';
+      css.onload = () => res(true); css.onerror = () => res(false);
+      setTimeout(() => res(false), 4000);
+      document.head.appendChild(css);
+    });
+    Promise.all([cssReady, loadScript(base + 'katex.min.js').then(() => loadScript(base + 'contrib/auto-render.min.js'))])
+      .then(([cssOk]) => {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '\\[', right: '\\]', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false }
+          ],
+          output: cssOk ? 'htmlAndMathml' : 'mathml',
+          throwOnError: false
+        });
+        el.classList.toggle('math-native', !cssOk);
+      })
       .catch(() => {}); // math stays readable as raw LaTeX if the CDN is unreachable
   }
   function loadScript(src) {

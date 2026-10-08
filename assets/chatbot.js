@@ -15,6 +15,22 @@
   const GH = 'https://github.com/KaunteyAcharya';
   const WORDPRESS = 'https://kaunteyacharya.wordpress.com/';
   const MEDIUM = 'https://medium.com/@sometimes_rational';
+  /* ---------- Call booking ----------
+     endpoint: your Google Apps Script web-app URL. Leave '' for demo mode
+               (sample slots, nothing is booked, no email is sent).
+     turnstileSiteKey: Cloudflare Turnstile SITE key (public by design).
+     Never put secret keys, calendar IDs, or passwords in this file:
+     it is public on GitHub and in every visitor's browser. */
+  const BOOKING = {
+    endpoint: '',
+    turnstileSiteKey: '',
+    lengths: [15, 30],
+    holdMinutes: 15,
+    // Demo mode only runs in previews. On the live site (github.io) booking stays
+    // hidden until an endpoint is set, so nobody thinks a demo booking was real.
+    demoOnLiveSite: false
+  };
+  const BOOKING_ON = !!BOOKING.endpoint || BOOKING.demoOnLiveSite || !/\.github\.io$/i.test(location.hostname);
   const CONTACT = `Email: [${EMAIL}](mailto:${EMAIL})\nLinkedIn: [linkedin.com/in/kauntey-acharya](${LINKEDIN})`;
 
   const KB = [
@@ -120,7 +136,7 @@
       answer: `Kauntey writes about AI, agents, quantitative finance, statistics, and data science, along with personal views and notes.\n\nThe [Notes](notes.html) section of this site has short updates and thoughts. For longer, specific blogs, read him on [WordPress](${WORDPRESS}) and [Medium](${MEDIUM}), where he is running the Stats_with_FirstPrinciples series.` }
   ];
 
-  const START_CHIPS = ['Who is Kauntey?', 'Publications', 'Projects', 'How to contact'];
+  const START_CHIPS = (BOOKING_ON ? ['Book a call'] : []).concat(['Who is Kauntey?', 'Projects', 'Publications', 'How to contact']);
   const FALLBACK = {
     answer: 'I can help with that, but I don’t have enough context here to give you a reliable answer. I’m primarily designed to answer questions about Kauntey’s research, projects, experience, publications, and technical work. If your question connects to any of those, ask away.',
     chips: ['Experience', 'Publications', 'Projects', 'Skills']
@@ -213,7 +229,15 @@
   }
 
   function ask(q) {
-    if (busy) return;
+    if (busy || booking) return;
+    if (isBookingIntent(q)) {
+      add(q, 'user');
+      if (BOOKING_ON) { startBooking(); return; }
+      busy = true;
+      const t = showTyping();
+      setTimeout(() => { t.remove(); add('Online booking is coming soon. For now, the quickest way to set up a call is:\n' + CONTACT, 'bot'); busy = false; }, TYPING_MS);
+      return;
+    }
     busy = true;
     add(q, 'user');
     const e = answer(CHIP_ALIASES[q.toLowerCase()] || q);
@@ -226,6 +250,218 @@
     }, TYPING_MS);
   }
 
+  /* =========================================================
+     Booking mode
+     While a booking is in progress the text box is locked; the
+     visitor can only use the booking controls or "Cancel booking".
+     ========================================================= */
+  const BOOK_RE = /\b(book|booking|schedule|scheduling|set up a (call|meeting)|arrange a (call|meeting)|interview|appointment|meeting|slot|availability|available times?|calendar)\b/i;
+  function isBookingIntent(q) {
+    const t = q.toLowerCase();
+    if (/\b(phone|number|whatsapp|mobile)\b/.test(t)) return false;   // phone questions keep their own answer
+    return t.trim() === 'book a call' || BOOK_RE.test(t) || /\b(call|chat) with (him|kauntey)\b/.test(t);
+  }
+
+  let booking = null;
+  const demo = !BOOKING.endpoint;
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'your local time';
+  const fmtDay = d => d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  const fmtTime = d => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  const dayKey = d => d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+  const h = (tag, attrs, html) => { const e = document.createElement(tag); Object.assign(e, attrs || {}); if (html != null) e.innerHTML = html; return e; };
+  const safe = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Cancel bar shown above the input while booking
+  const cancelBar = h('div', { className: 'bk-bar', hidden: true },
+    '<span>Booking a call</span><button type="button" class="bk-cancel">Cancel booking</button>');
+  form.parentNode.insertBefore(cancelBar, form);
+  cancelBar.querySelector('.bk-cancel').addEventListener('click', () => endBooking('cancel'));
+  const sendBtn = form.querySelector('button[type="submit"]');
+  const defaultPlaceholder = input.placeholder;
+
+  function lock(on) {
+    input.disabled = on; if (sendBtn) sendBtn.disabled = on;
+    input.placeholder = on ? 'Booking in progress. Cancel to chat again.' : defaultPlaceholder;
+    cancelBar.hidden = !on;
+  }
+
+  function botTyping(then) {
+    const t = showTyping();
+    setTimeout(() => { t.remove(); then(); }, TYPING_MS);
+  }
+
+  function card(html) {
+    // retire the previous step's controls
+    log.querySelectorAll('.bk.live').forEach(c => { c.classList.remove('live'); c.querySelectorAll('button, input, select').forEach(x => x.disabled = true); });
+    const c = h('div', { className: 'msg bot bk live' }, html);
+    log.appendChild(c); log.scrollTop = log.scrollHeight;
+    return c;
+  }
+
+  function startBooking() {
+    booking = { step: 1, minutes: 30, slots: [], day: null, slot: null, name: '', email: '', topic: '' };
+    lock(true);
+    botTyping(() => {
+      add('Happy to set that up. Pick a time that suits you and I’ll check it against Kauntey’s calendar.' + (demo ? '\n(Demo mode: this preview shows sample times and does not book anything yet.)' : ''), 'bot');
+      loadSlots();
+    });
+  }
+
+  function endBooking(reason) {
+    if (!booking) return;
+    log.querySelectorAll('.bk.live').forEach(c => { c.classList.remove('live'); c.querySelectorAll('button, input, select').forEach(x => x.disabled = true); });
+    booking = null;
+    lock(false);
+    if (reason === 'cancel') {
+      add('Booking cancelled. Ask me anything else.', 'bot');
+      addChips(['Book a call', 'Projects', 'How to contact']);
+    }
+    input.focus();
+  }
+
+  // ----- Slots -----
+  function demoSlots() {
+    const out = [], IST = 330, now = Date.now(), base = new Date();
+    for (let i = 1, days = 0; days < 6 && i < 14; i++) {
+      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
+      if (d.getDay() === 0 || d.getDay() === 6) continue;
+      days++;
+      [10, 11, 12, 14, 15, 16].forEach((hr, k) => {
+        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), hr, 0) - IST * 60000);
+        if ((i + k) % 4 !== 1 && t.getTime() > now + 24 * 3600e3) out.push(t);
+      });
+    }
+    return out;
+  }
+
+  function loadSlots() {
+    const done = list => {
+      if (!booking) return;
+      booking.slots = list.map(x => new Date(x)).filter(d => !isNaN(d)).sort((a, b) => a - b);
+      if (!booking.slots.length) {
+        add('There are no open slots in the next two weeks. Please email Kauntey directly:\n' + CONTACT, 'bot');
+        return endBooking();
+      }
+      booking.day = dayKey(booking.slots[0]);
+      renderSlots();
+    };
+    if (demo) return done(demoSlots());
+    fetch(BOOKING.endpoint + '?action=slots')
+      .then(r => r.json())
+      .then(j => done((j && j.slots) || []))
+      .catch(() => { add('I couldn’t reach the calendar right now. Please try again later, or email Kauntey:\n' + CONTACT, 'bot'); endBooking(); });
+  }
+
+  function renderSlots() {
+    const days = [];
+    booking.slots.forEach(s => { const k = dayKey(s); if (!days.some(d => d.k === k)) days.push({ k, d: s }); });
+    const times = booking.slots.filter(s => dayKey(s) === booking.day);
+    const c = card(
+      '<p class="bk-q">Times are shown in <b>' + safe(tz) + '</b>.</p>' +
+      '<div class="bk-row" role="group" aria-label="Day">' + days.map(d => '<button type="button" class="bk-chip" data-day="' + d.k + '" aria-pressed="' + (d.k === booking.day) + '">' + fmtDay(d.d) + '</button>').join('') + '</div>' +
+      '<div class="bk-grid" role="group" aria-label="Time">' + times.map(t => '<button type="button" class="bk-chip" data-t="' + t.getTime() + '" aria-pressed="' + (booking.slot && booking.slot.getTime() === t.getTime()) + '">' + fmtTime(t) + '</button>').join('') + '</div>' +
+      '<div class="bk-row" role="group" aria-label="Length">' + BOOKING.lengths.map(m => '<button type="button" class="bk-chip" data-m="' + m + '" aria-pressed="' + (booking.minutes === m) + '">' + m + ' min</button>').join('') + '</div>' +
+      '<div class="bk-actions"><button type="button" class="bk-primary" data-next ' + (booking.slot ? '' : 'disabled') + '>Continue</button></div>');
+    c.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { booking.day = b.dataset.day; booking.slot = null; c.remove(); renderSlots(); });
+    c.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { booking.slot = new Date(+b.dataset.t); c.remove(); renderSlots(); });
+    c.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { booking.minutes = +b.dataset.m; c.remove(); renderSlots(); });
+    c.querySelector('[data-next]').onclick = () => {
+      add(fmtDay(booking.slot) + ', ' + fmtTime(booking.slot) + ' · ' + booking.minutes + ' min', 'user');
+      botTyping(renderDetails);
+    };
+  }
+
+  // ----- Details -----
+  let tsLoaded = false;
+  function renderDetails() {
+    if (!booking) return;
+    const c = card(
+      '<p class="bk-q">Great. Where should the invite go?</p>' +
+      '<label class="bk-l" for="bkName">Your name</label><input class="bk-in" id="bkName" autocomplete="name" maxlength="80" value="' + safe(booking.name) + '">' +
+      '<label class="bk-l" for="bkEmail">Work email</label><input class="bk-in" id="bkEmail" type="email" autocomplete="email" maxlength="120" value="' + safe(booking.email) + '">' +
+      '<label class="bk-l" for="bkTopic">Company and topic (optional)</label><input class="bk-in" id="bkTopic" maxlength="200" value="' + safe(booking.topic) + '">' +
+      '<input class="bk-hp" id="bkWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+      (BOOKING.turnstileSiteKey ? '<div class="bk-ts" id="bkTs"></div>' : '') +
+      '<p class="bk-err" role="alert"></p>' +
+      '<div class="bk-actions"><button type="button" class="bk-ghost" data-back>Back</button><button type="button" class="bk-primary" data-send>Send confirmation</button></div>');
+    if (BOOKING.turnstileSiteKey) mountTurnstile(c.querySelector('#bkTs'));
+    c.querySelector('[data-back]').onclick = () => { c.remove(); renderSlots(); };
+    c.querySelector('[data-send]').onclick = () => submit(c);
+    c.querySelector('#bkName').focus();
+  }
+
+  function mountTurnstile(el) {
+    const render = () => window.turnstile && window.turnstile.render(el, { sitekey: BOOKING.turnstileSiteKey, size: 'flexible' });
+    if (window.turnstile) return render();
+    if (tsLoaded) return;
+    tsLoaded = true;
+    const s = h('script', { src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true });
+    s.onload = render; document.head.appendChild(s);
+  }
+
+  function submit(c) {
+    const err = c.querySelector('.bk-err');
+    booking.name = c.querySelector('#bkName').value.trim();
+    booking.email = c.querySelector('#bkEmail').value.trim();
+    booking.topic = c.querySelector('#bkTopic').value.trim();
+    if (c.querySelector('#bkWebsite').value) return;                       // honeypot: bots fill hidden fields
+    if (!booking.name) { err.textContent = 'Please enter your name.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(booking.email)) { err.textContent = 'Please enter a valid email so the invite can reach you.'; return; }
+    const token = BOOKING.turnstileSiteKey && window.turnstile ? window.turnstile.getResponse() : '';
+    if (BOOKING.turnstileSiteKey && !token) { err.textContent = 'Please complete the quick human check.'; return; }
+    err.textContent = '';
+    c.querySelectorAll('button').forEach(b => b.disabled = true);
+    add(booking.name + ' · ' + booking.email, 'user');
+
+    const payload = { action: 'request', start: booking.slot.toISOString(), minutes: booking.minutes,
+      name: booking.name, email: booking.email, topic: booking.topic, tz, token };
+    const send = demo
+      ? Promise.resolve({ ok: true })
+      : fetch(BOOKING.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).then(r => r.json());
+
+    const t = showTyping();
+    Promise.all([send, new Promise(r => setTimeout(r, TYPING_MS))])
+      .then(([res]) => {
+        t.remove();
+        if (!booking) return;
+        if (!res || !res.ok) {
+          add((res && res.message) || 'That slot was just taken or something went wrong. Please pick another time.', 'bot');
+          booking.slot = null; booking.slots = []; return loadSlots();
+        }
+        renderCheckInbox();
+      })
+      .catch(() => { t.remove(); add('I couldn’t reach the booking service. Please try again later, or email Kauntey:\n' + CONTACT, 'bot'); endBooking(); });
+  }
+
+  // ----- Confirmation -----
+  function renderCheckInbox() {
+    const when = fmtDay(booking.slot) + ' at ' + fmtTime(booking.slot);
+    const c = card(
+      '<p class="bk-q"><b>Almost done.</b> I sent a confirmation link to <b>' + safe(booking.email) + '</b>. ' +
+      'Click it within ' + BOOKING.holdMinutes + ' minutes to confirm your ' + booking.minutes + '-minute call on ' + when + '. ' +
+      'Until then the slot is held for you.</p>' +
+      (demo ? '<div class="bk-mail"><small>Demo: this is what arrives in their inbox</small>Confirm your call with Kauntey on ' + when + '.<br><button type="button" class="bk-link" data-confirm>Confirm booking</button></div>'
+            : '<div class="bk-actions"><button type="button" class="bk-primary" data-done>Done</button></div>'));
+    const fin = c.querySelector('[data-confirm]');
+    if (fin) fin.onclick = () => { add('Clicked the confirmation link', 'user'); botTyping(renderBooked); };
+    const done = c.querySelector('[data-done]');
+    if (done) done.onclick = () => {
+      endBooking();
+      add('Once you confirm, a calendar invite with a Meet link will arrive by email. Anything else I can help with?', 'bot');
+      addChips(['Projects', 'Publications', 'Skills']);
+    };
+  }
+
+  function renderBooked() {
+    if (!booking) return;
+    card('<p class="bk-q bk-ok"><b>You’re booked.</b></p><p class="bk-q">' + fmtDay(booking.slot) + ', ' + fmtTime(booking.slot) +
+      ' (' + safe(tz) + ') · ' + booking.minutes + ' min with Kauntey Acharya. A calendar invite with a Meet link is on its way to ' +
+      safe(booking.email) + ', and Kauntey has been notified.' + (demo ? '<br><small>(Demo: nothing was actually booked.)</small>' : '') + '</p>');
+    endBooking();
+    add('Anything else you’d like to know about Kauntey?', 'bot');
+    addChips(['Projects', 'Publications', 'Skills']);
+  }
+
   let greeted = false;
   function open() {
     chat.classList.add('open');
@@ -234,7 +470,7 @@
     toggle.setAttribute('aria-expanded', 'true');
     if (!greeted) {
       greeted = true;
-      add('Hi, I’m Kauntey’s portfolio assistant. Ask me about his work, projects, papers, notes, or how to get in touch.', 'bot');
+      add('Hi, I’m Kauntey’s portfolio assistant. Ask me about his work, projects, papers, or notes' + (BOOKING_ON ? ', or book a call with him.' : '.'), 'bot');
       addChips(START_CHIPS);
     }
     setTimeout(() => input.focus(), 50);
@@ -259,5 +495,5 @@
   });
 
   // Exposed for quick testing in the console: kaAsk("what's his phone number")
-  window.kaAsk = q => answer(q).id || 'fallback';
+  window.kaAsk = q => isBookingIntent(q) ? 'booking' : (answer(q).id || 'fallback');
 })();

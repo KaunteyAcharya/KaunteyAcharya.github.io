@@ -35,6 +35,16 @@
     "summary": "Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine."
   },
   {
+    "slug": "what-is-rag",
+    "title": "What is RAG, and why does it matter so much?",
+    "date": "2026-08-24",
+    "tags": [
+      "AI",
+      "RAG"
+    ],
+    "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong."
+  },
+  {
     "slug": "creating-focuspulse",
     "title": "Creating FocusPulse",
     "date": "2026-08-17",
@@ -43,6 +53,16 @@
       "productivity"
     ],
     "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome."
+  },
+  {
+    "slug": "ai-benchmarks",
+    "title": "How AI benchmarks are actually designed, from first principles",
+    "date": "2026-07-25",
+    "tags": [
+      "AI",
+      "research"
+    ],
+    "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work."
   },
   {
     "slug": "creating-easyautofill",
@@ -74,6 +94,54 @@
     "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
   },
   {
+    "slug": "ml-vs-deep-learning",
+    "title": "How machine learning and deep learning are different",
+    "date": "2025-03-05",
+    "tags": [
+      "machine learning"
+    ],
+    "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation."
+  },
+  {
+    "slug": "how-labs-train-ai-models",
+    "title": "How AI labs actually train their models",
+    "date": "2025-01-26",
+    "tags": [
+      "AI",
+      "research"
+    ],
+    "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently."
+  },
+  {
+    "slug": "gradient-descent-better-code",
+    "title": "Gradient descent can write better code than you",
+    "date": "2025-01-08",
+    "tags": [
+      "AI"
+    ],
+    "summary": "In 2017, Andrej Karpathy joked that gradient descent writes better code than us. Seven years later, it doesn't feel like much of a joke."
+  },
+  {
+    "slug": "claude-overtook-gpt",
+    "title": "How Claude overtook GPT (where it matters)",
+    "date": "2024-12-05",
+    "tags": [
+      "AI"
+    ],
+    "summary": "ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened."
+  },
+  {
+    "slug": "maths-physics-inside-llms",
+    "title": "The maths and physics hiding inside LLMs",
+    "date": "2024-10-14",
+    "tags": [
+      "AI",
+      "physics",
+      "maths"
+    ],
+    "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models."
+  },
+  {
     "slug": "jmn-magnetic-field",
     "title": "My quickest paper, and an unexpected collaboration",
     "date": "2023-10-12",
@@ -82,6 +150,35 @@
       "research"
     ],
     "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks."
+  },
+  {
+    "slug": "gpt-origins",
+    "title": "GPT: the model that started it all",
+    "date": "2023-03-29",
+    "tags": [
+      "AI"
+    ],
+    "summary": "With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went."
+  },
+  {
+    "slug": "chatgpt-interface",
+    "title": "ChatGPT: the interface that changed everything",
+    "date": "2022-12-14",
+    "tags": [
+      "AI"
+    ],
+    "summary": "ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is."
+  },
+  {
+    "slug": "ml-black-hole-energy-extraction",
+    "title": "Where machine learning meets black hole energy extraction",
+    "date": "2022-10-19",
+    "tags": [
+      "physics",
+      "research",
+      "AI"
+    ],
+    "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it."
   },
   {
     "slug": "first-paper-penrose",
