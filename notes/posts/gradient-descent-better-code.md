@@ -1,5 +1,5 @@
 ---
-title: Gradient descent can write better code than you
+title: Karpathy in 2017: “Gradient descent can write better code than you”
 date: 2025-01-08
 tags: [AI]
 summary: In 2017, Andrej Karpathy joked that gradient descent writes better code than us. Seven years later, it doesn't feel like much of a joke.
@@ -34,7 +34,7 @@ As someone who has spent years tuning parameters in physics code by hand, that f
 
 ## Now it writes the 1.0 code too
 
-The twist Karpathy may not have fully expected is that Software 2.0 now writes Software 1.0. Models trained with gradient descent generate ordinary Python, JavaScript, and SQL that humans can read and run.
+Here is the twist: Software 2.0 now writes Software 1.0. Models trained with gradient descent generate ordinary Python, JavaScript, and SQL that humans can read and run.
 
 Here's roughly how that happened:
 
@@ -64,5 +64,3 @@ There are also real risks: code that looks right but has subtle bugs, security h
 I let the model write the first draft, especially boilerplate, data cleaning scripts, and plotting code. Then I spend my time on the parts that matter: the design, the edge cases, testing, and checking whether it actually solves the problem.
 
 My code has got better, not because I write more of it, but because I review more of it and think more about structure. In a way, I've become a bit of a Software 2.0 programmer myself: my job is defining the goal clearly and judging the result.
-
-Karpathy was early. Looking back, "I'm sorry" might have been the most accurate part of the tweet.

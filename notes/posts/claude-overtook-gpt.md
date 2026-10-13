@@ -56,7 +56,7 @@ According to Menlo Ventures' report on enterprise AI, published in November 2024
 | OpenAI's share of enterprise LLM use | 50% | 34% |
 | Anthropic's share | 12% | 24% |
 
-OpenAI is still ahead overall, but in one year Anthropic doubled its share while OpenAI lost about a third of its own. The same report lists code generation as one of the biggest use cases in companies, which lines up with where Claude is strongest. Amazon also announced another $4 billion investment in Anthropic last month, bringing its total to $8 billion.
+OpenAI is still ahead overall, but in one year Anthropic doubled its share while OpenAI lost about a third of its own. The same report lists code generation as one of the biggest use cases in companies, which lines up with where Claude is strongest. Amazon also announced another 4 billion USD investment in Anthropic last month, bringing its total to 8 billion USD.
 
 ## Why I think it happened
 

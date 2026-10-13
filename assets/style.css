@@ -376,3 +376,59 @@ html { scrollbar-color: var(--line) transparent; }
 .bk-cancel:hover { border-color: var(--text); }
 .chat-form input:disabled { opacity: .55; cursor: not-allowed; }
 .chat-form button:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ---------- Konzi: the tour guide ----------
+   Konzi's blue stays the same in both themes and is a little see-through at rest;
+   the speech bubble follows the theme. Positions are set by assets/konzi.js. */
+:root { --konzi: #5C9DF2; --konzi-size: 60px; }
+.konzi { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 55; }
+.konzi-head, .konzi-bub, .konzi-say { position: fixed; left: 0; top: 0; will-change: transform; }
+.konzi-head {
+  width: var(--konzi-size); height: var(--konzi-size); padding: 0; border: 0; background: none;
+  border-radius: 50%; cursor: grab; touch-action: none; -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.18));
+}
+.konzi.dragging .konzi-head { cursor: grabbing; }
+.konzi-head svg { width: 100%; height: 100%; display: block; overflow: visible; pointer-events: none; }
+.konzi-head:focus-visible { outline: 2px solid var(--konzi); outline-offset: 4px; }
+.konzi-bub { border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, #93C0F8 0%, var(--konzi) 55%, #3F86E6 100%); }
+.konzi-b1 { width: calc(var(--konzi-size) * .2); height: calc(var(--konzi-size) * .2); }
+.konzi-b2 { width: calc(var(--konzi-size) * .13); height: calc(var(--konzi-size) * .13); }
+.konzi-head, .konzi-bub { opacity: .75; transition: opacity .25s ease; }
+.konzi.talking .konzi-head, .konzi.talking .konzi-bub,
+.konzi.dragging .konzi-head, .konzi.dragging .konzi-bub,
+.konzi-head:hover, .konzi-head:focus-visible { opacity: 1; }
+.kz-v, .kz-cheeks, .kz-zzz { transition: opacity .15s; }
+.kz-mouth { transition: d .22s ease; }
+.kz-zzz { opacity: 0; }
+.kz-zzz text { font-family: var(--mono); font-weight: 700; fill: var(--konzi); }
+
+.konzi-say {
+  width: min(300px, calc(100vw - 24px));
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.16);
+  padding: .75rem .9rem .8rem;
+  opacity: 0; transition: opacity .2s ease;
+}
+.konzi-say.on { opacity: 1; }
+.konzi-say-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .25rem; }
+.konzi-name { font-family: var(--mono); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--konzi); }
+.konzi-x { background: none; border: 0; color: var(--muted); font-size: 1.2rem; line-height: 1; cursor: pointer; padding: 0 .2rem; }
+.konzi-x:hover { color: var(--text); }
+.konzi-text { font-family: var(--mono); font-size: .84rem; line-height: 1.5; margin: 0; min-height: 2.6em; }
+.konzi-acts { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
+.konzi-acts:empty { display: none; }
+.konzi-btn {
+  font-family: var(--mono); font-size: .75rem; line-height: 1; padding: .5rem .7rem; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; text-decoration: none;
+}
+.konzi-btn:hover { border-color: var(--text); }
+.konzi-btn.primary { background: var(--konzi); border-color: var(--konzi); color: #0B1A33; font-weight: 700; }
+.konzi-btn.quiet { border-color: transparent; color: var(--muted); margin-left: auto; padding-inline: .3rem; }
+.konzi-btn.quiet:hover { color: var(--text); }
+.konzi-btn:focus-visible { outline: 2px solid var(--konzi); outline-offset: 2px; }
+
+@media (max-width: 760px) { :root { --konzi-size: 50px; } }
+@media print { .konzi { display: none; } }
