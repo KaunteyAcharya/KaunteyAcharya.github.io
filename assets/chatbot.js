@@ -22,7 +22,7 @@
      Never put secret keys, calendar IDs, or passwords in this file:
      it is public on GitHub and in every visitor's browser. */
   const BOOKING = {
-    endpoint: '',
+    endpoint: 'https://script.google.com/macros/s/AKfycbyPIRpuZ7-yNebIvXen_JSsVFEIxY5-78oqKosIOacKapdUhoAGAm2YK6OJmtkN5HwOJQ/exec',
     turnstileSiteKey: '',
     lengths: [15, 30],
     holdMinutes: 15,
@@ -299,7 +299,13 @@
   }
 
   function startBooking() {
-    booking = { step: 1, minutes: 30, slots: [], day: null, slot: null, name: '', email: '', topic: '' };
+    // Soft limit: one booking request per browser per day (real limits are enforced by the booking server)
+    let last = 0; try { last = Number(localStorage.getItem('ka-book-req') || 0); } catch (e) {}
+    if (!demo && Date.now() - last < 86400000) {
+      botTyping(() => add('You already requested a call from this browser today. Check your inbox for the confirmation link, or reach Kauntey directly:\n' + CONTACT, 'bot'));
+      return;
+    }
+    booking = { step: 1, minutes: 30, slots: [], day: null, slot: null, name: '', email: '', profile: '', topic: '' };
     lock(true);
     botTyping(() => {
       add('Happy to set that up. Pick a time that suits you and I’ll check it against Kauntey’s calendar.' + (demo ? '\n(Demo mode: this preview shows sample times and does not book anything yet.)' : ''), 'bot');
@@ -320,33 +326,38 @@
   }
 
   // ----- Slots -----
-  function demoSlots() {
-    const out = [], IST = 330, now = Date.now(), base = new Date();
-    for (let i = 1, days = 0; days < 6 && i < 14; i++) {
-      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
-      if (d.getDay() === 0 || d.getDay() === 6) continue;
-      days++;
-      [10, 11, 12, 14, 15, 16].forEach((hr, k) => {
-        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), hr, 0) - IST * 60000);
-        if ((i + k) % 4 !== 1 && t.getTime() > now + 24 * 3600e3) out.push(t);
-      });
+  // Preview-only sample times that follow the real rules: Mon to Sat, 4:00 AM to 2:00 AM IST,
+  // every 30 minutes, at least 3 hours ahead, up to 15 days out (some slots randomly "taken").
+  function demoSlots(minutes) {
+    const out = [], IST = 330, now = Date.now(), base = new Date(now + IST * 60000);
+    for (let i = -1; i <= 15; i++) {
+      const day = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate() + i);
+      const dow = new Date(day).getUTCDay();
+      if (dow === 0) continue;
+      const ws = day + 4 * 3600e3 - IST * 60000, we = day + 26 * 3600e3 - IST * 60000;
+      for (let t = ws; t + minutes * 60000 <= we; t += 30 * 60000) {
+        if (t < now + 3 * 3600e3 || t > now + 15 * 86400e3) continue;
+        if ((t / 1800000 + i) % 5 === 0) continue;
+        out.push(new Date(t));
+      }
     }
     return out;
   }
 
-  function loadSlots() {
+  // keepDay: stay on the chosen day after switching between 15 and 30 minutes, if it still has times
+  function loadSlots(keepDay) {
     const done = list => {
       if (!booking) return;
       booking.slots = list.map(x => new Date(x)).filter(d => !isNaN(d)).sort((a, b) => a - b);
       if (!booking.slots.length) {
-        add('There are no open slots in the next two weeks. Please email Kauntey directly:\n' + CONTACT, 'bot');
+        add('There are no open slots in the next 15 days. Please email Kauntey directly:\n' + CONTACT, 'bot');
         return endBooking();
       }
-      booking.day = dayKey(booking.slots[0]);
+      if (!(keepDay && booking.slots.some(s => dayKey(s) === booking.day))) booking.day = dayKey(booking.slots[0]);
       renderSlots();
     };
-    if (demo) return done(demoSlots());
-    fetch(BOOKING.endpoint + '?action=slots')
+    if (demo) return done(demoSlots(booking.minutes));
+    fetch(BOOKING.endpoint + '?action=slots&minutes=' + booking.minutes)
       .then(r => r.json())
       .then(j => done((j && j.slots) || []))
       .catch(() => { add('I couldn’t reach the calendar right now. Please try again later, or email Kauntey:\n' + CONTACT, 'bot'); endBooking(); });
@@ -364,7 +375,10 @@
       '<div class="bk-actions"><button type="button" class="bk-primary" data-next ' + (booking.slot ? '' : 'disabled') + '>Continue</button></div>');
     c.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { booking.day = b.dataset.day; booking.slot = null; c.remove(); renderSlots(); });
     c.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { booking.slot = new Date(+b.dataset.t); c.remove(); renderSlots(); });
-    c.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { booking.minutes = +b.dataset.m; c.remove(); renderSlots(); });
+    c.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+      if (booking.minutes === +b.dataset.m) return;
+      booking.minutes = +b.dataset.m; booking.slot = null; c.remove(); loadSlots(true);   // 30-minute calls fit fewer gaps
+    });
     c.querySelector('[data-next]').onclick = () => {
       add(fmtDay(booking.slot) + ', ' + fmtTime(booking.slot) + ' · ' + booking.minutes + ' min', 'user');
       botTyping(renderDetails);
@@ -379,6 +393,7 @@
       '<p class="bk-q">Great. Where should the invite go?</p>' +
       '<label class="bk-l" for="bkName">Your name</label><input class="bk-in" id="bkName" autocomplete="name" maxlength="80" value="' + safe(booking.name) + '">' +
       '<label class="bk-l" for="bkEmail">Work email</label><input class="bk-in" id="bkEmail" type="email" autocomplete="email" maxlength="120" value="' + safe(booking.email) + '">' +
+      '<label class="bk-l" for="bkProfile">LinkedIn profile or website</label><input class="bk-in" id="bkProfile" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="linkedin.com/in/your-name" value="' + safe(booking.profile) + '">' +
       '<label class="bk-l" for="bkTopic">Company and topic (optional)</label><input class="bk-in" id="bkTopic" maxlength="200" value="' + safe(booking.topic) + '">' +
       '<input class="bk-hp" id="bkWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">' +
       (BOOKING.turnstileSiteKey ? '<div class="bk-ts" id="bkTs"></div>' : '') +
@@ -404,9 +419,12 @@
     booking.name = c.querySelector('#bkName').value.trim();
     booking.email = c.querySelector('#bkEmail').value.trim();
     booking.topic = c.querySelector('#bkTopic').value.trim();
+    booking.profile = c.querySelector('#bkProfile').value.trim();
     if (c.querySelector('#bkWebsite').value) return;                       // honeypot: bots fill hidden fields
     if (!booking.name) { err.textContent = 'Please enter your name.'; return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(booking.email)) { err.textContent = 'Please enter a valid email so the invite can reach you.'; return; }
+    if (!/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(booking.profile)) { err.textContent = 'Please add your LinkedIn profile or website link, so Kauntey knows who he is meeting.'; return; }
+    if (/(^|\/\/|\.)linkedin\.com\/?$/i.test(booking.profile)) { err.textContent = 'Please use the link to your own LinkedIn profile (linkedin.com/in/…).'; return; }
     const token = BOOKING.turnstileSiteKey && window.turnstile ? window.turnstile.getResponse() : '';
     if (BOOKING.turnstileSiteKey && !token) { err.textContent = 'Please complete the quick human check.'; return; }
     err.textContent = '';
@@ -414,7 +432,7 @@
     add(booking.name + ' · ' + booking.email, 'user');
 
     const payload = { action: 'request', start: booking.slot.toISOString(), minutes: booking.minutes,
-      name: booking.name, email: booking.email, topic: booking.topic, tz, token };
+      name: booking.name, email: booking.email, profile: booking.profile, topic: booking.topic, tz, token };
     const send = demo
       ? Promise.resolve({ ok: true })
       : fetch(BOOKING.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).then(r => r.json());
@@ -428,6 +446,7 @@
           add((res && res.message) || 'That slot was just taken or something went wrong. Please pick another time.', 'bot');
           booking.slot = null; booking.slots = []; return loadSlots();
         }
+        if (!demo) { try { localStorage.setItem('ka-book-req', String(Date.now())); } catch (e) {} }
         renderCheckInbox();
       })
       .catch(() => { t.remove(); add('I couldn’t reach the booking service. Please try again later, or email Kauntey:\n' + CONTACT, 'bot'); endBooking(); });

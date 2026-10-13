@@ -54,10 +54,10 @@
     ] },
 
     experience: { parts: [
-      ['happy', 'Ah yes, the professional era! Look at him being all responsible and employable. 🥹'],
-      ['neutral', 'Physics research first, then research writing, and now AI automation and LLM evaluation at Innodata.'],
-      ['happy', 'From studying the universe to building AI systems. Same curiosity, different playground!']
-    ] },
+      ['happy', 'Ah yes, the professional era! Physics research first, then research writing, and now AI automation and LLM evaluation at Innodata.'],
+      ['neutral', 'From studying the universe to building AI systems. Same curiosity, different playground!'],
+      ['puppy', "But between us, he's not satisfied yet. He wants to grow! If you have an interesting opportunity, do reach out to him. 🥹"]
+    ], actions: [A.email, A.linkedin] },
 
     skills: { parts: [
       ['shocked', "Ooooh, the skills section! Let's see what's going on inside that brain."],
@@ -66,12 +66,11 @@
       ['laugh', '...Okay, he probably Googles it eventually. Hehe!']
     ] },
 
+    // The first project, paper and note are commented on inside these intro stops (they sit level with
+    // the section heading). Every later project, paper and note gets its own line as it scrolls past.
     projects: { parts: [
       ['shocked', "Ummm... let's see what he's built! 👀"],
-      ['happy', 'Ohhh, TickerBrief! Type a stock ticker and an agent writes a whole research report. Fancy!'],
-      ['wink', 'And an agent that watches ML models and pings Slack when they start drifting. Very responsible.'],
-      ['neutral', "There's a research-paper agent and a RAG agent too. Most projects have a demo link, so go try them!"],
-      ['puppy', 'Heyyy, just come back after the demo, okay? I still have a whole tour planned! 🥹']
+      ['neutral', 'Most projects have a live demo link, so go try them! Just come back after, okay? I still have a whole tour planned. 🥹']
     ] },
 
     publications: { parts: [
@@ -86,10 +85,10 @@
 
     contact: { spin: true, parts: [
       ['shocked', 'WAIT WAIT WAIT! One tiny favour before you go.'],
-      ['puppy', "If you liked Kauntey's work, drop him an email or a LinkedIn message. Even a little hello would make his day!"],
-      ['happy', 'Hiring, have a project idea, or want to build something together? Definitely reach out. Got questions? The assistant in the corner knows his whole story.'],
-      ['wink', "Thanks for roaming around with me! Don't be a stranger, okay? Love youuu! Byeee! 💙"]
-    ], actions: [A.linkedin, A.email, A.explore] },
+      ['puppy', "If you liked his work and have an opportunity for him, do reach out! And if not, he'd still be happy to hear your comments on his projects, talk research, or just have a simple conversation."],
+      ['happy', 'Got questions first? The assistant in the corner knows his whole story.'],
+      ['wink', "Thanks for roaming around with me! Don't forget to check out his Notes before leaving. Don't be a stranger, okay? Love youuu! Byeee! 💙"]
+    ], actions: [A.notes, A.linkedin, A.email, A.explore] },
 
     // Not tied to a section
     leaving: { parts: [['puppy', "Come back soon, okay? I'll wait right here! 🥹"]] },
@@ -109,7 +108,7 @@
 
   // One-liners when a visitor hovers a project (matched by its GitHub link) or a paper (matched by title)
   const HOVER = [
-    ['a[href*="/tickerbrief"]', 'happy', 'TickerBrief! One ticker in, a whole research report out. Wall Street interns are sweating. 😅'],
+    ['a[href*="/tickerbrief"]', 'happy', 'TickerBrief! Type one stock ticker and an agent writes a whole research report. Fancy! 📈'],
     ['a[href*="drift-alert"]', 'wink', 'The drift agent! It notices when a model goes off the rails, then explains why on Slack. Very responsible. 🧐'],
     ['a[href*="arxiv"]', 'laugh', 'The arXiv agent! He automated reading papers... so he could read even MORE papers. 🤓'],
     ['a[href*="RAG-doc"]', 'happy', 'Fully local RAG! Your documents never leave your machine. Privacy, but make it nerdy.'],
@@ -289,7 +288,44 @@
   const K = makeFace(headBtn);
 
   /* ---------- Which stop should be showing ---------- */
-  const headings = SECTIONS.map(([id, sel]) => [id, document.querySelector(sel)]).filter(x => x[1]);
+  let headings = [];
+  // Builds the list of things Konzi talks about, in page order: section headings plus each project,
+  // paper and note title. Rebuilt now and then because the latest notes load a moment after the page.
+  function buildAnchors() {
+    const list = [];
+    SECTIONS.forEach(([id, sel]) => {
+      const el = document.querySelector(sel); if (!el) return;
+      list.push([id, el]);
+      const items = id === 'projects' ? document.querySelectorAll('#projects .row')
+        : id === 'publications' ? document.querySelectorAll('#publications .row')
+        : id === 'notes' ? document.querySelectorAll('#latestPosts .post-item') : [];
+      [...items].forEach((row, i) => {
+        const line = itemLine(id, row);
+        if (!line) return;
+        const key = id + ':' + i;
+        STOPS[key] = line.stop;
+        if (i === 0) {
+          // the first item sits level with the heading, so its line joins the section's intro
+          const intro = STOPS[id];
+          if (!intro._first) { intro.parts.splice(1, 0, ...line.stop.parts); intro._first = true; }
+        } else list.push([key, row.querySelector('h3') || row.querySelector('a') || row]);
+      });
+    });
+    headings = list;
+  }
+  function itemLine(sec, row) {
+    if (sec === 'notes') {
+      const a = row.querySelector('a[href*="post="]'); if (!a) return null;
+      const slug = decodeURIComponent(a.getAttribute('href').split('post=')[1] || '');
+      const parts = NOTE_LINES[slug]; if (!parts) return null;
+      return { stop: { item: true, parts: [parts[0]], actions: [{ label: 'Read it →', href: 'notes.html?post=' + encodeURIComponent(slug) }] } };
+    }
+    const h3 = row.querySelector('h3'); if (!h3) return null;
+    const hit = HOVER.find(([key]) => key.startsWith('a[') ? row.querySelector(key) : h3.textContent.includes(key));
+    return hit ? { stop: { item: true, parts: [[hit[1], hit[2]]] } } : null;
+  }
+  buildAnchors();
+  if (onHome) { const tick = setInterval(() => { const n = document.querySelectorAll('#latestPosts .post-item').length; if (n) { buildAnchors(); clearInterval(tick); } }, 600); }
   const tourOn = () => !mem.off && !session.quiet;
   let activeId = headings.length ? headings[0][0] : null;
   let override = null;          // a one-off stop (leaving, back, tap) that sits on top of the section's line
@@ -314,12 +350,15 @@
     if (!tourOn() || closedFor === activeId) return null;
     return sectionStop(activeId);
   }
-  const LINE = { notes: .55, contact: .85 };
+  // Most things trigger a quarter of the way down the screen. Papers, Notes and Contact sit near the bottom of
+  // the page and can't scroll that high, so they (and the notes listed under Notes) trigger lower.
+  const LINE = { publications: .45, notes: .55, contact: .74 };
+  const lineFor = id => LINE[id] || LINE[id.split(':')[0]] || .25;
   function scanActive() {
     // Most headings trigger a quarter of the way down the screen. Notes and Contact sit at the
     // bottom of the page and can't scroll that high, so their trigger lines are lower.
     let id = headings.length ? headings[0][0] : null;
-    headings.forEach(([sid, el]) => { if (el.getBoundingClientRect().top <= innerHeight * (LINE[sid] || .25)) id = sid; });
+    headings.forEach(([sid, el]) => { if (el.getBoundingClientRect().top <= innerHeight * lineFor(sid)) id = sid; });
     if (id !== activeId) {
       activeId = id; closedFor = null;
       if (id === 'contact' && !mem.done) { mem.done = true; save(); }
@@ -367,7 +406,7 @@
       if (!last) acts.appendChild(btn('Next →', () => { partOf[id] = p + 1; showPart(); }, 'primary'));
       else {
         (stop.actions || []).forEach((a, i) => acts.appendChild(btn(a.label, a.run ? () => { a.run(); } : null, i === 0 ? 'primary' : '', a)));
-        if (!stop.actions) acts.appendChild(btn('Got it', close, 'primary'));
+        if (!stop.actions && !stop.item) acts.appendChild(btn('Got it', close, 'primary'));
       }
       if (id === 'heroAgain') acts.appendChild(btn('Not now', () => { session.quiet = true; saveSession(); close(); }, ''));
       if (onHome && !override && id !== 'heroAgain') acts.appendChild(btn('Skip tour', skipTour, 'quiet'));
@@ -596,6 +635,7 @@
       row.addEventListener('mouseenter', () => {
         timer = setTimeout(() => {
           if (!tourOn() || dragging || thrown || dozing || said.has(i)) return;
+          if (headings.some(([id, el]) => id === activeId && row.contains(el))) return;   // its line is already up
           if (override && !override.startsWith('aside:hover')) return;   // don't talk over a welcome-back
           said.add(i); hoverEl = row;
           aside('hover' + i, hit[1], hit[2]);
