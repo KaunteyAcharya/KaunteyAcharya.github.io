@@ -263,6 +263,20 @@ img { max-width: 100%; }
   transition: opacity .25s ease, transform .25s ease;
 }
 .chat.open { opacity: 1; transform: none; pointer-events: auto; }
+/* Resize grip in the top-left corner (the panel is anchored bottom-right) */
+.chat-resize {
+  position: absolute; left: 0; top: 0; width: 18px; height: 18px; cursor: nwse-resize; z-index: 2;
+  border-top-left-radius: 10px; touch-action: none;
+  background: linear-gradient(135deg, var(--muted) 0 1.5px, transparent 1.5px 5px, var(--muted) 5px 6.5px, transparent 6.5px) no-repeat 5px 5px / 9px 9px;
+  opacity: .45; transition: opacity .15s;
+}
+.chat-resize:hover, .chat.resizing .chat-resize { opacity: 1; }
+.chat.resizing { transition: none; user-select: none; }
+.chat-head { padding-left: 1.4rem; }
+.bk-tz { display: grid; gap: .25rem; margin-bottom: .6rem; }
+.bk-tz select.bk-in { padding: .35rem .5rem; }
+.bk-when { margin: .4rem 0; line-height: 1.45; }
+.bk-when small, .bk-sub { color: var(--muted); font-size: .78rem; }
 .chat-head { display: flex; justify-content: space-between; align-items: center; padding: .8rem 1rem; border-bottom: 1px solid var(--line); }
 .chat-head strong { font-family: var(--mono); font-size: .85rem; font-weight: 500; }
 .chat-close { background: none; border: 0; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: .2rem .4rem; }
@@ -305,7 +319,8 @@ img { max-width: 100%; }
 }
 @media (max-width: 480px) {
   .nav { gap: 1rem; }
-  .chat { right: 10px; left: 10px; bottom: 10px; width: auto; height: min(78vh, 560px); }
+  .chat { right: 10px; left: 10px; bottom: 10px; width: auto !important; height: min(78vh, 560px) !important; }
+  .chat-resize { display: none; }
   .chat-toggle span { display: none; }
   .chat-toggle { padding: 0; width: 44px; justify-content: center; }
 }

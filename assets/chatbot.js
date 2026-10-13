@@ -264,10 +264,30 @@
 
   let booking = null;
   const demo = !BOOKING.endpoint;
-  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'your local time';
-  const fmtDay = d => d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-  const fmtTime = d => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-  const dayKey = d => d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+  // Time zones: slots are exact moments (UTC), so they land on Kauntey's calendar correctly whatever zone
+  // the visitor views them in. The visitor's zone is detected, and they can switch it.
+  const HOME_TZ = 'Asia/Kolkata';
+  const zoneOk = z => { try { new Intl.DateTimeFormat('en', { timeZone: z }); return true; } catch (e) { return false; } };
+  const MY_TZ = (() => { const z = Intl.DateTimeFormat().resolvedOptions().timeZone; return z && zoneOk(z) ? z : HOME_TZ; })();
+  let tz = MY_TZ;
+  const fmtDay = d => d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', timeZone: tz });
+  const fmtTime = d => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', timeZone: tz });
+  const fmtLong = (d, z) => d.toLocaleString(undefined, { weekday: 'long', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: z });
+  const dayKey = d => new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+  const zoneLabel = z => z === HOME_TZ ? 'IST' : z.replace(/_/g, ' ');
+  function allZones() {
+    let list = [];
+    try { list = Intl.supportedValuesOf('timeZone'); } catch (e) {}
+    if (!list.length) list = ['UTC', 'Europe/London', 'Europe/Berlin', 'Europe/Paris', 'America/New_York', 'America/Chicago', 'America/Denver',
+      'America/Los_Angeles', 'America/Toronto', 'America/Sao_Paulo', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo',
+      'Asia/Shanghai', 'Australia/Sydney', 'Africa/Johannesburg', 'Pacific/Auckland'];
+    return list;
+  }
+  function untilText(d) {
+    const m = Math.max(0, Math.round((d - Date.now()) / 60000)), dd = Math.floor(m / 1440), hh = Math.floor((m % 1440) / 60), mm = m % 60;
+    const part = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+    return dd ? part(dd, 'day') + (hh ? ', ' + part(hh, 'hour') : '') : hh ? part(hh, 'hour') + (mm ? ', ' + part(mm, 'minute') : '') : part(mm, 'minute');
+  }
   const h = (tag, attrs, html) => { const e = document.createElement(tag); Object.assign(e, attrs || {}); if (html != null) e.innerHTML = html; return e; };
   const safe = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -308,7 +328,12 @@
     booking = { step: 1, minutes: 30, slots: [], day: null, slot: null, name: '', email: '', profile: '', topic: '' };
     lock(true);
     botTyping(() => {
-      add('Happy to set that up. Pick a time that suits you and I’ll check it against Kauntey’s calendar.' + (demo ? '\n(Demo mode: this preview shows sample times and does not book anything yet.)' : ''), 'bot');
+      add('Happy to set that up! A quick heads-up first:\n' +
+        '• One booking request per email address every 24 hours, so please enter your email carefully.\n' +
+        '• You’ll get a confirmation link by email. Click it within ' + BOOKING.holdMinutes + ' minutes, or the slot is released.\n' +
+        '• Please add your LinkedIn profile or website, so Kauntey knows who he’s meeting.\n' +
+        '• Temporary email addresses aren’t accepted.\n\nNow pick a time that suits you.' +
+        (demo ? '\n(Demo mode: this preview shows sample times and does not book anything yet.)' : ''), 'bot');
       loadSlots();
     });
   }
@@ -368,19 +393,45 @@
     booking.slots.forEach(s => { const k = dayKey(s); if (!days.some(d => d.k === k)) days.push({ k, d: s }); });
     const times = booking.slots.filter(s => dayKey(s) === booking.day);
     const c = card(
-      '<p class="bk-q">Times are shown in <b>' + safe(tz) + '</b>.</p>' +
+      '<div class="bk-tz"><label class="bk-l" for="bkTz">Show times in</label><select class="bk-in" id="bkTz">' +
+        '<option value="' + safe(MY_TZ) + '"' + (tz === MY_TZ ? ' selected' : '') + '>Your time (' + safe(zoneLabel(MY_TZ)) + ')</option>' +
+        (MY_TZ !== HOME_TZ ? '<option value="' + HOME_TZ + '"' + (tz === HOME_TZ ? ' selected' : '') + '>Kauntey’s time (IST)</option>' : '') +
+        '<optgroup label="Other time zones">' + allZones().filter(z => z !== MY_TZ && z !== HOME_TZ)
+          .map(z => '<option value="' + safe(z) + '"' + (tz === z ? ' selected' : '') + '>' + safe(z.replace(/_/g, ' ')) + '</option>').join('') + '</optgroup>' +
+      '</select></div>' +
       '<div class="bk-row" role="group" aria-label="Day">' + days.map(d => '<button type="button" class="bk-chip" data-day="' + d.k + '" aria-pressed="' + (d.k === booking.day) + '">' + fmtDay(d.d) + '</button>').join('') + '</div>' +
       '<div class="bk-grid" role="group" aria-label="Time">' + times.map(t => '<button type="button" class="bk-chip" data-t="' + t.getTime() + '" aria-pressed="' + (booking.slot && booking.slot.getTime() === t.getTime()) + '">' + fmtTime(t) + '</button>').join('') + '</div>' +
       '<div class="bk-row" role="group" aria-label="Length">' + BOOKING.lengths.map(m => '<button type="button" class="bk-chip" data-m="' + m + '" aria-pressed="' + (booking.minutes === m) + '">' + m + ' min</button>').join('') + '</div>' +
       '<div class="bk-actions"><button type="button" class="bk-primary" data-next ' + (booking.slot ? '' : 'disabled') + '>Continue</button></div>');
+    c.querySelector('#bkTz').onchange = e => {
+      if (!zoneOk(e.target.value)) return;
+      tz = e.target.value;
+      // keep the same chosen moment; re-group the days in the new zone
+      booking.day = dayKey(booking.slot || booking.slots[0]);
+      c.remove(); renderSlots();
+    };
     c.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { booking.day = b.dataset.day; booking.slot = null; c.remove(); renderSlots(); });
     c.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { booking.slot = new Date(+b.dataset.t); c.remove(); renderSlots(); });
     c.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
       if (booking.minutes === +b.dataset.m) return;
       booking.minutes = +b.dataset.m; booking.slot = null; c.remove(); loadSlots(true);   // 30-minute calls fit fewer gaps
     });
-    c.querySelector('[data-next]').onclick = () => {
-      add(fmtDay(booking.slot) + ', ' + fmtTime(booking.slot) + ' · ' + booking.minutes + ' min', 'user');
+    c.querySelector('[data-next]').onclick = () => botTyping(renderCheck);
+  }
+
+  // ----- "Is this right?" check before the form -----
+  function renderCheck() {
+    if (!booking || !booking.slot) return;
+    const s = booking.slot;
+    const c = card(
+      '<p class="bk-q">Just checking, is this the time you want?</p>' +
+      '<p class="bk-when"><b>' + safe(fmtLong(s, tz)) + '</b><br><small>' + (tz === MY_TZ ? 'your time' : 'time in') + ' · ' + safe(zoneLabel(tz)) + '</small></p>' +
+      (tz !== HOME_TZ ? '<p class="bk-q bk-sub">For Kauntey that’s ' + safe(fmtLong(s, HOME_TZ)) + ' IST.</p>' : '') +
+      '<p class="bk-q bk-sub">' + booking.minutes + ' minutes · starts in ' + untilText(s) + '</p>' +
+      '<div class="bk-actions"><button type="button" class="bk-ghost" data-back>Pick another time</button><button type="button" class="bk-primary" data-yes>Yes, continue</button></div>');
+    c.querySelector('[data-back]').onclick = () => { c.remove(); renderSlots(); };
+    c.querySelector('[data-yes]').onclick = () => {
+      add(fmtDay(s) + ', ' + fmtTime(s) + ' (' + zoneLabel(tz) + ') · ' + booking.minutes + ' min', 'user');
       botTyping(renderDetails);
     };
   }
@@ -443,7 +494,19 @@
         t.remove();
         if (!booking) return;
         if (!res || !res.ok) {
-          add((res && res.message) || 'That slot was just taken or something went wrong. Please pick another time.', 'bot');
+          const msg = (res && res.message) || 'That slot was just taken or something went wrong. Please pick another time.';
+          // Limit reached (this email already asked today, or already has a call): stop here, no more time pickers
+          if ((res && res.code === 'limit') || /already (requested|have a call)|too many|lots of requests/i.test(msg)) {
+            try { localStorage.setItem('ka-book-req', String(Date.now())); } catch (e) {}
+            add(msg + '\n\nYou can still reach Kauntey directly:\n' + CONTACT, 'bot');
+            return endBooking();
+          }
+          // Something in the form needs fixing: go back to the form, keep what they typed
+          if ((res && res.code === 'input') || /email|linkedin|website|name|human check/i.test(msg)) {
+            add(msg, 'bot');
+            return renderDetails();
+          }
+          add(msg, 'bot');
           booking.slot = null; booking.slots = []; return loadSlots();
         }
         if (!demo) { try { localStorage.setItem('ka-book-req', String(Date.now())); } catch (e) {} }
@@ -474,7 +537,7 @@
   function renderBooked() {
     if (!booking) return;
     card('<p class="bk-q bk-ok"><b>You’re booked.</b></p><p class="bk-q">' + fmtDay(booking.slot) + ', ' + fmtTime(booking.slot) +
-      ' (' + safe(tz) + ') · ' + booking.minutes + ' min with Kauntey Acharya. A calendar invite with a Meet link is on its way to ' +
+      ' (' + safe(zoneLabel(tz)) + ') · ' + booking.minutes + ' min with Kauntey Acharya. A calendar invite with a Meet link is on its way to ' +
       safe(booking.email) + ', and Kauntey has been notified.' + (demo ? '<br><small>(Demo: nothing was actually booked.)</small>' : '') + '</p>');
     endBooking();
     add('Anything else you’d like to know about Kauntey?', 'bot');
@@ -501,6 +564,30 @@
     toggle.setAttribute('aria-expanded', 'false');
     toggle.focus();
   }
+
+  /* ---------- Resizable panel (desktop): drag the top-left corner; double-click it to reset ---------- */
+  const grip = document.createElement('div');
+  grip.className = 'chat-resize'; grip.title = 'Drag to resize, double-click to reset';
+  grip.setAttribute('aria-hidden', 'true');
+  chat.appendChild(grip);
+  const SIZE_KEY = 'ka-chat-size';
+  const fit = (w, h) => [Math.max(300, Math.min(innerWidth - 40, w)), Math.max(360, Math.min(innerHeight - 40, h))];
+  function applySize(w, h) { [w, h] = fit(w, h); chat.style.width = w + 'px'; chat.style.height = h + 'px'; }
+  try { const z = JSON.parse(localStorage.getItem(SIZE_KEY) || 'null'); if (z && innerWidth > 480) applySize(z.w, z.h); } catch (e) {}
+  grip.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    const r = chat.getBoundingClientRect(), sx = e.clientX, sy = e.clientY;
+    chat.classList.add('resizing');
+    grip.setPointerCapture(e.pointerId);
+    const move = ev => applySize(r.width + (sx - ev.clientX), r.height + (sy - ev.clientY));
+    const stop = () => {
+      chat.classList.remove('resizing');
+      grip.removeEventListener('pointermove', move); grip.removeEventListener('pointerup', stop);
+      try { const b = chat.getBoundingClientRect(); localStorage.setItem(SIZE_KEY, JSON.stringify({ w: b.width, h: b.height })); } catch (err) {}
+    };
+    grip.addEventListener('pointermove', move); grip.addEventListener('pointerup', stop);
+  });
+  grip.addEventListener('dblclick', () => { chat.style.width = ''; chat.style.height = ''; try { localStorage.removeItem(SIZE_KEY); } catch (e) {} });
 
   toggle.addEventListener('click', open);
   close.addEventListener('click', shut);
