@@ -23,7 +23,7 @@
      it is public on GitHub and in every visitor's browser. */
   const BOOKING = {
     endpoint: 'https://script.google.com/macros/s/AKfycbyPIRpuZ7-yNebIvXen_JSsVFEIxY5-78oqKosIOacKapdUhoAGAm2YK6OJmtkN5HwOJQ/exec',
-    turnstileSiteKey: '',
+    turnstileSiteKey: '0x4AAAAAAFVrsFQVhIi8osXj',
     lengths: [15, 30],
     holdMinutes: 15,
     // Demo mode only runs in previews. On the live site (github.io) booking stays
@@ -456,10 +456,17 @@
     c.querySelector('#bkName').focus();
   }
 
+  // Cloudflare's human check. Each form gets a fresh widget (tokens are single-use).
+  let tsTarget = null, tsWidget = null;
   function mountTurnstile(el) {
-    const render = () => window.turnstile && window.turnstile.render(el, { sitekey: BOOKING.turnstileSiteKey, size: 'flexible' });
+    tsTarget = el;
+    const render = () => {
+      if (!window.turnstile || !tsTarget || !document.body.contains(tsTarget)) return;
+      if (tsWidget !== null) { try { window.turnstile.remove(tsWidget); } catch (e) {} }
+      tsWidget = window.turnstile.render(tsTarget, { sitekey: BOOKING.turnstileSiteKey, size: 'flexible' });
+    };
     if (window.turnstile) return render();
-    if (tsLoaded) return;
+    if (tsLoaded) return;   // script still loading; it renders into the latest form when ready
     tsLoaded = true;
     const s = h('script', { src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true });
     s.onload = render; document.head.appendChild(s);
@@ -476,7 +483,7 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(booking.email)) { err.textContent = 'Please enter a valid email so the invite can reach you.'; return; }
     if (!/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(booking.profile)) { err.textContent = 'Please add your LinkedIn profile or website link, so Kauntey knows who he is meeting.'; return; }
     if (/(^|\/\/|\.)linkedin\.com\/?$/i.test(booking.profile)) { err.textContent = 'Please use the link to your own LinkedIn profile (linkedin.com/in/…).'; return; }
-    const token = BOOKING.turnstileSiteKey && window.turnstile ? window.turnstile.getResponse() : '';
+    const token = BOOKING.turnstileSiteKey && window.turnstile && tsWidget !== null ? window.turnstile.getResponse(tsWidget) : '';
     if (BOOKING.turnstileSiteKey && !token) { err.textContent = 'Please complete the quick human check.'; return; }
     err.textContent = '';
     c.querySelectorAll('button').forEach(b => b.disabled = true);
