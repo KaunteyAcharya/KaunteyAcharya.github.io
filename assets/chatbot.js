@@ -619,6 +619,17 @@
   });
   grip.addEventListener('dblclick', () => { chat.style.width = ''; chat.style.height = ''; try { localStorage.removeItem(SIZE_KEY); } catch (e) {} });
 
+  // "Book a call" links on the page (e.g. next to Email): open the assistant straight into the booking flow
+  document.querySelectorAll('[data-book-call]').forEach(a => {
+    if (!BOOKING_ON) return;            // stays hidden until booking is switched on
+    a.hidden = false;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      open();
+      if (!booking) ask('Book a call');
+    });
+  });
+
   toggle.addEventListener('click', open);
   close.addEventListener('click', shut);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && chat.classList.contains('open')) shut(); });

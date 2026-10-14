@@ -115,6 +115,7 @@ img { max-width: 100%; }
 }
 .links a:hover { border-color: var(--accent); color: var(--accent); }
 .links svg { width: 15px; height: 15px; fill: currentColor; }
+.links a[hidden] { display: none; }
 .hero .loc { margin-top: 2.2rem; font-family: var(--mono); font-size: .78rem; color: var(--muted); }
 
 /* ---------- Sections ---------- */
