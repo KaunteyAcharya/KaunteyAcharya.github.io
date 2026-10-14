@@ -376,6 +376,9 @@ html { scrollbar-color: var(--line) transparent; }
 .bk-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .bk-err { color: #b4541a; font-size: .74rem; min-height: 1em; margin: .35rem 0 0; }
 .bk-ts { margin-top: .5rem; }
+.bk-ts:empty { display: none; }
+.bk-note { font-size: .7rem; color: var(--muted); margin: .4rem 0 0; }
+.bk-note a { color: inherit; }
 .bk-mail { border: 1px dashed var(--line); border-radius: 6px; padding: .55rem .65rem; background: var(--bg); font-size: .85rem; }
 .bk-mail small { display: block; color: var(--muted); font-family: var(--mono); font-size: .68rem; margin-bottom: .2rem; }
 .bk-ok { color: #2f7d46; }

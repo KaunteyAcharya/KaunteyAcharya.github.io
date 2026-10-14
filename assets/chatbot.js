@@ -447,7 +447,7 @@
       '<label class="bk-l" for="bkProfile">LinkedIn profile or website</label><input class="bk-in" id="bkProfile" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="linkedin.com/in/your-name" value="' + safe(booking.profile) + '">' +
       '<label class="bk-l" for="bkTopic">Company and topic (optional)</label><input class="bk-in" id="bkTopic" maxlength="200" value="' + safe(booking.topic) + '">' +
       '<input class="bk-hp" id="bkWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-      (BOOKING.turnstileSiteKey ? '<div class="bk-ts" id="bkTs"></div>' : '') +
+      (BOOKING.turnstileSiteKey ? '<div class="bk-ts" id="bkTs"></div><p class="bk-note">Protected by Cloudflare · <a href="https://www.cloudflare.com/turnstile-privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy</a></p>' : '') +
       '<p class="bk-err" role="alert"></p>' +
       '<div class="bk-actions"><button type="button" class="bk-ghost" data-back>Back</button><button type="button" class="bk-primary" data-send>Send confirmation</button></div>');
     if (BOOKING.turnstileSiteKey) mountTurnstile(c.querySelector('#bkTs'));
@@ -463,7 +463,8 @@
     const render = () => {
       if (!window.turnstile || !tsTarget || !document.body.contains(tsTarget)) return;
       if (tsWidget !== null) { try { window.turnstile.remove(tsWidget); } catch (e) {} }
-      tsWidget = window.turnstile.render(tsTarget, { sitekey: BOOKING.turnstileSiteKey, size: 'flexible' });
+      // 'interaction-only': the check runs in the background and the box only appears if Cloudflare needs a click
+      tsWidget = window.turnstile.render(tsTarget, { sitekey: BOOKING.turnstileSiteKey, size: 'flexible', appearance: 'interaction-only' });
     };
     if (window.turnstile) return render();
     if (tsLoaded) return;   // script still loading; it renders into the latest form when ready
@@ -483,8 +484,20 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(booking.email)) { err.textContent = 'Please enter a valid email so the invite can reach you.'; return; }
     if (!/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(booking.profile)) { err.textContent = 'Please add your LinkedIn profile or website link, so Kauntey knows who he is meeting.'; return; }
     if (/(^|\/\/|\.)linkedin\.com\/?$/i.test(booking.profile)) { err.textContent = 'Please use the link to your own LinkedIn profile (linkedin.com/in/…).'; return; }
+    if (BOOKING.turnstileSiteKey) {
+      // The background check usually finishes in a second or two; wait for it briefly instead of erroring
+      const getTok = () => (window.turnstile && tsWidget !== null ? window.turnstile.getResponse(tsWidget) : '') || '';
+      if (!getTok()) {
+        if (c.dataset.waiting) return;
+        c.dataset.waiting = '1'; err.textContent = 'One moment, finishing a quick security check…';
+        const t0 = Date.now(), iv = setInterval(() => {
+          if (getTok()) { clearInterval(iv); delete c.dataset.waiting; err.textContent = ''; submit(c); }
+          else if (Date.now() - t0 > 8000) { clearInterval(iv); delete c.dataset.waiting; err.textContent = 'Please complete the quick human check above, then send again.'; }
+        }, 250);
+        return;
+      }
+    }
     const token = BOOKING.turnstileSiteKey && window.turnstile && tsWidget !== null ? window.turnstile.getResponse(tsWidget) : '';
-    if (BOOKING.turnstileSiteKey && !token) { err.textContent = 'Please complete the quick human check.'; return; }
     err.textContent = '';
     c.querySelectorAll('button').forEach(b => b.disabled = true);
     add(booking.name + ' · ' + booking.email, 'user');
@@ -503,7 +516,7 @@
         if (!res || !res.ok) {
           const msg = (res && res.message) || 'That slot was just taken or something went wrong. Please pick another time.';
           // Limit reached (this email already asked today, or already has a call): stop here, no more time pickers
-          if ((res && res.code === 'limit') || /already (requested|have a call)|too many|lots of requests/i.test(msg)) {
+          if ((res && (res.code === 'limit' || res.code === 'blocked')) || /already (requested|have a call)|too many|lots of requests|isn.t available for this email/i.test(msg)) {
             try { localStorage.setItem('ka-book-req', String(Date.now())); } catch (e) {}
             add(msg + '\n\nYou can still reach Kauntey directly:\n' + CONTACT, 'bot');
             return endBooking();
