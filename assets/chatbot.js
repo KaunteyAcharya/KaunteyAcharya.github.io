@@ -521,6 +521,15 @@
             add(msg + '\n\nYou can still reach Kauntey directly:\n' + CONTACT, 'bot');
             return endBooking();
           }
+          // Fake or unusable email: say clearly that the booking stopped, then let them switch to a real address
+          if (/temporary inbox|disposable|can.t receive email/i.test(msg)) {
+            const why = /can.t receive email/i.test(msg)
+              ? 'the domain of ' + booking.email + ' can’t receive email, so the invite would never arrive. Please check it for typos.'
+              : booking.email + ' looks like a temporary (fake) email address, and calls can only be booked with a real one.';
+            add('Booking not completed: ' + why + '\n\nIf you’d like to book, enter your real work or personal email below.', 'bot');
+            if (!/can.t receive email/i.test(msg)) booking.email = '';   // keep it for typo fixes
+            return renderDetails();
+          }
           // Something in the form needs fixing: go back to the form, keep what they typed
           if ((res && res.code === 'input') || /email|linkedin|website|name|human check/i.test(msg)) {
             add(msg, 'bot');
@@ -542,6 +551,7 @@
       '<p class="bk-q"><b>Almost done.</b> I sent a confirmation link to <b>' + safe(booking.email) + '</b>. ' +
       'Click it within ' + BOOKING.holdMinutes + ' minutes to confirm your ' + booking.minutes + '-minute call on ' + when + '. ' +
       'Until then the slot is held for you.</p>' +
+      '<p class="bk-q">Not in your inbox after a minute? Please check your Spam or Promotions folder, and mark it “Not spam” so the calendar invite reaches you too.</p>' +
       (demo ? '<div class="bk-mail"><small>Demo: this is what arrives in their inbox</small>Confirm your call with Kauntey on ' + when + '.<br><button type="button" class="bk-link" data-confirm>Confirm booking</button></div>'
             : '<div class="bk-actions"><button type="button" class="bk-primary" data-done>Done</button></div>'));
     const fin = c.querySelector('[data-confirm]');
