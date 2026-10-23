@@ -18,6 +18,9 @@ const SITE = 'https://kaunteyacharya.com';
 const AUTHOR = 'Kauntey Acharya';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const POSTS = path.join(ROOT, 'notes', 'posts');
+const AUTHOR_ROLE = 'AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst';
+const AUTHOR_BIO = 'is an AI automation engineer and consultant with a background in theoretical physics. He builds agentic workflows, RAG systems, and research tools, and writes these notes to explain AI and quantitative ideas from first principles.';
+const AUTHOR_LINKS = ['https://www.linkedin.com/in/kauntey-acharya', 'https://github.com/KaunteyAcharya', 'https://medium.com/@sometimes_rational', 'https://www.researchgate.net/profile/Kauntey-Acharya'];
 const EXTRA_PAGES = ['ai-stack-advisor/'];        // other sites served under this domain
 const require = createRequire(import.meta.url);
 const { marked } = require(path.join(ROOT, 'assets', 'vendor', 'marked.min.js'));
@@ -83,7 +86,8 @@ const notes = fs.readdirSync(POSTS)
   .map(f => {
     const slug = f.replace(/\.md$/i, '');
     const { meta, body } = parseNote(fs.readFileSync(path.join(POSTS, f), 'utf8'), slug);
-    return { ...meta, body, mins: Math.max(1, Math.round(words(body) / 220)) };
+    const wc = words(body);
+    return { ...meta, body, words: wc, mins: Math.max(1, Math.round(wc / 220)) };
   })
   .filter(n => !n.draft && /^[\w.-]+$/.test(n.slug) && !['posts', 'images'].includes(n.slug))
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -105,7 +109,9 @@ notes.forEach((n, i) => {
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: n.title, description: n.summary, datePublished: n.date, dateModified: n.updated || n.date,
-    author: { '@type': 'Person', name: AUTHOR, url: SITE + '/' }, image: img, url,
+    author: { '@type': 'Person', '@id': SITE + '/#person', name: AUTHOR, url: SITE + '/', jobTitle: AUTHOR_ROLE, sameAs: AUTHOR_LINKS },
+    publisher: { '@id': SITE + '/#person' }, isPartOf: { '@id': SITE + '/#website' },
+    image: img, url, inLanguage: 'en', wordCount: n.words,
     mainEntityOfPage: url, keywords: n.tags.join(', ')
   };
   const tags = n.tags.map(t => `<a href="notes.html?tag=${encodeURIComponent(t)}">${esc(t)}</a>`).join('  ·  ');
@@ -143,6 +149,7 @@ ${top.replace('<body>', `<body data-note="${n.slug}">`)}<main class="wrap" id="b
     <a class="back" href="notes.html">← All notes</a>
     <header>
       <h1 id="postTitle">${esc(n.title)}</h1>
+      <p class="byline">By <a href="./" rel="author">${AUTHOR}</a></p>
       <p class="meta" id="postMeta"><time datetime="${n.date}">${fmtDate(n.date)}</time>  ·  ${n.mins} min read${tags ? '  ·  ' + tags : ''}</p>
     </header>
     <div class="prose" id="postBody"${math ? ' data-math' : ''}>
@@ -157,6 +164,9 @@ ${html}    </div>
         <a href="https://wa.me/?text=${encodeURIComponent(n.title + ' ' + url)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
         <a href="mailto:?subject=${encodeURIComponent(n.title)}&amp;body=${encodeURIComponent(n.summary + '\n\n' + url)}">Email</a>
       </div>
+      <aside class="note-author" aria-label="About the author">
+        <p><strong><a href="./" rel="author">${AUTHOR}</a></strong> ${AUTHOR_BIO}</p>
+      </aside>
       <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed.xml">RSS feed</a>.</p>
       <nav class="note-nav" aria-label="More notes">
         ${newer ? `<a class="note-newer" href="notes/${newer.slug}/"><span>← Newer</span>${esc(newer.title)}</a>` : '<span></span>'}
@@ -220,10 +230,42 @@ write('.build/cards.json', JSON.stringify([
   ...notes.map(n => ({ file: n.slug + '.png', label: label(n.date), title: n.title, summary: n.summary }))
 ], null, 2));
 
-/* ---------- Tell the list pages that note pages exist ---------- */
-for (const f of ['index.html', 'notes.html']) {
-  const s = read(f);
-  if (!s.includes('name="ka-static-notes"')) write(f, s.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n<meta name="ka-static-notes" content="1">'));
+/* ---------- Write the note lists into the pages, so crawlers that don't run JavaScript see them ---------- */
+const item = n => `<li class="post-item"><time datetime="${n.date}">${fmtDate(n.date)}</time><div><a href="notes/${n.slug}/">${esc(n.title)}</a>${n.summary ? `<p>${esc(n.summary)}</p>` : ''}</div></li>`;
+const lists = { 'index.html': ['latestPosts', notes.slice(0, 3)], 'notes.html': ['allPosts', notes] };
+for (const [f, [id, items]] of Object.entries(lists)) {
+  let s = read(f);
+  if (!s.includes('name="ka-static-notes"')) s = s.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n<meta name="ka-static-notes" content="1">');
+  s = s.replace(new RegExp(`(<ul class="post-list" id="${id}">)[\\s\\S]*?(</ul>)`), `$1${items.map(item).join('')}$2`);
+  write(f, s);
 }
+
+/* ---------- llms.txt: a plain summary of the site for AI assistants (llmstxt.org) ---------- */
+const P = s => s.replace(/\s+/g, ' ').trim();
+write('llms.txt', `# ${AUTHOR}
+
+> ${AUTHOR} ${AUTHOR_BIO} Based in Ahmedabad, India. Currently an AI Automation Engineer and Analyst at Innodata Inc.
+
+This site is his portfolio (experience, projects, and four peer-reviewed physics papers) and his notes on AI, automation, and research.
+
+## Main pages
+
+- [Portfolio](${SITE}/): about, experience, skills, projects, publications, and contact
+- [Notes](${SITE}/notes.html): all notes, newest first
+- [AI Stack Advisor](${SITE}/ai-stack-advisor/): free build-vs-buy, TCO, and ROI calculator for AI solutions
+- [RSS feed](${SITE}/feed.xml)
+
+## Notes
+
+${notes.map(n => `- [${n.title}](${SITE}/notes/${n.slug}/): ${P(n.summary)}`).join('\n')}
+
+## Profiles
+
+${AUTHOR_LINKS.map(u => `- ${u}`).join('\n')}
+
+## Contact
+
+Email kaunteyacharya2000@gmail.com or message on LinkedIn. Calls can be booked through the assistant on the portfolio page.
+`);
 
 console.log(`Built ${notes.length} note pages, feed.xml and sitemap.xml`);

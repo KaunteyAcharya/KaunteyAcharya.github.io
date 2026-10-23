@@ -29,22 +29,300 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Kauntey Acharya",
-  "url": "https://kaunteyacharya.com/",
-  "email": "mailto:kaunteyacharya2000@gmail.com",
-  "jobTitle": "AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst",
-  "description": "AI Automation Engineer and Quantitative Analyst with a background in theoretical physics.",
-  "address": { "@type": "PostalAddress", "addressLocality": "Ahmedabad", "addressCountry": "IN" },
-  "sameAs": [
-    "https://github.com/KaunteyAcharya",
-    "https://www.linkedin.com/in/kauntey-acharya",
-    "https://kaunteyacharya.wordpress.com/",
-    "https://medium.com/@sometimes_rational"
-  ],
-  "knowsAbout": ["AI Automation","n8n","Zapier","API Integration","Retrieval-Augmented Generation","LLM Evaluation","Python","SQL","PyTorch","Bayesian Inference","Time Series Modeling","Quantitative Finance","Theoretical Physics"],
-  "alumniOf": { "@type": "Organization", "name": "Ahmedabad University" },
-  "worksFor": { "@type": "Organization", "name": "Innodata Inc." }
+  "@graph": [
+    {
+      "@type": "Person",
+      "name": "Kauntey Acharya",
+      "url": "https://kaunteyacharya.com/",
+      "email": "mailto:kaunteyacharya2000@gmail.com",
+      "jobTitle": "AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst",
+      "description": "AI Automation Engineer and Quantitative Analyst with a background in theoretical physics.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ahmedabad",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://github.com/KaunteyAcharya",
+        "https://www.linkedin.com/in/kauntey-acharya",
+        "https://kaunteyacharya.wordpress.com/",
+        "https://medium.com/@sometimes_rational",
+        "https://www.researchgate.net/profile/Kauntey-Acharya"
+      ],
+      "knowsAbout": [
+        "AI Automation",
+        "n8n",
+        "Zapier",
+        "API Integration",
+        "Retrieval-Augmented Generation",
+        "LLM Evaluation",
+        "Python",
+        "SQL",
+        "PyTorch",
+        "Bayesian Inference",
+        "Time Series Modeling",
+        "Quantitative Finance",
+        "Theoretical Physics",
+        "General Relativity",
+        "Black Holes"
+      ],
+      "alumniOf": {
+        "@type": "Organization",
+        "name": "Ahmedabad University"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Innodata Inc."
+      },
+      "@id": "https://kaunteyacharya.com/#person",
+      "image": "https://kaunteyacharya.com/assets/icons/icon-512.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://kaunteyacharya.com/#website",
+      "url": "https://kaunteyacharya.com/",
+      "name": "Kauntey Acharya",
+      "publisher": {
+        "@id": "https://kaunteyacharya.com/#person"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://kaunteyacharya.com/#profile",
+      "url": "https://kaunteyacharya.com/",
+      "mainEntity": {
+        "@id": "https://kaunteyacharya.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://kaunteyacharya.com/#website"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "TickerBrief: Automated Equity Research Reports",
+      "description": "Type a ticker and get a full equity research report as an interactive web page and a PDF. An n8n workflow pulls prices, fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technical indicators, and sentiment; and a local LLM writes the narrative in three structured passes, with rule-based fallbacks.",
+      "codeRepository": "https://github.com/KaunteyAcharya/tickerbrief",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Model Monitoring + Drift Alert Agent",
+      "description": "A local MLOps stack that watches a deployed model. An n8n workflow scores new traffic, logs predictions to Postgres, and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.",
+      "codeRepository": "https://github.com/KaunteyAcharya/ML-model-drift-alert-agent",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "ArXiv Research Analysis Agent",
+      "description": "Monitors arXiv every morning (gr-qc and q-fin by default), filters new papers by keyword, and sends a Telegram brief with a yes/no prompt. On “yes” it downloads the PDF, has a local LLM walk through the paper from first principles, and returns a Markdown report.",
+      "codeRepository": "https://github.com/KaunteyAcharya/n8n-arxiv-research-automation",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Local RAG Document Q&A Agent",
+      "description": "A fully local retrieval-augmented generation pipeline. Upload a PDF, TXT, DOCX, or MD file; it is chunked, embedded with nomic-embed-text, and stored in ChromaDB, and questions are answered by llama3.2 under a strict answer-only-from-context prompt. No cloud APIs, and no data leaves the machine.",
+      "codeRepository": "https://github.com/KaunteyAcharya/RAG-doc-qa-agent",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Banking & Financial Stock Analysis",
+      "description": "Quantitative analysis of banking stocks: returns, volatility, correlations, and risk metrics.",
+      "codeRepository": "https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Gravitational-Wave Tests of GR (ppE formalism)",
+      "description": "Bayesian parameter estimation pipelines that test for deviations from General Relativity in gravitational-wave observations, using the parametrized post-Einsteinian (ppE) framework.",
+      "codeRepository": "https://github.com/KaunteyAcharya/GW-GR-Test-ppe-formalism",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Credit Score Data Analysis",
+      "description": "EDA of credit datasets focused on default risk, class imbalance, correlations, and interpretability.",
+      "codeRepository": "https://github.com/KaunteyAcharya/Credit-Score-Data-Analysis",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Indian Startup Investment EDA",
+      "description": "Exploratory analysis of Indian startup funding trends, sectors, and investor activity.",
+      "codeRepository": "https://github.com/KaunteyAcharya/start-ups-data-analysis",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "AI Stack Advisor",
+      "description": "A free, browser-only tool that compares SaaS, API-based, self-hosted and hybrid AI stacks on monthly cost, 36-month total cost of ownership, break-even volume and ROI.",
+      "url": "https://kaunteyacharya.com/ai-stack-advisor/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any (web browser)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      },
+      "subjectOf": {
+        "@type": "BlogPosting",
+        "url": "https://kaunteyacharya.com/notes/ai-stack-advisor/"
+      }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "JMN-1 singularity in weak magnetic field",
+      "name": "JMN-1 singularity in weak magnetic field",
+      "author": [
+        {
+          "@type": "Person",
+          "name": "M. Azreg-Ainou"
+        },
+        {
+          "@id": "https://kaunteyacharya.com/#person"
+        },
+        {
+          "@type": "Person",
+          "name": "P. S. Joshi"
+        }
+      ],
+      "isPartOf": {
+        "@type": "Periodical",
+        "name": "Eur. Phys. J. C 84, 535"
+      },
+      "url": "https://doi.org/10.1140/epjc/s10052-024-12905-4",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "10.1140/epjc/s10052-024-12905-4"
+      },
+      "sameAs": "https://link.springer.com/article/10.1140/epjc/s10052-024-12905-4"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "High energy particle collision in vicinity of naked singularity",
+      "name": "High energy particle collision in vicinity of naked singularity",
+      "author": [
+        {
+          "@id": "https://kaunteyacharya.com/#person"
+        },
+        {
+          "@type": "Person",
+          "name": "P. Bambhaniya"
+        },
+        {
+          "@type": "Person",
+          "name": "P. S. Joshi"
+        },
+        {
+          "@type": "Person",
+          "name": "K. Pandey"
+        },
+        {
+          "@type": "Person",
+          "name": "V. Patel"
+        }
+      ],
+      "isPartOf": {
+        "@type": "Periodical",
+        "name": "Phys. Dark Univ. Vol. 50, 102101"
+      },
+      "url": "https://doi.org/10.1016/j.dark.2025.102101",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "10.1016/j.dark.2025.102101"
+      },
+      "sameAs": "https://doi.org/10.1016/j.dark.2025.102101"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "Energy extraction from Janis-Newman-Winicour naked singularity",
+      "name": "Energy extraction from Janis-Newman-Winicour naked singularity",
+      "author": [
+        {
+          "@type": "Person",
+          "name": "V. Patel"
+        },
+        {
+          "@id": "https://kaunteyacharya.com/#person"
+        },
+        {
+          "@type": "Person",
+          "name": "P. Bambhaniya"
+        },
+        {
+          "@type": "Person",
+          "name": "P. S. Joshi"
+        }
+      ],
+      "isPartOf": {
+        "@type": "Periodical",
+        "name": "Phys. Rev. D 107, 064036"
+      },
+      "url": "https://doi.org/10.1103/PhysRevD.107.064036",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "10.1103/PhysRevD.107.064036"
+      },
+      "sameAs": "https://doi.org/10.1103/PhysRevD.107.064036"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "Rotational energy extraction from Kerr black hole’s mimickers",
+      "name": "Rotational energy extraction from Kerr black hole’s mimickers",
+      "author": [
+        {
+          "@type": "Person",
+          "name": "V. Patel"
+        },
+        {
+          "@id": "https://kaunteyacharya.com/#person"
+        },
+        {
+          "@type": "Person",
+          "name": "P. Bambhaniya"
+        },
+        {
+          "@type": "Person",
+          "name": "P. S. Joshi"
+        }
+      ],
+      "isPartOf": {
+        "@type": "Periodical",
+        "name": "Universe 2022, 8(11), 571"
+      },
+      "url": "https://doi.org/10.3390/universe8110571",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "10.3390/universe8110571"
+      },
+      "sameAs": "https://doi.org/10.3390/universe8110571"
+    }
+  ]
 }
 </script>
 

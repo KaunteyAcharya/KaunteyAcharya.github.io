@@ -474,3 +474,7 @@ html { scrollbar-color: var(--line) transparent; }
 }
 .note-share a:hover, .note-share button:hover { border-color: var(--text); }
 .note-share [hidden] { display: none; }
+.article .byline { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin-top: .9rem; }
+.article .byline a { color: var(--text); text-underline-offset: 3px; }
+.note-author { margin-bottom: 1.6rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 4px; font-size: .92rem; color: var(--muted); }
+.note-author a { color: var(--text); text-underline-offset: 3px; }
