@@ -123,6 +123,7 @@
   ];
   // What Konzi says when a visitor opens a note (by file name). New notes get a generic line.
   const NOTE_LINES = {
+    'ai-stack-advisor': [['wink', 'Build or buy? I was built, obviously. Very cost-effective, zero GPUs. 💸']],
     'tickerbrief': [['happy', "The TickerBrief story! Ask him how many tickers he tested. Actually, don't. It's a lot."]],
     'ml-drift-alert-agent': [['wink', 'Models drift, Kauntey notices. This agent is basically a babysitter for ML models.']],
     'local-rag-agent': [['happy', 'Fully local RAG! No cloud, no leaks, just one laptop working very hard. 💪']],
