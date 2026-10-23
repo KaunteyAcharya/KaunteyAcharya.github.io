@@ -1,6 +1,6 @@
-# kaunteyacharya.github.io
+# kaunteyacharya.com
 
-Personal site of Kauntey Acharya. Plain HTML/CSS/JS, no build step, hosted on GitHub Pages.
+Personal site of Kauntey Acharya. Plain HTML/CSS/JS, no build step, hosted on GitHub Pages at [kaunteyacharya.com](https://kaunteyacharya.com) (the old kaunteyacharya.github.io address redirects there).
 
 ```
 index.html            main page

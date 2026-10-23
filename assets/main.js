@@ -6,7 +6,7 @@
    notes/posts.json is only a backup, used if GitHub can't be reached.
    ========================================================= */
 const NOTES_SOURCE = (function () {
-  const host = location.hostname;                       // e.g. kaunteyacharya.github.io
+  const host = location.hostname;                       // kaunteyacharya.com, or *.github.io in forks
   const onPages = /\.github\.io$/i.test(host);
   return {
     owner: onPages ? host.split('.')[0] : 'KaunteyAcharya',

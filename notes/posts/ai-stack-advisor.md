@@ -7,7 +7,7 @@ summary: Should a business buy a SaaS tool, build on APIs, or run its own model?
 
 Almost every business that wants an AI chatbot, voice agent, or document assistant runs into the same question: should we buy it or build it? Subscribe to a SaaS tool, build on hosted LLM APIs, run an open model on our own GPUs, or mix the two? The honest answer is "it depends", but it depends on things you can actually put numbers on: volume, data sensitivity, team skills, and what each conversation is worth.
 
-So I built [AI Stack Advisor](https://github.com/KaunteyAcharya/ai-stack-advisor). You describe what you want AI to do, and it compares the four options on monthly cost, 36-month total cost of ownership (TCO), break-even volume, and ROI, then writes a consultant-style recommendation with every assumption listed. You can [try it live](https://kaunteyacharya.github.io/ai-stack-advisor/).
+So I built [AI Stack Advisor](https://github.com/KaunteyAcharya/ai-stack-advisor). You describe what you want AI to do, and it compares the four options on monthly cost, 36-month total cost of ownership (TCO), break-even volume, and ROI, then writes a consultant-style recommendation with every assumption listed. You can [try it live](https://kaunteyacharya.com/ai-stack-advisor/).
 
 ## How it works
 
