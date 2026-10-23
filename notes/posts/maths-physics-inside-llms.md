@@ -1,7 +1,7 @@
 ---
 title: The maths and physics hiding inside LLMs
 date: 2024-10-14
-tags: [AI, physics, maths]
+tags: [AI, maths]
 summary: Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models.
 ---
 

@@ -3,3 +3,6 @@ booking-backend/
 
 # My own how-to notes for maintaining the site (kept off GitHub)
 private-notes/
+
+# Temporary files from the notes build (scripts/build-notes.mjs)
+.build/

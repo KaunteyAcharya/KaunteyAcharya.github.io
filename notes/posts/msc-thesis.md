@@ -1,7 +1,7 @@
 ---
 title: My MSc thesis: following light and matter around black holes
 date: 2022-04-21
-tags: [physics, research]
+tags: [physics]
 summary: Five months of learning how light and particles move around black holes, naked singularities, and wormholes.
 ---
 

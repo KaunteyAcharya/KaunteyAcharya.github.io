@@ -10,6 +10,11 @@
   const listView = document.getElementById('listView');
   const postView = document.getElementById('postView');
 
+  // Old links (notes.html?post=x) move to the note's own page on the live site
+  if (slug && typeof STATIC_NOTES !== 'undefined' && STATIC_NOTES && /^[\w.-]+$/.test(slug)) {
+    location.replace('notes/' + encodeURIComponent(slug) + '/');
+    return;
+  }
   if (slug) showPost(slug);
   else loadNotes()
     .then(showList)

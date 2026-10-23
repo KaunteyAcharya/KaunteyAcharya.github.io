@@ -1,7 +1,7 @@
 ---
 title: How machine learning and deep learning are different
 date: 2025-03-05
-tags: [machine learning]
+tags: [AI]
 summary: Not "deep learning is ML with neural networks," but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation.
 ---
 

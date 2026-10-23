@@ -16,7 +16,11 @@
 <meta property="og:title" content="Kauntey Acharya | AI Automation Engineer | AI Strategist & Consultant | Quantitative Analyst">
 <meta property="og:description" content="Designing AI-powered workflows, agents, and automation systems. AI Automation Engineer, AI Strategist & Consultant, and Quantitative Analyst based in Ahmedabad, India.">
 <meta property="og:site_name" content="Kauntey Acharya">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://kaunteyacharya.com/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kaunteyacharya.com/og/home.png">
 <meta name="twitter:title" content="Kauntey Acharya | AI Automation Engineer | AI Strategist & Consultant | Quantitative Analyst">
 <meta name="twitter:description" content="Designing AI-powered workflows, agents, and automation systems. AI Automation Engineer, AI Strategist & Consultant, and Quantitative Analyst.">
 <meta name="theme-color" content="#F5F5DC" media="(prefers-color-scheme: light)">
@@ -44,6 +48,7 @@
 }
 </script>
 
+<link rel="alternate" type="application/rss+xml" title="Kauntey Acharya: Notes" href="https://kaunteyacharya.com/feed.xml">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
@@ -176,7 +181,7 @@
             fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technical indicators, and sentiment; and a
             local LLM writes the narrative in three structured passes, with rule-based fallbacks.</p>
           <ul class="tags"><li>n8n</li><li>Python</li><li>FastAPI</li><li>Ollama</li><li>yfinance</li><li>SEC EDGAR</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/tickerbrief" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/tickerbrief#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes.html?post=tickerbrief">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/tickerbrief" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/tickerbrief#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/tickerbrief/">Note →</a></div>
         </li>
         <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent" target="_blank" rel="noopener noreferrer">Model Monitoring + Drift Alert Agent</a></h3>
@@ -184,7 +189,7 @@
             and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains
             the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.</p>
           <ul class="tags"><li>MLOps</li><li>n8n</li><li>Evidently AI</li><li>Ollama</li><li>Postgres</li><li>Grafana</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes.html?post=ml-drift-alert-agent">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/ml-drift-alert-agent/">Note →</a></div>
         </li>
         <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">ArXiv Research Analysis Agent</a></h3>
@@ -192,7 +197,7 @@
             Telegram brief with a yes/no prompt. On “yes” it downloads the PDF, has a local LLM walk through the
             paper from first principles, and returns a Markdown report.</p>
           <ul class="tags"><li>n8n</li><li>Ollama</li><li>ChromaDB</li><li>Telegram Bot API</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes.html?post=automating-arxiv">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/automating-arxiv/">Note →</a></div>
         </li>
         <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent" target="_blank" rel="noopener noreferrer">Local RAG Document Q&amp;A Agent</a></h3>
@@ -200,7 +205,7 @@
             embedded with nomic-embed-text, and stored in ChromaDB, and questions are answered by llama3.2 under a strict
             answer-only-from-context prompt. No cloud APIs, and no data leaves the machine.</p>
           <ul class="tags"><li>RAG</li><li>n8n</li><li>Ollama</li><li>ChromaDB</li><li>Docker</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes.html?post=local-rag-agent">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/local-rag-agent/">Note →</a></div>
         </li>
         <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis" target="_blank" rel="noopener noreferrer">Banking &amp; Financial Stock Analysis</a></h3>
@@ -286,7 +291,7 @@
 <footer class="footer">
   <div class="wrap">
     <span>© <span data-year>2026</span> Kauntey Acharya</span>
-    <span><a href="#top">Back to top ↑</a></span>
+    <span><a href="feed.xml">RSS</a> · <a href="#top">Back to top ↑</a></span>
   </div>
 </footer>
 

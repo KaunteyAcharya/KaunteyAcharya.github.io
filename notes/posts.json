@@ -5,7 +5,6 @@
     "date": "2026-10-21",
     "tags": [
       "AI",
-      "consulting",
       "projects"
     ],
     "summary": "Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI."
@@ -16,8 +15,6 @@
     "date": "2026-10-01",
     "tags": [
       "AI",
-      "automation",
-      "finance",
       "projects"
     ],
     "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. All local and free."
@@ -28,8 +25,6 @@
     "date": "2026-09-29",
     "tags": [
       "AI",
-      "automation",
-      "MLOps",
       "projects"
     ],
     "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack."
@@ -40,7 +35,6 @@
     "date": "2026-09-22",
     "tags": [
       "AI",
-      "automation",
       "projects"
     ],
     "summary": "Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine."
@@ -50,8 +44,7 @@
     "title": "What is RAG, and why does it matter so much?",
     "date": "2026-08-24",
     "tags": [
-      "AI",
-      "RAG"
+      "AI"
     ],
     "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong."
   },
@@ -60,8 +53,7 @@
     "title": "Creating FocusPulse",
     "date": "2026-08-17",
     "tags": [
-      "projects",
-      "productivity"
+      "projects"
     ],
     "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome."
   },
@@ -70,8 +62,7 @@
     "title": "How AI benchmarks are actually designed, from first principles",
     "date": "2026-07-25",
     "tags": [
-      "AI",
-      "research"
+      "AI"
     ],
     "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work."
   },
@@ -89,8 +80,7 @@
     "title": "Starting a statistics series on Medium",
     "date": "2026-06-24",
     "tags": [
-      "statistics",
-      "writing"
+      "maths"
     ],
     "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time."
   },
@@ -99,8 +89,8 @@
     "title": "Automating my morning arXiv routine",
     "date": "2026-06-02",
     "tags": [
-      "automation",
-      "AI"
+      "AI",
+      "projects"
     ],
     "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
   },
@@ -109,7 +99,7 @@
     "title": "How machine learning and deep learning are different",
     "date": "2025-03-05",
     "tags": [
-      "machine learning"
+      "AI"
     ],
     "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation."
   },
@@ -118,8 +108,7 @@
     "title": "How AI labs actually train their models",
     "date": "2025-01-26",
     "tags": [
-      "AI",
-      "research"
+      "AI"
     ],
     "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently."
   },
@@ -147,7 +136,6 @@
     "date": "2024-10-14",
     "tags": [
       "AI",
-      "physics",
       "maths"
     ],
     "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models."
@@ -157,8 +145,7 @@
     "title": "My quickest paper, and an unexpected collaboration",
     "date": "2023-10-12",
     "tags": [
-      "physics",
-      "research"
+      "physics"
     ],
     "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks."
   },
@@ -186,7 +173,6 @@
     "date": "2022-10-19",
     "tags": [
       "physics",
-      "research",
       "AI"
     ],
     "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it."
@@ -196,8 +182,7 @@
     "title": "My first paper: stealing energy from spinning black holes",
     "date": "2022-06-02",
     "tags": [
-      "physics",
-      "research"
+      "physics"
     ],
     "summary": "The Penrose process in plain words, and what my first paper asked about black hole look-alikes."
   },
@@ -206,8 +191,7 @@
     "title": "My MSc thesis: following light and matter around black holes",
     "date": "2022-04-21",
     "tags": [
-      "physics",
-      "research"
+      "physics"
     ],
     "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes."
   }

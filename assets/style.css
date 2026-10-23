@@ -451,3 +451,18 @@ html { scrollbar-color: var(--line) transparent; }
 
 @media (max-width: 760px) { :root { --konzi-size: 50px; } }
 @media print { .konzi { display: none; } }
+
+/* ---------- Note pages: tags, ending, older/newer ---------- */
+.article .meta a { color: inherit; text-underline-offset: 3px; }
+.article .meta a:hover { color: var(--text); }
+.note-end { margin-top: 3.5rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+.note-follow { color: var(--muted); font-size: .95rem; }
+.note-follow a { color: var(--text); text-underline-offset: 3px; }
+.note-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.8rem; }
+.note-nav a { display: block; text-decoration: none; padding: .9rem 1rem; border: 1px solid var(--line); border-radius: 4px; font-weight: 600; line-height: 1.35; }
+.note-nav a:hover { border-color: var(--text); }
+.note-nav span { display: block; font-family: var(--mono); font-size: .75rem; font-weight: 400; color: var(--muted); margin-bottom: .3rem; }
+.note-nav .note-older { text-align: right; }
+@media (max-width: 560px) { .note-nav { grid-template-columns: 1fr; } .note-nav .note-older { text-align: left; } }
+.feed-link { font-family: var(--mono); font-size: .8rem; }
+.feed-link a { color: var(--text); text-underline-offset: 3px; }

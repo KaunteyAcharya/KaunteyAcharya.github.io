@@ -1,7 +1,7 @@
 ---
 title: Automating my morning arXiv routine
 date: 2026-06-02
-tags: [automation, AI]
+tags: [AI, projects]
 summary: Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it.
 ---
 

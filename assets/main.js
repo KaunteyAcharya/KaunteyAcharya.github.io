@@ -3,8 +3,22 @@
    Notes discovery: just drop a .md file into notes/posts/.
    The list is read live from the GitHub repo, and each file's
    front matter (title, date, tags, summary) fills the listing.
-   notes/posts.json is only a backup, used if GitHub can't be reached.
+   On the live site the deploy step builds notes/posts.json and a page per note
+   (scripts/build-notes.mjs), so the list comes from posts.json and links go to
+   notes/<slug>/. Without that build (e.g. a local preview) it falls back to
+   reading the repo through the GitHub API.
    ========================================================= */
+const STATIC_NOTES = !!document.querySelector('meta[name="ka-static-notes"]');
+
+/* Visitor stats (Cloudflare Web Analytics: no cookies, no consent banner needed).
+   Paste the token from Cloudflare > Analytics & Logs > Web Analytics to switch it on. */
+const CF_ANALYTICS_TOKEN = '';
+if (CF_ANALYTICS_TOKEN && /kaunteyacharya\.com$/.test(location.hostname)) {
+  const s = document.createElement('script');
+  s.defer = true; s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', JSON.stringify({ token: CF_ANALYTICS_TOKEN }));
+  document.head.appendChild(s);
+}
 const NOTES_SOURCE = (function () {
   const host = location.hostname;                       // kaunteyacharya.com, or *.github.io in forks
   const onPages = /\.github\.io$/i.test(host);
@@ -68,7 +82,7 @@ function loadNotes() {
   } catch (e) {}
 
   const { owner, repo, dir } = NOTES_SOURCE;
-  const fromGitHub = fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${dir}`, { headers: { Accept: 'application/vnd.github+json' } })
+  const fromGitHub = () => fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${dir}`, { headers: { Accept: 'application/vnd.github+json' } })
     .then(r => { if (!r.ok) throw new Error('GitHub ' + r.status); return r.json(); })
     .then(files => {
       const mds = files.filter(f => f.type === 'file' && /\.md$/i.test(f.name) && !/^[_.]/.test(f.name));
@@ -86,8 +100,7 @@ function loadNotes() {
     .then(r => { if (!r.ok) throw new Error('posts.json ' + r.status); return r.json(); })
     .then(sortNotes);
 
-  _notesPromise = fromGitHub
-    .catch(() => fromBackup())
+  _notesPromise = (STATIC_NOTES ? fromBackup().catch(() => fromGitHub()) : fromGitHub().catch(() => fromBackup()))
     .then(list => {
       try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), list })); } catch (e) {}
       return list;
@@ -185,7 +198,7 @@ function postItem(p) {
   t.dateTime = p.date; t.textContent = formatDate(p.date);
   const div = document.createElement('div');
   const a = document.createElement('a');
-  a.href = 'notes.html?post=' + encodeURIComponent(p.slug);
+  a.href = STATIC_NOTES ? 'notes/' + encodeURIComponent(p.slug) + '/' : 'notes.html?post=' + encodeURIComponent(p.slug);
   a.textContent = p.title;
   div.appendChild(a);
   if (p.summary) { const s = document.createElement('p'); s.textContent = p.summary; div.appendChild(s); }

@@ -1,7 +1,7 @@
 ---
 title: How AI labs actually train their models
 date: 2025-01-26
-tags: [AI, research]
+tags: [AI]
 summary: From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently.
 ---
 

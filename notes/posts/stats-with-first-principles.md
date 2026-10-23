@@ -1,7 +1,7 @@
 ---
 title: Starting a statistics series on Medium
 date: 2026-06-24
-tags: [statistics, writing]
+tags: [maths]
 summary: Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time.
 ---
 

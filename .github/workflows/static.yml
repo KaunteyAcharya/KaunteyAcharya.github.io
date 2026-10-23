@@ -33,6 +33,22 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      # Builds a page per note, the RSS feed, the sitemap and the link-preview images.
+      # Nothing to change here when you add a note: just push the .md file.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build notes, feed, sitemap and preview images
+        run: |
+          pip install --quiet "pillow>=10,<13"
+          node scripts/build-notes.mjs
+          python scripts/make_cards.py .build/cards.json og
+          rm -rf .build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

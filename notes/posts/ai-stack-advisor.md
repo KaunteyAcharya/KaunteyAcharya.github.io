@@ -1,7 +1,7 @@
 ---
 title: Building AI Stack Advisor, a build-vs-buy calculator for AI
 date: 2026-10-21
-tags: [AI, consulting, projects]
+tags: [AI, projects]
 summary: Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI.
 ---
 

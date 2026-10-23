@@ -1,7 +1,7 @@
 ---
 title: My first paper: stealing energy from spinning black holes
 date: 2022-06-02
-tags: [physics, research]
+tags: [physics]
 summary: The Penrose process in plain words, and what my first paper asked about black hole look-alikes.
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Where machine learning meets black hole energy extraction
 date: 2022-10-19
-tags: [physics, research, AI]
+tags: [physics, AI]
 summary: Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it.
 ---
 

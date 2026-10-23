@@ -1,7 +1,7 @@
 ---
 title: My quickest paper, and an unexpected collaboration
 date: 2023-10-12
-tags: [physics, research]
+tags: [physics]
 summary: How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks.
 ---
 

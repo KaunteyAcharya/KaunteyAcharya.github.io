@@ -1,7 +1,7 @@
 ---
 title: Building a model drift alert agent
 date: 2026-09-29
-tags: [AI, automation, MLOps, projects]
+tags: [AI, projects]
 summary: A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack.
 ---
 

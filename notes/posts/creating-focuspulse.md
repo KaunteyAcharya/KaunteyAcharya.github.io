@@ -1,7 +1,7 @@
 ---
 title: Creating FocusPulse
 date: 2026-08-17
-tags: [projects, productivity]
+tags: [projects]
 summary: A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome.
 ---
 

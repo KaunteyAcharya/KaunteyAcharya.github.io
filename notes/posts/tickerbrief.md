@@ -1,7 +1,7 @@
 ---
 title: Building TickerBrief, an equity research agent
 date: 2026-10-01
-tags: [AI, automation, finance, projects]
+tags: [AI, projects]
 summary: Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. All local and free.
 ---
 

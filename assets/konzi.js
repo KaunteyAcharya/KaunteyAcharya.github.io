@@ -149,7 +149,7 @@
     [['happy', 'Ooh, good pick! Tell me if you spot a typo, I will tell on him. Hehe.']],
     [['puppy', "Reading his notes? You're officially one of the 31. 🥹"]]
   ];
-  const postSlug = onNotes ? new URLSearchParams(location.search).get('post') : null;
+  const postSlug = onNotes ? (document.body.dataset.note || new URLSearchParams(location.search).get('post')) : null;
   if (postSlug) STOPS.note = { parts: NOTE_LINES[postSlug] || GENERIC_NOTE[Math.floor(Math.random() * GENERIC_NOTE.length)] };
 
   // Section heading that anchors each stop, in page order
@@ -316,10 +316,12 @@
   }
   function itemLine(sec, row) {
     if (sec === 'notes') {
-      const a = row.querySelector('a[href*="post="]'); if (!a) return null;
-      const slug = decodeURIComponent(a.getAttribute('href').split('post=')[1] || '');
+      const a = row.querySelector('a[href*="post="], a[href^="notes/"]'); if (!a) return null;
+      const href = a.getAttribute('href');
+      const m = href.match(/post=([^&]+)/) || href.match(/^notes\/([\w.-]+)\/?$/);
+      const slug = m ? decodeURIComponent(m[1]) : '';
       const parts = NOTE_LINES[slug]; if (!parts) return null;
-      return { stop: { item: true, parts: [parts[0]], actions: [{ label: 'Read it →', href: 'notes.html?post=' + encodeURIComponent(slug) }] } };
+      return { stop: { item: true, parts: [parts[0]], actions: [{ label: 'Read it →', href }] } };
     }
     const h3 = row.querySelector('h3'); if (!h3) return null;
     const hit = HOVER.find(([key]) => key.startsWith('a[') ? row.querySelector(key) : h3.textContent.includes(key));
