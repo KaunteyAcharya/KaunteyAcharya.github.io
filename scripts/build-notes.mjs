@@ -148,7 +148,16 @@ ${top.replace('<body>', `<body data-note="${n.slug}">`)}<main class="wrap" id="b
     <div class="prose" id="postBody"${math ? ' data-math' : ''}>
 ${html}    </div>
     <footer class="note-end">
-      <p class="note-follow">Thanks for reading. New notes arrive in the <a href="feed.xml">RSS feed</a>, and I share them on <a href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+      <div class="note-share" aria-label="Share this note">
+        <span class="note-share-label">Share this note</span>
+        <button type="button" class="share-native" hidden>Share…</button>
+        <button type="button" class="share-copy" data-url="${url}">Copy link</button>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://x.com/intent/post?url=${encodeURIComponent(url)}&amp;text=${encodeURIComponent(n.title)}" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://wa.me/?text=${encodeURIComponent(n.title + ' ' + url)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href="mailto:?subject=${encodeURIComponent(n.title)}&amp;body=${encodeURIComponent(n.summary + '\n\n' + url)}">Email</a>
+      </div>
+      <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed.xml">RSS feed</a>.</p>
       <nav class="note-nav" aria-label="More notes">
         ${newer ? `<a class="note-newer" href="notes/${newer.slug}/"><span>← Newer</span>${esc(newer.title)}</a>` : '<span></span>'}
         ${older ? `<a class="note-older" href="notes/${older.slug}/"><span>Older →</span>${esc(older.title)}</a>` : '<span></span>'}
@@ -166,6 +175,7 @@ write('notes/posts.json', JSON.stringify(list, null, 2) + '\n');
 const cdata = s => '<![CDATA[' + s.replace(/]]>/g, ']]]]><![CDATA[>') + ']]>';
 const rfc822 = iso => new Date(iso + 'T09:00:00+05:30').toUTCString();
 const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/feed.xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
   <title>${AUTHOR}: Notes</title>

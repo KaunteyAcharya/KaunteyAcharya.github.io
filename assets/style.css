@@ -466,3 +466,11 @@ html { scrollbar-color: var(--line) transparent; }
 @media (max-width: 560px) { .note-nav { grid-template-columns: 1fr; } .note-nav .note-older { text-align: left; } }
 .feed-link { font-family: var(--mono); font-size: .8rem; }
 .feed-link a { color: var(--text); text-underline-offset: 3px; }
+.note-share { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; font-family: var(--mono); font-size: .8rem; margin-bottom: 1.4rem; }
+.note-share-label { color: var(--muted); margin-right: .2rem; }
+.note-share a, .note-share button {
+  font: inherit; color: var(--text); background: none; cursor: pointer; text-decoration: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: .3rem .75rem; line-height: 1.2;
+}
+.note-share a:hover, .note-share button:hover { border-color: var(--text); }
+.note-share [hidden] { display: none; }

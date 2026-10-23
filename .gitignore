@@ -6,3 +6,6 @@ private-notes/
 
 # Temporary files from the notes build (scripts/build-notes.mjs)
 .build/
+
+# Files saved by the Claude app (not part of the site)
+Claude outputs/

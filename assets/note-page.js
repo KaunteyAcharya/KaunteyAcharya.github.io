@@ -34,3 +34,25 @@
     })
     .catch(() => {}); // maths stays readable as raw LaTeX if the CDN is unreachable
 })();
+
+/* Share buttons at the end of a note */
+(function () {
+  const box = document.querySelector('.note-share');
+  if (!box) return;
+  const url = box.querySelector('.share-copy').dataset.url;
+  const title = document.querySelector('#postTitle').textContent;
+
+  // Phones (and some desktops) have a built-in share sheet: offer it first
+  const native = box.querySelector('.share-native');
+  if (navigator.share) {
+    native.hidden = false;
+    native.addEventListener('click', () => navigator.share({ title, url }).catch(() => {}));
+  }
+
+  const copy = box.querySelector('.share-copy');
+  copy.addEventListener('click', () => {
+    const done = () => { copy.textContent = 'Link copied ✓'; setTimeout(() => (copy.textContent = 'Copy link'), 2000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url));
+    else prompt('Copy this link:', url);
+  });
+})();
