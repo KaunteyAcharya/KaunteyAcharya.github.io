@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found | Kauntey Acharya</title>
+<meta name="robots" content="noindex">
+<!-- GitHub Pages serves this file for any missing address, at any depth, so every link here starts with / -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/style.css">
+<script>
+  (function () {
+    var t = null, k = 'ka-theme';
+    try { t = localStorage.getItem(k) || localStorage.getItem('theme'); } catch (e) {}
+    if (!t) { try { t = sessionStorage.getItem(k); } catch (e) {} }
+    if (!t) { var m = document.cookie.match(/(?:^|; )ka-theme=(light|dark)/); if (m) t = m[1]; }
+    if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-ka-theme', t);
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Home">KA</a>
+    <nav class="nav" aria-label="Primary">
+      <a class="hide-sm nav-u" href="/#about">About</a>
+      <a href="/#projects">Projects</a>
+      <a href="/#publications">Papers</a>
+      <a class="nav-u" href="/notes.html">Notes</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme"></button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="page-head">
+    <h1>Page not found</h1>
+    <p>There is nothing at this address. It may have moved, or the link may have a typo.</p>
+    <p>Try the <a href="/">home page</a>, browse <a href="/notes.html">all notes</a>, or see my <a href="/#projects">projects</a>.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Kauntey Acharya</span>
+    <span><a href="/">Home</a> · <a href="mailto:kaunteyacharya2000@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener noreferrer">LinkedIn</a> · <a href="/feed.xml">RSS</a></span>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+</body>
+</html>

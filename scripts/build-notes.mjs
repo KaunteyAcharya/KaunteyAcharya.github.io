@@ -144,7 +144,7 @@ ${n.tags.map(t => `<meta property="article:tag" content="${esc(t)}">`).join('\n'
 <meta name="twitter:image" content="${img}">
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
 ${headKeep}</head>
-${top.replace('<body>', `<body data-note="${n.slug}">`)}<main class="wrap" id="blogRoot">
+${top.replace('<body>', `<body data-note="${n.slug}">`).replace('href="#blogRoot"', `href="notes/${n.slug}/#blogRoot"`)}<main class="wrap" id="blogRoot">
   <article class="article" id="postView">
     <a class="back" href="notes.html">← All notes</a>
     <header>
