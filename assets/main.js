@@ -12,7 +12,7 @@ const STATIC_NOTES = !!document.querySelector('meta[name="ka-static-notes"]');
 
 /* Visitor stats (Cloudflare Web Analytics: no cookies, no consent banner needed).
    Paste the token from Cloudflare > Analytics & Logs > Web Analytics to switch it on. */
-const CF_ANALYTICS_TOKEN = '';
+const CF_ANALYTICS_TOKEN = 'bb376cb50e544991be93c2ecff3d8064';
 if (CF_ANALYTICS_TOKEN && /kaunteyacharya\.com$/.test(location.hostname)) {
   const s = document.createElement('script');
   s.defer = true; s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
