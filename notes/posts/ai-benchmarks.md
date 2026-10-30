@@ -3,6 +3,7 @@ title: How AI benchmarks are actually designed, from first principles
 date: 2026-07-25
 tags: [AI]
 summary: Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work.
+related: [how-labs-train-ai-models, claude-overtook-gpt, gradient-descent-better-code]
 ---
 
 Every new model launch comes with a chart: a row of benchmark names, a column of percentages, and the new model's numbers in bold. For a long time I just read the bold numbers and moved on.

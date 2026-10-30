@@ -13,10 +13,10 @@ from PIL import Image, ImageDraw, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 W, H = 1200, 630
 PAD = 80
-BG = (245, 245, 220)                     # --bg  #F5F5DC
-INK = (0, 0, 0)                          # --text
-MUTED = tuple(round(0.34 * c) for c in BG)          # black at 66% on the beige
-LINE = tuple(round(0.82 * c) for c in BG)           # black at 18% on the beige
+BG = (245, 245, 245)                     # --bg  #F5F5F5
+INK = (27, 26, 23)                       # --text #1B1A17
+MUTED = tuple(round(0.32 * c + 0.68 * i) for c, i in zip(BG, INK))   # text at 68% on the paper
+LINE = tuple(round(0.82 * c + 0.18 * i) for c, i in zip(BG, INK))    # text at 18% on the paper
 
 
 def font(weight, size):

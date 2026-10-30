@@ -43,7 +43,7 @@ function parseNote(md, slug) {
       if (!m) return;
       const key = m[1].toLowerCase();
       let val = m[2].trim().replace(/^["']|["']$/g, '');
-      if (key === 'tags') val = val.replace(/^\[|\]$/g, '').split(',').map(t => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
+      if (key === 'tags' || key === 'related') val = val.replace(/^\[|\]$/g, '').split(',').map(t => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
       else if (key === 'draft') val = /^(true|yes|1)$/i.test(val);
       meta[key] = val;
     });
@@ -56,6 +56,8 @@ function parseNote(md, slug) {
   if (!meta.date) { const d = slug.match(/^(\d{4}-\d{2}-\d{2})/); meta.date = d ? d[1] : ''; }
   meta.date = String(meta.date).slice(0, 10);
   if (!Array.isArray(meta.tags)) meta.tags = meta.tags ? [String(meta.tags)] : [];
+  if (!Array.isArray(meta.related)) meta.related = meta.related ? [String(meta.related)] : [];
+  if (meta.updated) meta.updated = String(meta.updated).slice(0, 10);
   if (!meta.summary) {
     const para = body.split(/\r?\n\s*\r?\n/).map(x => x.trim()).find(x => x && !/^(#|```|[-*]\s|\d+\.|>|!\[)/.test(x)) || '';
     const plain = para.replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' ');
@@ -92,6 +94,20 @@ const notes = fs.readdirSync(POSTS)
   .filter(n => !n.draft && /^[\w.-]+$/.test(n.slug) && !['posts', 'images'].includes(n.slug))
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
+/* ---------- Related notes: the slugs listed in front matter (related: [a, b]) first,
+   then notes sharing the most tags, newest first, up to three ---------- */
+const bySlug = Object.fromEntries(notes.map(n => [n.slug, n]));
+function relatedFor(n) {
+  const picked = n.related.filter(s => bySlug[s] && s !== n.slug);
+  const rest = notes
+    .filter(o => o.slug !== n.slug && !picked.includes(o.slug))
+    .map(o => ({ o, shared: o.tags.filter(t => n.tags.includes(t)).length }))
+    .filter(x => x.shared > 0)
+    .sort((a, b) => b.shared - a.shared || (b.o.date || '').localeCompare(a.o.date || ''))
+    .map(x => x.o.slug);
+  return [...picked, ...rest].slice(0, 3).map(s => bySlug[s]);
+}
+
 /* ---------- One page per note, built from notes.html so header, footer and chat stay identical ---------- */
 const shell = read('notes.html');
 const headStart = shell.indexOf('<link rel="icon"');          // keep icons, stylesheet and theme script
@@ -106,6 +122,7 @@ notes.forEach((n, i) => {
   const img = `${SITE}/og/${n.slug}.png`;
   const { html, math } = render(n.body);
   const older = notes[i + 1], newer = notes[i - 1];
+  const related = relatedFor(n);
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: n.title, description: n.summary, datePublished: n.date, dateModified: n.updated || n.date,
@@ -150,7 +167,7 @@ ${top.replace('<body>', `<body data-note="${n.slug}">`).replace('href="#blogRoot
     <header>
       <h1 id="postTitle">${esc(n.title)}</h1>
       <p class="byline">By <a href="./" rel="author">${AUTHOR}</a></p>
-      <p class="meta" id="postMeta"><time datetime="${n.date}">${fmtDate(n.date)}</time>  ·  ${n.mins} min read${tags ? '  ·  ' + tags : ''}</p>
+      <p class="meta" id="postMeta"><time datetime="${n.date}">${fmtDate(n.date)}</time>${n.updated && n.updated !== n.date ? `  ·  Updated <time datetime="${n.updated}">${fmtDate(n.updated)}</time>` : ''}  ·  ${n.mins} min read${tags ? '  ·  ' + tags : ''}</p>
     </header>
     <div class="prose" id="postBody"${math ? ' data-math' : ''}>
 ${html}    </div>
@@ -167,6 +184,10 @@ ${html}    </div>
       <aside class="note-author" aria-label="About the author">
         <p><strong><a href="./" rel="author">${AUTHOR}</a></strong> ${AUTHOR_BIO}</p>
       </aside>
+      ${related.length ? `<nav class="note-related" aria-labelledby="relatedHead">
+        <h2 id="relatedHead">Related notes</h2>
+        <ul>${related.map(r => `<li><a href="notes/${r.slug}/">${esc(r.title)}</a><p>${esc(r.summary)}</p></li>`).join('')}</ul>
+      </nav>` : ''}
       <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed.xml">RSS feed</a>.</p>
       <nav class="note-nav" aria-label="More notes">
         ${newer ? `<a class="note-newer" href="notes/${newer.slug}/"><span>← Newer</span>${esc(newer.title)}</a>` : '<span></span>'}

@@ -3,6 +3,7 @@ title: How Claude overtook GPT (where it matters)
 date: 2024-12-05
 tags: [AI]
 summary: ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened.
+related: [ai-benchmarks, gpt-origins, chatgpt-interface]
 ---
 
 If you ask most people which AI they use, the answer is still ChatGPT. It has the brand, the user numbers, and the head start. But in the places I care about most, which are coding, agents, and real work inside companies, the story of 2024 has been Claude.
@@ -13,7 +14,7 @@ I switched most of my own work to Claude this year, so I wanted to understand wh
 
 Claude is made by **Anthropic**, a company founded in 2021 by a group of former OpenAI researchers, including siblings Dario and Daniela Amodei. Their focus from the start was AI safety: how to build models that are helpful but also predictable and honest.
 
-The first Claude came out in March 2023, a few months after ChatGPT. For most of 2023, Claude was "the other one." It was good at long documents (Claude 2 could read around 100,000 tokens, roughly a full book, in one go), but GPT-4 was clearly ahead on most tasks.
+The first Claude came out in March 2023, a few months after [ChatGPT](notes/chatgpt-interface/). For most of 2023, Claude was "the other one." It was good at long documents (Claude 2 could read around 100,000 tokens, roughly a full book, in one go), but GPT-4 was clearly ahead on most tasks.
 
 ## March 2024: the first crack
 

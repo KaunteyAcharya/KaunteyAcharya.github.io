@@ -3,13 +3,14 @@ title: Where machine learning meets black hole energy extraction
 date: 2022-10-19
 tags: [physics, AI]
 summary: Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it.
+related: [first-paper-penrose, jmn-magnetic-field, maths-physics-inside-llms]
 ---
 
 Most of my research time goes into one question: how much energy can you pull out of a spinning black hole (or something that only looks like one)? That is pen-and-paper work plus a lot of numerical code. Lately I keep wondering where machine learning fits into this, so here are my notes on it.
 
 ## First, an honest answer
 
-Machine learning is not calculating energy extraction for anyone. The Penrose process, the magnetic Penrose process, and the efficiency numbers we publish all still come from solving equations in a known spacetime. What ML is doing is helping with the hard parts *around* that calculation, and that turns out to matter a lot.
+Machine learning is not calculating energy extraction for anyone. The [Penrose process](notes/first-paper-penrose/), the magnetic Penrose process, and the efficiency numbers we publish all still come from solving equations in a known spacetime. What ML is doing is helping with the hard parts *around* that calculation, and that turns out to matter a lot.
 
 ## 1. Measuring spin, the energy source
 

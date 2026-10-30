@@ -3,6 +3,7 @@ title: How AI labs actually train their models
 date: 2025-01-26
 tags: [AI]
 summary: From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently.
+related: [ai-benchmarks, gpt-origins, gradient-descent-better-code]
 ---
 
 I use these models every day, and since part of my role involves training models, I wanted to go deeper than the usual "they read the internet" explanation. How do the big labs actually go from a pile of text to something like ChatGPT or Claude? Where do they spend their money, and where do they differ?
@@ -33,7 +34,7 @@ The scale is hard to picture. Meta's Llama 3 was trained on over 15 trillion tok
 
 ## Stage 2: pretraining
 
-This is the expensive part. The model starts with random numbers as its parameters and reads through the data, predicting the next token over and over. Each wrong guess nudges billions of parameters slightly in the right direction using gradient descent.
+This is the expensive part. The model starts with random numbers as its parameters and reads through the data, predicting the next token over and over. Each wrong guess nudges billions of parameters slightly in the right direction using [gradient descent](notes/gradient-descent-better-code/).
 
 - **Hardware:** thousands to tens of thousands of GPUs (or Google's TPUs) running in parallel for weeks or months. Llama 3's largest model used up to 16,000 Nvidia H100 GPUs.
 - **Engineering:** at this scale, hardware fails regularly, so a lot of work goes into checkpoints, recovery, and splitting the model across many chips efficiently.

@@ -3,6 +3,7 @@ title: Starting a statistics series on Medium
 date: 2026-06-24
 tags: [maths]
 summary: Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time.
+related: [maths-physics-inside-llms, ml-vs-deep-learning, ai-benchmarks]
 ---
 
 I am starting a statistics series on [Medium](https://medium.com/@sometimes_rational) called **Stats_with_FirstPrinciples**.

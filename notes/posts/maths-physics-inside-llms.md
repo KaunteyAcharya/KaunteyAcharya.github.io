@@ -3,6 +3,7 @@ title: The maths and physics hiding inside LLMs
 date: 2024-10-14
 tags: [AI, maths]
 summary: Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models.
+related: [gradient-descent-better-code, ml-vs-deep-learning, ml-black-hole-energy-extraction]
 ---
 
 On 8 October, the 2024 Nobel Prize in Physics went to John Hopfield and Geoffrey Hinton "for foundational discoveries and inventions that enable machine learning with artificial neural networks."
@@ -72,7 +73,7 @@ If the model gave the right word a probability close to 1, the loss is near 0. I
 
 ## Step 5: learning by rolling downhill (calculus)
 
-So how does the model actually improve? Through **gradient descent**.
+So how does the model actually improve? Through **[gradient descent](notes/gradient-descent-better-code/)**.
 
 Imagine standing on a hilly landscape in thick fog, trying to reach the lowest valley. You can't see far, but you can feel the slope under your feet. So you take a small step downhill, then check again, over and over. That's gradient descent. The landscape is the loss, and your position is the setting of all the model's parameters $\theta$:
 

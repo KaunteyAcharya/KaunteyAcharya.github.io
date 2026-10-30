@@ -3,6 +3,7 @@ title: "GPT: the model that started it all"
 date: 2023-03-29
 tags: [AI]
 summary: With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went.
+related: [chatgpt-interface, how-labs-train-ai-models, claude-overtook-gpt]
 ---
 
 GPT-4 came out on 14 March, and after a few weeks of using it I got curious about how we got here. ChatGPT made the world notice, but the story starts years earlier. So I went back and read through the GPT papers one by one. Here is the history as I understand it, in plain terms.

@@ -3,6 +3,7 @@ title: My MSc thesis: following light and matter around black holes
 date: 2022-04-21
 tags: [physics]
 summary: Five months of learning how light and particles move around black holes, naked singularities, and wormholes.
+related: [first-paper-penrose, jmn-magnetic-field, ml-black-hole-energy-extraction]
 ---
 
 I have just wrapped up my MSc thesis, [Behavior of Null and Timelike Geodesics around Black Holes](https://github.com/KaunteyAcharya/MSc-Thesis-Behavior-of-Null-and-Timelike-Geodesics-around-Black-Holes). I had been working on it since December, and the whole idea for the thesis came from my MSc thesis supervisor. I am grateful for that, because it pulled me into the field I ended up doing research in.

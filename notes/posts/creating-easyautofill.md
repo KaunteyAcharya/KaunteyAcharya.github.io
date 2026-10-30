@@ -3,6 +3,7 @@ title: Creating EasyAutoFill
 date: 2026-07-20
 tags: [projects]
 summary: A local, open-source browser extension that fills any form from your own profile file.
+related: [creating-focuspulse, automating-arxiv, tickerbrief]
 ---
 
 My latest side project is [EasyAutoFill](https://github.com/KaunteyAcharya/Easy-Auto-Fill), a free, open-source browser extension that fills in forms from your own profile data.

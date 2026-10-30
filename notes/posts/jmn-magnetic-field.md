@@ -3,6 +3,7 @@ title: My quickest paper, and an unexpected collaboration
 date: 2023-10-12
 tags: [physics]
 summary: How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks.
+related: [first-paper-penrose, ml-black-hole-energy-extraction, msc-thesis]
 ---
 
 Some projects take a year. This one took about six weeks, and it wasn't even the problem I was supposed to be working on.

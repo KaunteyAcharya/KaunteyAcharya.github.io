@@ -73,6 +73,11 @@
       ['neutral', 'Most projects have a live demo link, so go try them! Just come back after, okay? I still have a whole tour planned. 🥹']
     ] },
 
+    services: { parts: [
+      ['happy', 'Ooh, the "hire him" part! These are the things he actually builds for people.'],
+      ['wink', 'Every service links to a real project above, so no vague promises. Want to talk? Book a call, he is friendly. Mostly. Hehe.']
+    ] },
+
     publications: { parts: [
       ['shocked', 'Wait. Four peer-reviewed papers? In journals like Physical Review D?'],
       ['puppy', "Okay, I'm actually impressed. Don't tell him I said that."]
@@ -108,6 +113,7 @@
 
   // One-liners when a visitor hovers a project (matched by its GitHub link) or a paper (matched by title)
   const HOVER = [
+    ['a[href*="ai-stack-advisor"]', 'wink', 'Build or buy? This calculator does the maths for you, with error bars. Of course with error bars. 📊'],
     ['a[href*="/tickerbrief"]', 'happy', 'TickerBrief! Type one stock ticker and an agent writes a whole research report. Fancy! 📈'],
     ['a[href*="drift-alert"]', 'wink', 'The drift agent! It notices when a model goes off the rails, then explains why on Slack. Very responsible. 🧐'],
     ['a[href*="arxiv"]', 'laugh', 'The arXiv agent! He automated reading papers... so he could read even MORE papers. 🤓'],
@@ -155,7 +161,7 @@
   // Section heading that anchors each stop, in page order
   const SECTIONS = onHome ? [
     ['hero', '#hero-name'], ['about', '#about-h'], ['experience', '#exp-h'], ['skills', '#skills-h'],
-    ['projects', '#proj-h'], ['publications', '#pub-h'], ['notes', '#notes-h'], ['contact', '#contact-h']
+    ['projects', '#proj-h'], ['services', '#services-h'], ['publications', '#pub-h'], ['notes', '#notes-h'], ['contact', '#contact-h']
   ] : onNotes ? [postSlug ? ['note', '#postTitle'] : ['notesPage', '#blogRoot']] : [];
 
   /* ---------- Saved choices ---------- */
@@ -360,6 +366,9 @@
   function scanActive() {
     // Most headings trigger a quarter of the way down the screen. Notes and Contact sit at the
     // bottom of the page and can't scroll that high, so their trigger lines are lower.
+    // The notes list is redrawn after load; if an anchor was replaced, rebuild the list first
+    // (a detached element reports top 0 and would trigger its line too early).
+    if (headings.some(([, el]) => !el.isConnected)) buildAnchors();
     let id = headings.length ? headings[0][0] : null;
     headings.forEach(([sid, el]) => { if (el.getBoundingClientRect().top <= innerHeight * lineFor(sid)) id = sid; });
     if (id !== activeId) {
@@ -393,7 +402,7 @@
     requestAnimationFrame(() => sayBox.classList.add('on'));
     acts.innerHTML = '';
     clearInterval(typer);
-    const done = () => { K.st.talk = false; buttons(); };
+    const done = () => { K.st.talk = false; buttons(); autoHide(id); };
     if (reduce) { sayText.textContent = text; done(); }
     else {
       let i = 0; sayText.textContent = ''; K.st.talk = true;
@@ -414,6 +423,18 @@
       if (id === 'heroAgain') acts.appendChild(btn('Not now', () => { session.quiet = true; saveSession(); close(); }, ''));
       if (onHome && !override && id !== 'heroAgain') acts.appendChild(btn('Skip tour', skipTour, 'quiet'));
     }
+  }
+  // On phones the speech bubble sits over the text. Outside the home-page tour, let it fade away
+  // a few seconds after it finishes, unless the visitor is touching or using it.
+  let hideT = null;
+  function autoHide(id) {
+    clearTimeout(hideT);
+    if (onHome || !corner()) return;
+    hideT = setTimeout(() => {
+      if (shownId !== id) return;
+      if (sayBox.contains(document.activeElement) || sayBox.matches(':hover')) return autoHide(id);
+      close();
+    }, 5000);
   }
   function btn(label, fn, kind, a) {
     let el;

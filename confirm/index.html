@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirm your call | Kauntey Acharya</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<!-- Booking confirmation. The link in the booking email opens this page; it sends the id and token
+     to the booking web app (booking-backend/Code.gs, action 'confirm') and shows the result. -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/style.css">
+<script>
+  (function () {
+    var t = null, k = 'ka-theme';
+    try { t = localStorage.getItem(k) || localStorage.getItem('theme'); } catch (e) {}
+    if (!t) { try { t = sessionStorage.getItem(k); } catch (e) {} }
+    if (!t) { var m = document.cookie.match(/(?:^|; )ka-theme=(light|dark)/); if (m) t = m[1]; }
+    if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-ka-theme', t);
+  })();
+  // Read the one-time id and token, then remove them from the address bar,
+  // so they never reach analytics, browser history, or a shared link.
+  window.KA_CONFIRM = (function () {
+    var p = new URLSearchParams(location.search);
+    var v = { id: p.get('id') || '', t: p.get('t') || '' };
+    if (location.search) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
+    return v;
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Home">KA</a>
+    <nav class="nav" aria-label="Primary">
+      <a class="hide-sm nav-u" href="/#about">About</a>
+      <a href="/#projects">Projects</a>
+      <a href="/#publications">Papers</a>
+      <a class="nav-u" href="/notes.html">Notes</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme"></button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="page-head confirm-box" aria-live="polite">
+    <h1 id="cfTitle">Confirming your call…</h1>
+    <p id="cfMsg">One moment, this takes a few seconds.</p>
+    <noscript><p>This page needs JavaScript to confirm the booking. Please enable it, or email
+      <a href="mailto:kaunteyacharya2000@gmail.com">kaunteyacharya2000@gmail.com</a>.</p></noscript>
+    <p class="confirm-next" id="cfNext" hidden>Meanwhile, you can read my <a href="/notes.html">notes</a> or look at my <a href="/#projects">projects</a>.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Kauntey Acharya</span>
+    <span><a href="/">Home</a> · <a href="mailto:kaunteyacharya2000@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/kauntey-acharya" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // Same web-app URL as BOOKING.endpoint in assets/chatbot.js
+    var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyPIRpuZ7-yNebIvXen_JSsVFEIxY5-78oqKosIOacKapdUhoAGAm2YK6OJmtkN5HwOJQ/exec';
+    var title = document.getElementById('cfTitle'), msg = document.getElementById('cfMsg'), next = document.getElementById('cfNext');
+    var c = window.KA_CONFIRM || {};
+    // Server messages may contain simple markup; show them as plain text
+    var plain = function (s) { var d = document.createElement('div'); d.innerHTML = String(s || ''); return d.textContent || ''; };
+    var show = function (t, m, ok) {
+      title.textContent = t; msg.textContent = m;
+      document.title = t + ' | Kauntey Acharya';
+      next.hidden = !ok;
+    };
+    if (!c.id || !c.t) {
+      show('Link not complete', 'This confirmation link is missing a part. Please open it again from the email, or copy the whole link into your browser.', false);
+      return;
+    }
+    fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'confirm', id: c.id, t: c.t }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { show(j.title || (j.ok ? "You're booked!" : 'Something went wrong'), plain(j.message), !!j.ok); })
+      .catch(function () {
+        show('Could not reach the booking service', 'Please try the link again in a minute. If it still does not work, email kaunteyacharya2000@gmail.com and I will confirm it by hand.', false);
+      });
+  })();
+</script>
+<script src="/assets/main.js"></script>
+</body>
+</html>

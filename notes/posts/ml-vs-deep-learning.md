@@ -3,6 +3,7 @@ title: How machine learning and deep learning are different
 date: 2025-03-05
 tags: [AI]
 summary: Not "deep learning is ML with neural networks," but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation.
+related: [gradient-descent-better-code, maths-physics-inside-llms, what-is-rag]
 ---
 
 The usual answer to this question is a diagram of circles: deep learning sits inside machine learning, which sits inside AI. That's true, but it never helped me understand anything. It tells you *where* deep learning sits, not *why* it behaves so differently.

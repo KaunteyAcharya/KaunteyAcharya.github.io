@@ -4,14 +4,14 @@
    ========================================================= */
 
 /* ---------- Tokens ---------- */
-/* Original portfolio palette: beige paper / pure black, monochrome */
+/* Palette: off-white paper (light) / graphite (dark), monochrome */
 :root {
-  --bg:      #F5F5DC;
-  --surface: rgba(0, 0, 0, .04);
-  --text:    #000000;
-  --muted:   rgba(0, 0, 0, .66);
-  --line:    rgba(0, 0, 0, .18);
-  --accent:  #000000;
+  --bg:      #F5F5F5;
+  --surface: rgba(27, 26, 23, .04);
+  --text:    #1B1A17;
+  --muted:   rgba(27, 26, 23, .68);
+  --line:    rgba(27, 26, 23, .18);
+  --accent:  #1B1A17;
 
   --mono:  monospace;
   --serif: monospace;
@@ -19,15 +19,22 @@
   --max: 1040px;
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --label-col: 180px;
+
+  /* Paper grain: a tiny tiling noise texture (SVG, about 1 KB, no extra request).
+     Light and dark specks around the paper colour; --paper is set a touch lighter
+     than --bg (and a touch darker in dark mode) so the grained page averages out to --bg. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27d%27 x=%270%27 y=%270%27 color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.85%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -0.5 0 0 0 0.25%27/%3E%3C/filter%3E%3Cfilter id=%27l%27 x=%270%27 y=%270%27 color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.85%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix values=%270 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.5 0 0 0 -0.25%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23d%29%27/%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23l%29%27/%3E%3C/svg%3E");
+  --paper: #FBFBFB;
 }
 
 :root[data-ka-theme="dark"] {
-  --bg:      #000000;
-  --surface: rgba(255, 255, 255, .06);
-  --text:    #FFFFFF;
-  --muted:   rgba(255, 255, 255, .66);
-  --line:    rgba(255, 255, 255, .2);
-  --accent:  #FFFFFF;
+  --bg:      #1C1B19;
+  --surface: rgba(236, 231, 220, .05);
+  --text:    #ECE7DC;
+  --muted:   rgba(236, 231, 220, .66);
+  --line:    rgba(236, 231, 220, .18);
+  --accent:  #ECE7DC;
+  --paper:   #171614;
   color-scheme: dark;
 }
 
@@ -35,13 +42,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
-  background: var(--bg);
+  background-color: var(--paper, var(--bg));
   color: var(--text);
   font-family: var(--serif);
   font-size: 17px;
   line-height: 1.5;          /* original 1.75 minus .25 */
   -webkit-font-smoothing: antialiased;
   transition: background-color .3s ease, color .3s ease;
+}
+/* Grain sits on its own fixed layer, so it stays still while the page scrolls over it
+   (background-attachment: fixed is ignored on iPhones, a fixed layer is not). */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--grain) 0 0 / 180px 180px;
 }
 a { color: inherit; }
 img { max-width: 100%; }
@@ -62,7 +75,7 @@ img { max-width: 100%; }
 /* ---------- Top bar ---------- */
 .topbar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: var(--grain) 0 0 / 180px 180px, color-mix(in srgb, var(--paper, var(--bg)) 88%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
@@ -163,6 +176,28 @@ img { max-width: 100%; }
 .row-links a { text-decoration: none; color: var(--text); border-bottom: 1px solid var(--line); }
 .row-links a:hover { border-color: var(--text); }
 .row-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Work with me ---------- */
+.services-lede { max-width: 38em; margin-bottom: 1.6rem; }
+.services .row { padding: 1.2rem 0; }
+.services .row:first-child { padding-top: 0; }
+.services .proof { margin-top: .5rem; font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.services .proof a { color: var(--text); text-underline-offset: 3px; }
+.steps-h { font-family: var(--mono); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin: 2.2rem 0 .9rem; }
+.steps { list-style: none; counter-reset: step; display: grid; gap: .6rem; max-width: 40em; }
+.steps li { counter-increment: step; position: relative; padding-left: 2.4rem; }
+.steps li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 0; top: .2em; font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.steps b { margin-right: .3em; }
+.services-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
+.services-cta a { font-family: var(--mono); font-size: .85rem; text-decoration: none; padding: .6rem 1.1rem; border-radius: 6px; border: 1px solid var(--text); }
+.services-cta .cta-primary { background: var(--text); color: var(--bg); }
+.services-cta .cta-ghost { color: var(--text); border-color: var(--line); }
+.services-cta a:hover { border-color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.services-cta a[hidden] { display: none; }
+
+/* ---------- Booking confirmation page (confirm/index.html) ---------- */
+.confirm-box { min-height: 40vh; }
+.confirm-next { color: var(--muted); }
 
 /* ---------- Skills ---------- */
 .skill-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem 2.2rem; }
@@ -471,6 +506,15 @@ html { scrollbar-color: var(--line) transparent; }
 .note-nav span { display: block; font-family: var(--mono); font-size: .75rem; font-weight: 400; color: var(--muted); margin-bottom: .3rem; }
 .note-nav .note-older { text-align: right; }
 @media (max-width: 560px) { .note-nav { grid-template-columns: 1fr; } .note-nav .note-older { text-align: left; } }
+/* Related notes: picked in front matter (related:) or by shared tags, see scripts/build-notes.mjs */
+.note-related { margin: 0 0 1.8rem; }
+.note-related h2 { font-family: var(--mono); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .8rem; }
+.note-related ul { list-style: none; display: grid; gap: .7rem; }
+.note-related li { padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 4px; transition: border-color .2s; }
+.note-related li:hover { border-color: var(--text); }
+.note-related a { font-weight: 600; line-height: 1.35; text-decoration: none; }
+.note-related a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.note-related p { margin-top: .3rem; color: var(--muted); font-size: .88rem; line-height: 1.45; }
 .feed-link { font-family: var(--mono); font-size: .8rem; }
 .feed-link a { color: var(--text); text-underline-offset: 3px; }
 .note-share { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; font-family: var(--mono); font-size: .8rem; margin-bottom: 1.4rem; }
@@ -485,3 +529,9 @@ html { scrollbar-color: var(--line) transparent; }
 .article .byline a { color: var(--text); text-underline-offset: 3px; }
 .note-author { margin-bottom: 1.6rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 4px; font-size: .92rem; color: var(--muted); }
 .note-author a { color: var(--text); text-underline-offset: 3px; }
+
+/* ---------- Print: plain paper, no grain ---------- */
+@media print {
+  body::before { display: none; }
+  .topbar { background-image: none; }
+}

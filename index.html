@@ -23,8 +23,8 @@
 <meta name="twitter:image" content="https://kaunteyacharya.com/og/home.png">
 <meta name="twitter:title" content="Kauntey Acharya | AI Automation Engineer | AI Strategist & Consultant | Quantitative Analyst">
 <meta name="twitter:description" content="Designing AI-powered workflows, agents, and automation systems. AI Automation Engineer, AI Strategist & Consultant, and Quantitative Analyst.">
-<meta name="theme-color" content="#F5F5DC" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F5F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1B19" media="(prefers-color-scheme: dark)">
 
 <script type="application/ld+json">
 {
@@ -351,6 +351,7 @@
       <a class="hide-sm nav-u" href="#about" aria-current="page">About</a>
       <a class="hide-sm" href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a class="hide-sm" href="#services">Services</a>
       <a href="#publications">Papers</a>
       <a class="nav-u" href="notes.html">Notes</a>
       <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch theme"></button>
@@ -451,6 +452,14 @@
     <div class="section-body">
       <ol class="rows">
         <li class="row">
+          <h3><a href="ai-stack-advisor/">AI Stack Advisor: Build-vs-Buy Calculator for AI</a></h3>
+          <p>Describe what you want AI to do, and it compares four ways to get there (buy a SaaS tool, build on hosted LLM APIs,
+            run an open model on your own GPUs, or mix the two) on monthly cost, 36-month total cost of ownership, break-even volume,
+            and ROI. Every assumption is shown, and 300 simulations report how often each option wins. It runs entirely in the browser.</p>
+          <ul class="tags"><li>JavaScript</li><li>Chart.js</li><li>TCO &amp; ROI</li><li>Monte Carlo</li><li>GitHub Actions</li></ul>
+          <div class="row-links"><a href="ai-stack-advisor/">Try it live →</a><a href="https://github.com/KaunteyAcharya/ai-stack-advisor" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="notes/ai-stack-advisor/">Note →</a></div>
+        </li>
+        <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/tickerbrief" target="_blank" rel="noopener noreferrer">TickerBrief: Automated Equity Research Reports</a></h3>
           <p>Type a ticker and get a full equity research report as an interactive web page and a PDF. An n8n workflow pulls prices,
             fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technical indicators, and sentiment; and a
@@ -511,9 +520,55 @@
     </div>
   </section>
 
+  <!-- ═══ WORK WITH ME ═══ -->
+  <section class="section reveal" id="services" aria-labelledby="services-h">
+    <h2 class="section-label" id="services-h"><span>05</span>Work with me</h2>
+    <div class="section-body">
+      <p class="services-lede">I help teams find where AI creates practical leverage, then build and test it on their real workflows.
+        Each service below links to work on this page that you can open and try.</p>
+      <ol class="rows services">
+        <li class="row">
+          <h3>AI opportunity and build-vs-buy review</h3>
+          <p>Find the workflows where AI saves real time or money, then compare buying a tool, building on APIs, and running
+            your own model on cost, privacy, and time to launch.</p>
+          <p class="proof">See: <a href="ai-stack-advisor/">AI Stack Advisor</a></p>
+        </li>
+        <li class="row">
+          <h3>Agentic workflows and automation</h3>
+          <p>n8n and Python workflows that connect your tools and APIs, use an LLM where it helps, and keep a human approval
+            step where it matters.</p>
+          <p class="proof">See: <a href="notes/tickerbrief/">TickerBrief</a>, <a href="notes/automating-arxiv/">arXiv research agent</a></p>
+        </li>
+        <li class="row">
+          <h3>RAG and document Q&amp;A</h3>
+          <p>Assistants that answer from your own documents and say so when the answer is not there, including fully local
+            setups where no data leaves your machines.</p>
+          <p class="proof">See: <a href="notes/local-rag-agent/">Local RAG agent</a></p>
+        </li>
+        <li class="row">
+          <h3>LLM evaluation and model monitoring</h3>
+          <p>Testing LLM behaviour, retrieval quality, and workflow reliability before launch, and monitoring models after it,
+            so problems show up before your users notice them.</p>
+          <p class="proof">See: <a href="notes/ml-drift-alert-agent/">Drift alert agent</a></p>
+        </li>
+      </ol>
+      <h3 class="steps-h">How it works</h3>
+      <ol class="steps">
+        <li><b>Intro call.</b> Your problem, your data, and your constraints.</li>
+        <li><b>Scope.</b> One workflow, a clear measure of success, and a plan.</li>
+        <li><b>Working prototype.</b> Built on your real data and tested against that measure.</li>
+        <li><b>Handover.</b> Code and documentation your team can run and extend.</li>
+      </ol>
+      <div class="services-cta">
+        <a class="cta-primary" href="#book-a-call" data-book-call hidden>Book a call</a>
+        <a class="cta-ghost" href="mailto:kaunteyacharya2000@gmail.com">Email me</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ PUBLICATIONS ═══ -->
   <section class="section reveal" id="publications" aria-labelledby="pub-h">
-    <h2 class="section-label" id="pub-h"><span>05</span>Publications</h2>
+    <h2 class="section-label" id="pub-h"><span>06</span>Publications</h2>
     <div class="section-body">
       <ol class="rows">
         <li class="row pub">
@@ -542,7 +597,7 @@
 
   <!-- ═══ NOTES ═══ -->
   <section class="section reveal" id="notes" aria-labelledby="notes-h">
-    <h2 class="section-label" id="notes-h"><span>06</span>Notes</h2>
+    <h2 class="section-label" id="notes-h"><span>07</span>Notes</h2>
     <div class="section-body">
       <ul class="post-list" id="latestPosts"><li class="empty">Loading…</li></ul>
       <a class="more-link" href="notes.html">All notes →</a>
@@ -551,7 +606,7 @@
 
   <!-- ═══ CONTACT ═══ -->
   <section class="section reveal" id="contact" aria-labelledby="contact-h">
-    <h2 class="section-label" id="contact-h"><span>07</span>Contact</h2>
+    <h2 class="section-label" id="contact-h"><span>08</span>Contact</h2>
     <div class="section-body">
       <p class="contact-big">Ping me for opportunities related to AI roles, agent builds, research collabs, or just a good paper to discuss.</p>
       <nav class="links" aria-label="Contact">

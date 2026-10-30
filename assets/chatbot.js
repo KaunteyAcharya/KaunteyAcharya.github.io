@@ -52,7 +52,7 @@
       answer: `Kauntey is open to AI roles (AI automation engineering, AI strategy and consulting, and quantitative analysis), agent builds, and research collaborations in AI or physics.\n\nTo start a conversation:\n${CONTACT}`,
       chips: ['Experience', 'Skills', 'Projects'] },
     { id: 'consulting', weight: 3, keys: ['consult', 'consultant', 'consulting', 'strategy', 'strategist', 'ai strategy', 'advise', 'advisor', 'advisory', 'business', 'use case', 'use cases', 'roi', 'prototype', 'my company', 'our team', 'help us', 'automate our', 'agent build', 'build an agent'],
-      answer: `Kauntey works as an AI strategist and consultant as well as an engineer. He helps identify where AI can create practical leverage, translates business problems into AI solutions, and builds working prototypes: agentic workflows, RAG systems, API automations, and human-in-the-loop systems.\n\nSee TickerBrief and the Drift Alert Agent in Projects for examples. To discuss a project:\n${CONTACT}`,
+      answer: `Kauntey works as an AI strategist and consultant as well as an engineer. He helps identify where AI can create practical leverage, translates business problems into AI solutions, and builds working prototypes: agentic workflows, RAG systems, API automations, and human-in-the-loop systems.\n\nThe Work with me section lists the services (AI opportunity and build-vs-buy reviews, agentic workflows, RAG and document Q&A, and LLM evaluation and monitoring), each linked to a real project. To discuss a project, book a call here or:\n${CONTACT}`,
       chips: ['Projects', 'Skills', 'How to contact'] },
     { id: 'resume', keys: ['resume', 'cv', 'curriculum vitae', 'portfolio pdf'],
       answer: `A CV is available on request. Email [${EMAIL}](mailto:${EMAIL}) or message him on [LinkedIn](${LINKEDIN}).` },
@@ -445,7 +445,7 @@
       '<label class="bk-l" for="bkName">Your name</label><input class="bk-in" id="bkName" autocomplete="name" maxlength="80" value="' + safe(booking.name) + '">' +
       '<label class="bk-l" for="bkEmail">Work email</label><input class="bk-in" id="bkEmail" type="email" autocomplete="email" maxlength="120" value="' + safe(booking.email) + '">' +
       '<label class="bk-l" for="bkProfile">LinkedIn profile or website</label><input class="bk-in" id="bkProfile" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="linkedin.com/in/your-name" value="' + safe(booking.profile) + '">' +
-      '<label class="bk-l" for="bkTopic">Company and topic (optional)</label><input class="bk-in" id="bkTopic" maxlength="200" value="' + safe(booking.topic) + '">' +
+      '<label class="bk-l" for="bkTopic">Company and what you’d like to discuss</label><input class="bk-in" id="bkTopic" maxlength="200" required placeholder="e.g. Acme Ltd, automating invoice processing" value="' + safe(booking.topic) + '">' +
       '<input class="bk-hp" id="bkWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">' +
       (BOOKING.turnstileSiteKey ? '<div class="bk-ts" id="bkTs"></div><p class="bk-note">Protected by Cloudflare · <a href="https://www.cloudflare.com/turnstile-privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy</a></p>' : '') +
       '<p class="bk-err" role="alert"></p>' +
@@ -484,6 +484,7 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(booking.email)) { err.textContent = 'Please enter a valid email so the invite can reach you.'; return; }
     if (!/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(booking.profile)) { err.textContent = 'Please add your LinkedIn profile or website link, so Kauntey knows who he is meeting.'; return; }
     if (/(^|\/\/|\.)linkedin\.com\/?$/i.test(booking.profile)) { err.textContent = 'Please use the link to your own LinkedIn profile (linkedin.com/in/…).'; return; }
+    if (booking.topic.length < 8) { err.textContent = 'Please add your company and a line on what you’d like to discuss, so Kauntey can come prepared.'; return; }
     if (BOOKING.turnstileSiteKey) {
       // The background check usually finishes in a second or two; wait for it briefly instead of erroring
       const getTok = () => (window.turnstile && tsWidget !== null ? window.turnstile.getResponse(tsWidget) : '') || '';
@@ -531,7 +532,7 @@
             return renderDetails();
           }
           // Something in the form needs fixing: go back to the form, keep what they typed
-          if ((res && res.code === 'input') || /email|linkedin|website|name|human check/i.test(msg)) {
+          if ((res && res.code === 'input') || /email|linkedin|website|name|human check|talk about|company/i.test(msg)) {
             add(msg, 'bot');
             return renderDetails();
           }

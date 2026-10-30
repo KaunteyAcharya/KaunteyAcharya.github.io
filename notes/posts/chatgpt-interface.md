@@ -3,6 +3,7 @@ title: "ChatGPT: the interface that changed everything"
 date: 2022-12-14
 tags: [AI]
 summary: ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is.
+related: [gpt-origins, claude-overtook-gpt, what-is-rag]
 ---
 
 OpenAI released ChatGPT on 30 November as a free "research preview." Two weeks later, it has taken over every conversation I have, in research circles and outside them. Sam Altman posted that it crossed a million users in about five days. I can't think of any piece of software that spread this fast.
@@ -45,7 +46,7 @@ It reminds me of how the web browser didn't invent the internet but made it usab
 
 **Where it shines:**
 
-- Explaining concepts. I asked it about the Penrose process and frame dragging, and the explanations were surprisingly clear for a first pass.
+- Explaining concepts. I asked it about the [Penrose process](notes/first-paper-penrose/) and frame dragging, and the explanations were surprisingly clear for a first pass.
 - Small coding tasks. Little Python scripts and plotting code often run on the first try.
 - Rewriting and summarising. Emails, abstracts, and making messy notes readable.
 

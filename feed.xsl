@@ -11,8 +11,8 @@
         <title>RSS feed | Kauntey Acharya</title>
         <link rel="icon" type="image/png" href="/assets/icons/favicon-32.png"/>
         <style>
-          :root { --bg: #F5F5DC; --text: #000; --muted: rgba(0,0,0,.66); --line: rgba(0,0,0,.18); }
-          @media (prefers-color-scheme: dark) { :root { --bg: #000; --text: #F5F5DC; --muted: rgba(245,245,220,.66); --line: rgba(245,245,220,.2); } }
+          :root { --bg: #F5F5F5; --text: #1B1A17; --muted: rgba(27,26,23,.68); --line: rgba(27,26,23,.18); }
+          @media (prefers-color-scheme: dark) { :root { --bg: #1C1B19; --text: #ECE7DC; --muted: rgba(236,231,220,.66); --line: rgba(236,231,220,.18); } }
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body { background: var(--bg); color: var(--text); font-family: monospace; line-height: 1.6; }
           main { max-width: 42rem; margin: 0 auto; padding: 3.5rem 1.25rem 4rem; }

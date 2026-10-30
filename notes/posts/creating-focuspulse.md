@@ -3,6 +3,7 @@ title: Creating FocusPulse
 date: 2026-08-17
 tags: [projects]
 summary: A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome.
+related: [creating-easyautofill, tickerbrief, automating-arxiv]
 ---
 
 I have been building [FocusPulse](https://github.com/KaunteyAcharya/FocusPulse), a small Chrome extension for tracking focus.
