@@ -56,3 +56,13 @@
     else prompt('Copy this link:', url);
   });
 })();
+
+
+/* Interactive figures in the "AI from Scratch" notes: load their script only on pages that have them */
+(function () {
+  if (!document.querySelector('.fs-widget')) return;
+  const s = document.createElement('script');
+  s.src = 'assets/fromscratch.js'; s.defer = true;
+  document.head.appendChild(s);
+})();
+

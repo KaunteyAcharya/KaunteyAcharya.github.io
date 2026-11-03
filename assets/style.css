@@ -535,3 +535,16 @@ html { scrollbar-color: var(--line) transparent; }
   body::before { display: none; }
   .topbar { background-image: none; }
 }
+
+
+/* ---------- "AI from Scratch" series: banner and pipeline (static, works without JavaScript) ---------- */
+.prose .fs-series { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 4px; padding: .7rem .9rem; background: var(--surface); font-size: .88rem; }
+.prose .fs-series p + p { margin-top: .3rem; color: var(--muted); }
+.prose .fs-flow { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; font-size: .85rem; }
+.prose .fs-flow span { border: 1px solid var(--line); border-radius: 4px; padding: .35rem .6rem; background: var(--surface); }
+.prose .fs-flow span + span::before { content: "â†’"; margin: 0 .5rem 0 -.1rem; color: var(--muted); }
+.prose details { border: 1px solid var(--line); border-radius: 4px; padding: .5rem .8rem; }
+.prose details summary { cursor: pointer; color: var(--muted); }
+.prose details[open] summary { margin-bottom: .6rem; }
+.prose .fs-widget { margin: 1.8em 0; }
+
