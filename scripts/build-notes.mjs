@@ -21,7 +21,7 @@ const POSTS = path.join(ROOT, 'notes', 'posts');
 const AUTHOR_ROLE = 'AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst';
 const AUTHOR_BIO = 'is an AI automation engineer and consultant with a background in theoretical physics. He builds agentic workflows, RAG systems, and research tools, and writes these notes to explain AI and quantitative ideas from first principles.';
 const AUTHOR_LINKS = ['https://www.linkedin.com/in/kauntey-acharya', 'https://github.com/KaunteyAcharya', 'https://medium.com/@sometimes_rational', 'https://www.researchgate.net/profile/Kauntey-Acharya'];
-const EXTRA_PAGES = ['ai-stack-advisor/'];        // other sites served under this domain
+const EXTRA_PAGES = ['ai-stack-advisor/', 'ai-stack-advisor/about.html'];        // other sites served under this domain
 const require = createRequire(import.meta.url);
 const { marked } = require(path.join(ROOT, 'assets', 'vendor', 'marked.min.js'));
 
@@ -200,7 +200,7 @@ ${html}    </div>
 });
 
 /* ---------- Notes list, feed, sitemap ---------- */
-const list = notes.map(({ slug, title, date, tags, summary, mins }) => ({ slug, title, date, tags, summary, mins }));
+const list = notes.map(({ slug, title, date, tags, summary, mins, series }) => ({ slug, title, date, tags, summary, mins, ...(series ? { series } : {}) }));
 write('notes/posts.json', JSON.stringify(list, null, 2) + '\n');
 
 const cdata = s => '<![CDATA[' + s.replace(/]]>/g, ']]]]><![CDATA[>') + ']]>';
@@ -274,6 +274,7 @@ This site is his portfolio (experience, projects, and four peer-reviewed physics
 - [Portfolio](${SITE}/): about, experience, skills, projects, publications, and contact
 - [Notes](${SITE}/notes.html): all notes, newest first
 - [AI Stack Advisor](${SITE}/ai-stack-advisor/): free build-vs-buy, TCO, and ROI calculator for AI solutions
+- [How AI Stack Advisor works](${SITE}/ai-stack-advisor/about.html): every formula, assumption, and price behind the calculator, with sources
 - [RSS feed](${SITE}/feed.xml)
 
 ## Notes
