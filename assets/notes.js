@@ -28,33 +28,73 @@
   function showList(posts) {
     const ul = document.getElementById('allPosts');
     const bar = document.getElementById('filters');
+    const searchInput = document.getElementById('noteSearch');
     const tags = [...new Set(posts.flatMap(p => p.tags || []))].sort();
-    let active = params.get('tag');
+    const SERIES_TBT = '__series:token-by-token__';
+    const inTBT = p => /^AI from Scratch, Token by Token/i.test(p.title || '');
+    const hasTBT = posts.some(inTBT);
+
+    let active = params.get('series') === 'token-by-token'
+      ? SERIES_TBT
+      : (params.get('tag') || null);
+    let query = '';
 
     function render() {
       ul.innerHTML = '';
-      const shown = active ? posts.filter(p => (p.tags || []).includes(active)) : posts;
-      if (!shown.length) { ul.innerHTML = '<li class="empty">No notes yet.</li>'; return; }
+      let shown = active === SERIES_TBT
+        ? posts.filter(inTBT)
+        : active ? posts.filter(p => (p.tags || []).includes(active)) : posts;
+      if (query) {
+        const q = query.toLowerCase();
+        shown = shown.filter(p =>
+          (p.title || '').toLowerCase().includes(q) ||
+          (p.summary || '').toLowerCase().includes(q) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(q))
+        );
+      }
+      if (!shown.length) { ul.innerHTML = '<li class="empty">No notes match.</li>'; return; }
       shown.forEach(p => ul.appendChild(postItem(p)));
     }
-    function button(label, value) {
+
+    function setActive(value) {
+      active = value;
+      const key = value == null ? '' : value;
+      bar.querySelectorAll('button').forEach(x =>
+        x.setAttribute('aria-pressed', String(x.dataset.fv === key))
+      );
+      const u = new URL(location);
+      u.searchParams.delete('tag'); u.searchParams.delete('series');
+      if (value === SERIES_TBT) u.searchParams.set('series', 'token-by-token');
+      else if (value) u.searchParams.set('tag', value);
+      history.replaceState(null, '', u);
+      render();
+    }
+
+    function button(label, value, cls) {
       const b = document.createElement('button');
       b.type = 'button'; b.textContent = label;
+      b.dataset.fv = value == null ? '' : value;
       b.setAttribute('aria-pressed', String(active === value));
-      b.addEventListener('click', () => {
-        active = value;
-        bar.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false'));
-        b.setAttribute('aria-pressed', 'true');
-        const u = new URL(location); value ? u.searchParams.set('tag', value) : u.searchParams.delete('tag');
-        history.replaceState(null, '', u);
-        render();
-      });
+      if (cls) b.className = cls;
+      b.addEventListener('click', () => setActive(value));
       return b;
     }
-    if (tags.length > 1) {
+
+    if (tags.length > 1 || hasTBT) {
       bar.appendChild(button('All', null));
       tags.forEach(t => bar.appendChild(button(t, t)));
+      if (hasTBT) {
+        const sep = document.createElement('span');
+        sep.className = 'filter-sep'; sep.setAttribute('aria-hidden', 'true');
+        bar.appendChild(sep);
+        bar.appendChild(button('Token by Token series', SERIES_TBT, 'filter-series'));
+      }
     }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => { query = searchInput.value.trim(); render(); });
+    }
+
     render();
   }
 
