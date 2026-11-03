@@ -31,7 +31,7 @@
     const searchInput = document.getElementById('noteSearch');
     const tags = [...new Set(posts.flatMap(p => p.tags || []))].sort();
     const SERIES_TBT = '__series:token-by-token__';
-    const inTBT = p => /^AI from Scratch, Token by Token/i.test(p.title || '');
+    const inTBT = p => p.series === 'token-by-token' || /^AI from Scratch, Token by Token/i.test(p.title || '');
     const hasTBT = posts.some(inTBT);
 
     let active = params.get('series') === 'token-by-token'
