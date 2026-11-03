@@ -1,7 +1,7 @@
 ---
 title: Building AI Stack Advisor, a build-vs-buy calculator for AI
 date: 2026-10-21
-updated: 2026-10-30
+updated: 2026-11-03
 tags: [AI, projects]
 summary: Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI, in your own currency and with your country's tax rules.
 related: [local-rag-agent, ml-drift-alert-agent, tickerbrief]
@@ -9,26 +9,27 @@ related: [local-rag-agent, ml-drift-alert-agent, tickerbrief]
 
 Almost every business that wants an AI chatbot, voice agent, or document assistant runs into the same question: should we buy it or build it? Subscribe to a SaaS tool, build on hosted LLM APIs, run an open model on our own GPUs, or mix the two? The honest answer is "it depends", but it depends on things you can actually put numbers on: volume, data sensitivity, team skills, and what each conversation is worth.
 
-So I built [AI Stack Advisor](https://github.com/KaunteyAcharya/ai-stack-advisor). You describe what you want AI to do, and it compares the four options on monthly cost, 36-month total cost of ownership (TCO), break-even volume, and ROI, then writes a consultant-style recommendation with every assumption listed. You can [try it live](https://kaunteyacharya.com/ai-stack-advisor/).
+So I built [AI Stack Advisor](https://github.com/KaunteyAcharya/ai-stack-advisor). You describe what you want AI to do, and it compares five options on monthly cost, 36-month total cost of ownership (TCO), break-even volume, and ROI, then writes a consultant-style recommendation with every assumption listed. You can [try it live](https://kaunteyacharya.com/ai-stack-advisor/).
 
 It is built for founders, operations leads, and consultants in India, the US, Canada, Australia, the UAE, the UK, Switzerland, and the Eurozone, and it works in each region's currency, number format, tax rules, and labour costs.
 
-## The four options
+## The five options
 
 - **A. SaaS:** a ready-made product, priced per seat, per conversation, or per resolved conversation.
 - **B. API-based build:** your own app on hosted models, paying per token.
 - **C. Self-hosted:** an open-weight model on rented GPUs that you run yourself.
 - **D. Hybrid:** routine requests on your own GPUs, harder ones sent to an API.
+- **E. Hosted open model:** the same open-weight model as C, run by an inference provider and paid per token, so there are no GPUs to manage, but data goes to that provider.
 
 ## How it works
 
 1. **Start from goals.** Pick what you want AI to do, like answering customers, processing invoices, or finding answers in company data. Each goal becomes a workload, and you can pick several.
 2. **Volume.** Users per day × requests per user × 30, or documents × pages for document processing, growing month by month.
-3. **Cost of each option.** API cost comes from tokens times published prices, plus hosting, databases, and maintenance. Self-hosting picks a model size, the cheapest GPU with enough memory, and enough GPUs for peak traffic. SaaS uses the cheapest plan whose limits fit.
+3. **Cost of each option.** API cost comes from tokens times published prices, plus hosting, databases, and maintenance. Self-hosting picks a model size, the cheapest GPU with enough memory, and enough GPUs for peak traffic, counting the time to read prompts, the time to write answers, and the memory that long prompts need. SaaS uses the cheapest plan whose limits fit.
 4. **Value.** What a conversation is worth in sales, or how many staff hours an internal tool or agent saves.
 5. **Recommendation.** A weighted score of cost and non-cost factors (privacy, time to launch, team fit, quality, lock-in, and scalability), plus a check on whether the answer is robust or a close call.
 
-Every formula is written out in the [methodology](https://github.com/KaunteyAcharya/ai-stack-advisor/blob/main/docs/METHODOLOGY.md). The rest of this note is about the details that make the numbers believable.
+Every formula, assumption, and price, with its source, is on the tool's [How it works](https://kaunteyacharya.com/ai-stack-advisor/about.html) page. The rest of this note is about the details that make the numbers believable.
 
 ## Your own currency, formatted the way you read it
 
