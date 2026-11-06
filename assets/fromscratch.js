@@ -39,6 +39,8 @@
   .fs-svg .vb { stroke: var(--fs-b); fill: var(--fs-b); }
   .fs-svg .tb { fill: var(--fs-b); }
   .fs-svg .faint { opacity: .25; }
+  .fs-svg .band { fill: var(--muted); opacity: .26; stroke: none; }
+  .fs-svg polyline { fill: none; }
   .fs-svg .handle { fill: transparent; stroke: none; cursor: grab; }
   .fs-svg .dash { stroke-dasharray: 5 4; fill: none; }
   .fs-range { width: 100%; max-width: 22rem; accent-color: var(--fs-b); }
@@ -653,6 +655,375 @@
       h('div', { class: 'fs-row' }, h('button', { type: 'button', class: 'fs-btn', onclick: run }, 'Draw new random vectors')),
       out);
     run();
+  };
+
+  /* =========================================================
+     Part 2 widgets: matrices, layers, and nonlinearity
+     ========================================================= */
+
+  /* 10. matrix: a matrix transforms the whole plane */
+  widgets.matrix = function (root) {
+    const PRESETS = [
+      ['identity', [1, 0, 0, 1]], ['stretch', [2, 0, 0, 1]], ['rotate 90', [0, -1, 1, 0]],
+      ['reflect', [1, 0, 0, -1]], ['shear', [1, 2, 0, 1]], ['project', [1, 0, 0, 0]]
+    ];
+    let M = [1, 2, 0, 1], P = [3, 1];
+    const S = 28, OX = 168, OY = 140, VW = 420, VH = 224;
+    const sx = x => OX + S * x, sy = y => OY - S * y;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'A matrix applied to the plane' });
+    const out = h('div', { class: 'fs-out' });
+    const cells = [0, 1, 2, 3].map(i => h('input', { class: 'fs-input fs-num', type: 'number', step: '0.5', value: String(M[i]), 'aria-label': 'matrix entry ' + (i + 1) }));
+    const apply = p => [M[0] * p[0] + M[1] * p[1], M[2] * p[0] + M[3] * p[1]];
+
+    function draw() {
+      svg.replaceChildren();
+      const g0 = sv('g', { class: 'faint' }, svg);
+      for (let k = -7; k <= 10; k++) {
+        sv('line', { x1: sx(k), y1: sy(-6), x2: sx(k), y2: sy(8), class: 'grid' }, g0);
+        sv('line', { x1: sx(-7), y1: sy(k), x2: sx(10), y2: sy(k), class: 'grid' }, g0);
+      }
+      const g1 = sv('g', {}, svg);
+      for (let k = -7; k <= 10; k++) {
+        const a = apply([k, -7]), b = apply([k, 9]);
+        sv('line', { x1: sx(a[0]), y1: sy(a[1]), x2: sx(b[0]), y2: sy(b[1]), class: 'grid' }, g1);
+        const c = apply([-7, k]), d = apply([10, k]);
+        sv('line', { x1: sx(c[0]), y1: sy(c[1]), x2: sx(d[0]), y2: sy(d[1]), class: 'grid' }, g1);
+      }
+      sv('line', { x1: sx(-7), y1: sy(0), x2: sx(10), y2: sy(0), class: 'axis' }, svg);
+      sv('line', { x1: sx(0), y1: sy(-6), x2: sx(0), y2: sy(8), class: 'axis' }, svg);
+      const q = apply(P);
+      arrow(svg, sx(0), sy(0), sx(P[0]), sy(P[1]), 'va');
+      arrow(svg, sx(0), sy(0), sx(q[0]), sy(q[1]), 'vb');
+      sv('circle', { cx: sx(P[0]), cy: sy(P[1]), r: 4, class: 'va' }, svg);
+      sv('circle', { cx: sx(q[0]), cy: sy(q[1]), r: 4, class: 'vb' }, svg);
+      sv('circle', { cx: sx(P[0]), cy: sy(P[1]), r: 18, class: 'handle' }, svg);
+      sv('text', { x: sx(P[0]) + 9, y: sy(P[1]) - 7, 'font-size': 11 }, svg).textContent = `x (${num(P[0])}, ${num(P[1])})`;
+      sv('text', { x: sx(q[0]) + 9, y: sy(q[1]) - 7, 'font-size': 11, class: 'tb' }, svg).textContent = `Wx (${num(q[0])}, ${num(q[1])})`;
+      const [a, b, c, d] = M, det = a * d - b * c;
+      out.textContent =
+        `W = [ ${num(a)}  ${num(b)} ]        x = (${num(P[0])}, ${num(P[1])})\n` +
+        `    [ ${num(c)}  ${num(d)} ]\n\n` +
+        `Wx = ( ${num(a)}·${num(P[0])} + ${num(b)}·${num(P[1])},  ${num(c)}·${num(P[0])} + ${num(d)}·${num(P[1])} )\n` +
+        `   = ( ${num(q[0])}, ${num(q[1])} )\n\n` +
+        (Math.abs(det) < 1e-9
+          ? 'The grid has collapsed onto one line. Different inputs now land on the same output, and nothing later can tell them apart. This is a rank-1 matrix (Step 12).'
+          : 'However far you drag, grid lines stay straight, stay parallel, and the origin stays put. That is what linear means, and it is exactly what a matrix alone cannot escape.');
+    }
+    cells.forEach((cell, i) => cell.addEventListener('input', () => {
+      const v = parseFloat(cell.value); if (!isNaN(v)) { M[i] = v; draw(); }
+    }));
+    let drag = false;
+    const move = e => {
+      if (!drag) return;
+      const p = svgPoint(svg, e.touches ? e.touches[0] : e);
+      P = [Math.max(-5, Math.min(8, Math.round((p.x - OX) / S * 2) / 2)), Math.max(-2.5, Math.min(4.5, Math.round((OY - p.y) / S * 2) / 2))];
+      draw(); e.preventDefault();
+    };
+    svg.addEventListener('pointerdown', e => { drag = true; svg.setPointerCapture(e.pointerId); move(e); });
+    svg.addEventListener('pointermove', move);
+    svg.addEventListener('pointerup', () => { drag = false; });
+    const mrow = h('div', { class: 'fs-row' }, h('span', { text: 'W =' }), cells[0], cells[1], h('span', { text: '/' }), cells[2], cells[3]);
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: what a matrix does to the whole plane' }),
+      h('div', { class: 'fs-hint', text: 'Pick a matrix, or type your own entries (top row, then bottom row). Drag anywhere on the figure to move the input point. Watch the grid, not just the arrow: the grid is the space.' }),
+      buttons(PRESETS.map(p => p[0]), i => { M = PRESETS[i][1].slice(); cells.forEach((c, j) => c.value = String(M[j])); draw(); }, -1),
+      mrow, svg, out);
+    draw();
+  };
+
+  /* 11. collapse: stacked matrices are one matrix, until ReLU */
+  widgets.collapse = function (root) {
+    const W1 = [1, 1, 0, 1], W2 = [2, 0, 1, 1];
+    const mul = (A, B) => [A[0] * B[0] + A[1] * B[2], A[0] * B[1] + A[1] * B[3], A[2] * B[0] + A[3] * B[2], A[2] * B[1] + A[3] * B[3]];
+    const W = mul(W2, W1);
+    const ap = (A, p) => [A[0] * p[0] + A[1] * p[1], A[2] * p[0] + A[3] * p[1]];
+    const relu = p => p.map(v => Math.max(0, v));
+    let P = [1, 1], useRelu = false;
+    const out = h('div', { class: 'fs-out' });
+    const xi = [0, 1].map(i => h('input', { class: 'fs-input fs-num', type: 'number', step: '1', value: String(P[i]), 'aria-label': 'input component ' + (i + 1) }));
+    const tog = h('button', { type: 'button', class: 'fs-btn', 'aria-pressed': 'false' }, 'ReLU after layer 1: off');
+
+    function draw() {
+      const h1 = ap(W1, P), h1r = useRelu ? relu(h1) : h1, h2 = ap(W2, h1r), one = ap(W, P);
+      const same = Math.abs(h2[0] - one[0]) < 1e-9 && Math.abs(h2[1] - one[1]) < 1e-9;
+      out.textContent =
+        `W1 = [ 1  1 ]      W2 = [ 2  0 ]      W2W1 = [ ${num(W[0])}  ${num(W[1])} ]\n` +
+        `     [ 0  1 ]           [ 1  1 ]             [ ${num(W[2])}  ${num(W[3])} ]\n\n` +
+        `input x = (${num(P[0])}, ${num(P[1])})\n` +
+        `----------------------------------------------\n` +
+        `TWO LAYERS\n` +
+        `  W1 x            = (${num(h1[0])}, ${num(h1[1])})\n` +
+        (useRelu ? `  ReLU(W1 x)      = (${num(h1r[0])}, ${num(h1r[1])})\n` : '') +
+        `  W2 ${useRelu ? 'ReLU(W1 x)' : '(W1 x)   '}   = (${num(h2[0])}, ${num(h2[1])})\n\n` +
+        `ONE MATRIX\n` +
+        `  (W2 W1) x       = (${num(one[0])}, ${num(one[1])})\n` +
+        `----------------------------------------------\n` +
+        (same
+          ? 'Identical. Two matrices did the work of one, so the second layer added nothing a single matrix could not do.'
+          : 'Different. One clipped number was enough: no single matrix can reproduce this for every input, because the clipping happens for some inputs and not others.');
+      tog.textContent = 'ReLU after layer 1: ' + (useRelu ? 'on' : 'off');
+      tog.setAttribute('aria-pressed', String(useRelu));
+    }
+    xi.forEach((el, i) => el.addEventListener('input', () => { const v = parseFloat(el.value); if (!isNaN(v)) { P[i] = v; draw(); } }));
+    tog.addEventListener('click', () => { useRelu = !useRelu; draw(); });
+    const setX = p => { P = p.slice(); xi.forEach((el, i) => el.value = String(P[i])); draw(); };
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: do two matrices beat one?' }),
+      h('div', { class: 'fs-hint', text: 'Compare passing a vector through two matrices against passing it through their single product. Then switch ReLU on and try an input that goes negative, such as (-2, 1).' }),
+      h('div', { class: 'fs-row' }, h('span', { text: 'x =' }), xi[0], xi[1]),
+      buttons(['(1, 1)', '(3, 2)', '(-2, 1)', '(-1, -3)'], i => setX([[1, 1], [3, 2], [-2, 1], [-1, -3]][i]), -1),
+      h('div', { class: 'fs-row' }, tog), out);
+    draw();
+  };
+
+  /* 12. layer: one complete h = relu(Wx + b) */
+  widgets.layer = function (root) {
+    let M = [1, 2, 0, 1], P = [3, 1], B = [-4, 0], useRelu = true;
+    const out = h('div', { class: 'fs-out' });
+    const mk = (v, lbl) => h('input', { class: 'fs-input fs-num', type: 'number', step: '1', value: String(v), 'aria-label': lbl });
+    const cells = [0, 1, 2, 3].map(i => mk(M[i], 'matrix entry ' + (i + 1)));
+    const xi = [0, 1].map(i => mk(P[i], 'input ' + (i + 1)));
+    const bi = [0, 1].map(i => mk(B[i], 'bias ' + (i + 1)));
+    const tog = h('button', { type: 'button', class: 'fs-btn', 'aria-pressed': 'true' }, 'ReLU: on');
+
+    function draw() {
+      const wx = [M[0] * P[0] + M[1] * P[1], M[2] * P[0] + M[3] * P[1]];
+      const z = [wx[0] + B[0], wx[1] + B[1]];
+      const hh = useRelu ? z.map(v => Math.max(0, v)) : z.slice();
+      const clipped = useRelu && (z[0] < 0 || z[1] < 0);
+      out.textContent =
+        `step 1   W x       = ( ${num(M[0])}·${num(P[0])} + ${num(M[1])}·${num(P[1])},  ${num(M[2])}·${num(P[0])} + ${num(M[3])}·${num(P[1])} )\n` +
+        `                   = ( ${num(wx[0])}, ${num(wx[1])} )\n\n` +
+        `step 2   W x + b   = ( ${num(wx[0])} + ${num(B[0])},  ${num(wx[1])} + ${num(B[1])} )\n` +
+        `                   = ( ${num(z[0])}, ${num(z[1])} )\n\n` +
+        `step 3   ${useRelu ? 'ReLU(W x + b)' : 'no activation'}\n` +
+        `         h         = ( ${num(hh[0])}, ${num(hh[1])} )\n\n` +
+        (clipped
+          ? 'A negative number was clipped to zero. That clipping is the fold: it is the only part of this layer that is not a stretch or a tilt.'
+          : useRelu
+            ? 'Both numbers were already positive, so ReLU changed nothing for this input. Try an input that makes W x + b go negative, such as x = (1, 1).'
+            : 'Without the activation this layer is a matrix and a shift, so stacking more of them collapses back to one (Step 7).');
+      tog.textContent = 'ReLU: ' + (useRelu ? 'on' : 'off');
+      tog.setAttribute('aria-pressed', String(useRelu));
+    }
+    const bind = (els, arr) => els.forEach((el, i) => el.addEventListener('input', () => { const v = parseFloat(el.value); if (!isNaN(v)) { arr[i] = v; draw(); } }));
+    bind(cells, M); bind(xi, P); bind(bi, B);
+    tog.addEventListener('click', () => { useRelu = !useRelu; draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: one complete layer' }),
+      h('div', { class: 'fs-hint', text: 'Change any number and watch which of the three stages does the work. With x = (3, 1) nothing is clipped; with x = (1, 1) the first coordinate goes negative and ReLU acts.' }),
+      h('div', { class: 'fs-row' }, h('span', { text: 'W =' }), cells[0], cells[1], h('span', { text: '/' }), cells[2], cells[3]),
+      h('div', { class: 'fs-row' }, h('span', { text: 'x =' }), xi[0], xi[1], h('span', { text: '   b =' }), bi[0], bi[1]),
+      h('div', { class: 'fs-row' }, tog), out);
+    draw();
+  };
+
+  /* 13. untangle: XOR becomes separable after one layer */
+  widgets.untangle = function (root) {
+    const PTS = [[[0, 0], 'cat'], [[1, 1], 'cat'], [[0, 1], 'dog'], [[1, 0], 'dog']];
+    const W = [1, 1, 1, 1], B = [0, -1];
+    let useRelu = true;
+    const S = 70, OX = 55, OY = 160, VW = 260, VH = 240;
+    const sx = x => OX + S * x, sy = y => OY - S * y;
+    const mkSvg = lbl => sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': lbl });
+    const s1 = mkSvg('The four points before the layer'), s2 = mkSvg('The four points after the layer');
+    const out = h('div', { class: 'fs-out' });
+    const tog = h('button', { type: 'button', class: 'fs-btn', 'aria-pressed': 'true' }, 'ReLU: on');
+    const fwd = p => {
+      const z = [W[0] * p[0] + W[1] * p[1] + B[0], W[2] * p[0] + W[3] * p[1] + B[1]];
+      return useRelu ? z.map(v => Math.max(0, v)) : z;
+    };
+    function panel(svg, pts, title, line) {
+      svg.replaceChildren();
+      for (let k = -1; k <= 3; k++) {
+        sv('line', { x1: sx(k), y1: sy(-1.2), x2: sx(k), y2: sy(2.2), class: 'grid faint' }, svg);
+        sv('line', { x1: sx(-0.7), y1: sy(k), x2: sx(2.9), y2: sy(k), class: 'grid faint' }, svg);
+      }
+      sv('line', { x1: sx(-0.7), y1: sy(0), x2: sx(2.9), y2: sy(0), class: 'axis' }, svg);
+      sv('line', { x1: sx(0), y1: sy(-1.2), x2: sx(0), y2: sy(2.2), class: 'axis' }, svg);
+      if (line) sv('line', { x1: sx(line[0]), y1: sy(line[1]), x2: sx(line[2]), y2: sy(line[3]), class: 'vb dash', 'stroke-width': 2 }, svg);
+      const seen = {};
+      pts.forEach(([p, cls]) => {
+        const key = num(p[0]) + ',' + num(p[1]);
+        const n = (seen[key] = (seen[key] || 0) + 1);
+        if (cls === 'cat') sv('circle', { cx: sx(p[0]), cy: sy(p[1]), r: 6, class: 'va' }, svg);
+        else sv('rect', { x: sx(p[0]) - 5.5, y: sy(p[1]) - 5.5, width: 11, height: 11, class: 'vb' }, svg);
+        const right = sx(p[0]) > VW * 0.55;
+        sv('text', { x: sx(p[0]) + (right ? -10 : 10), y: sy(p[1]) - 8 + (n - 1) * 12, 'font-size': 10, 'text-anchor': right ? 'end' : 'start', class: n > 1 ? 'm' : '' }, svg)
+          .textContent = cls + ' (' + num(p[0]) + ', ' + num(p[1]) + ')';
+      });
+      sv('text', { x: 8, y: 16, 'font-size': 11, 'font-weight': '700' }, svg).textContent = title;
+    }
+    function draw() {
+      panel(s1, PTS.map(([p, c]) => [p, c]), 'before: no line works', null);
+      const after = PTS.map(([p, c]) => [fwd(p), c]);
+      panel(s2, after, useRelu ? 'after: a line works' : 'after: still no line', useRelu ? [-0.7, -0.6, 2.9, 1.2] : null);
+      out.textContent = PTS.map(([p, c]) => {
+        const z = [W[0] * p[0] + W[1] * p[1] + B[0], W[2] * p[0] + W[3] * p[1] + B[1]];
+        const hh = fwd(p);
+        return `${c.padEnd(4)} (${num(p[0])}, ${num(p[1])})   Wx+b = (${num(z[0])}, ${num(z[1])})   h = (${num(hh[0])}, ${num(hh[1])})`;
+      }).join('\n') + '\n\n' + (useRelu
+        ? 'Both dogs have landed on the same point, and the two cats sit on the opposite side of the dashed line. One more row of weights can now finish the job.'
+        : 'Without ReLU all four points land on one straight line, in the order cat, dog, dog, cat. No line can separate them, and no further matrix will change that.');
+      tog.textContent = 'ReLU: ' + (useRelu ? 'on' : 'off');
+      tog.setAttribute('aria-pressed', String(useRelu));
+    }
+    tog.addEventListener('click', () => { useRelu = !useRelu; draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: the smallest problem one matrix cannot solve' }),
+      h('div', { class: 'fs-hint', text: 'Two cats (circles) and two dogs (squares), arranged so that no straight line separates them. The layer is h = ReLU(Wx + b) with W = [[1, 1], [1, 1]] and b = (0, -1). Switch ReLU off to see the matrix fail on its own.' }),
+      h('div', { class: 'fs-row' }, tog),
+      h('div', { class: 'fs-grid2' }, s1, s2), out);
+    draw();
+  };
+
+  /* 14. rank: a rank-1 matrix flattens the plane */
+  widgets.rank = function (root) {
+    const MATS = [['rank 1: [[1,2],[2,4]]', [1, 2, 2, 4]], ['full rank: [[1,2],[0,1]]', [1, 2, 0, 1]], ['rank 1: [[1,0],[0,0]]', [1, 0, 0, 0]]];
+    let M = MATS[0][1].slice();
+    const S = 30, OX = 180, OY = 150, VW = 420, VH = 270;
+    const sx = x => OX + S * x, sy = y => OY - S * y;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'Where a matrix sends the plane' });
+    const out = h('div', { class: 'fs-out' });
+    const ap = p => [M[0] * p[0] + M[1] * p[1], M[2] * p[0] + M[3] * p[1]];
+    const A = [1, 0], Bp = [3, -1];
+    function draw() {
+      svg.replaceChildren();
+      for (let k = -6; k <= 7; k++) {
+        sv('line', { x1: sx(k), y1: sy(-5), x2: sx(k), y2: sy(4), class: 'grid faint' }, svg);
+        sv('line', { x1: sx(-6), y1: sy(k), x2: sx(7), y2: sy(k), class: 'grid faint' }, svg);
+      }
+      const g = sv('g', {}, svg);
+      for (let k = -7; k <= 8; k++) {
+        const a = ap([k, -7]), b = ap([k, 8]); sv('line', { x1: sx(a[0]), y1: sy(a[1]), x2: sx(b[0]), y2: sy(b[1]), class: 'grid' }, g);
+        const c = ap([-7, k]), d = ap([8, k]); sv('line', { x1: sx(c[0]), y1: sy(c[1]), x2: sx(d[0]), y2: sy(d[1]), class: 'grid' }, g);
+      }
+      sv('line', { x1: sx(-6), y1: sy(0), x2: sx(7), y2: sy(0), class: 'axis' }, svg);
+      sv('line', { x1: sx(0), y1: sy(-5), x2: sx(0), y2: sy(4), class: 'axis' }, svg);
+      const qa = ap(A), qb = ap(Bp);
+      [[A, qa, 'a'], [Bp, qb, 'b']].forEach(([p, q, lbl]) => {
+        sv('circle', { cx: sx(p[0]), cy: sy(p[1]), r: 4, class: 'va' }, svg);
+        sv('text', { x: sx(p[0]) + 7, y: sy(p[1]) - 6, 'font-size': 10 }, svg).textContent = `${lbl} (${num(p[0])}, ${num(p[1])})`;
+        sv('line', { x1: sx(p[0]), y1: sy(p[1]), x2: sx(q[0]), y2: sy(q[1]), class: 'vb dash', 'stroke-width': 1.2 }, svg);
+        sv('circle', { cx: sx(q[0]), cy: sy(q[1]), r: 5, class: 'vb' }, svg);
+      });
+      sv('text', { x: sx(qa[0]) + 8, y: sy(qa[1]) + 14, 'font-size': 10, class: 'tb' }, svg).textContent = `-> (${num(qa[0])}, ${num(qa[1])})`;
+      const det = M[0] * M[3] - M[1] * M[2];
+      const collide = Math.abs(qa[0] - qb[0]) < 1e-9 && Math.abs(qa[1] - qb[1]) < 1e-9;
+      out.textContent =
+        `W = [ ${num(M[0])}  ${num(M[1])} ]      determinant = ${num(det)}      rank = ${Math.abs(det) < 1e-9 ? (M.every(v => v === 0) ? 0 : 1) : 2}\n` +
+        `    [ ${num(M[2])}  ${num(M[3])} ]\n\n` +
+        `a = (${num(A[0])}, ${num(A[1])})   ->   (${num(qa[0])}, ${num(qa[1])})\n` +
+        `b = (${num(Bp[0])}, ${num(Bp[1])})  ->   (${num(qb[0])}, ${num(qb[1])})\n\n` +
+        (collide
+          ? 'Two different inputs, one output. The difference between a and b has been destroyed, and no later layer can recover it. The whole plane now lies on a single line.'
+          : 'Distinct inputs stay distinct. Every direction survives, so nothing downstream has been made impossible.');
+    }
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: what a low-rank matrix throws away' }),
+      h('div', { class: 'fs-hint', text: 'Two input points, a and b, and where each one lands. Switch between a rank-1 matrix and a full-rank one.' }),
+      buttons(MATS.map(m => m[0]), i => { M = MATS[i][1].slice(); draw(); }, 0),
+      svg, out);
+    draw();
+  };
+
+  /* 15. activations: compare activation curves and their slopes */
+  widgets.activations = function (root) {
+    const erf = x => {                       // Abramowitz and Stegun 7.1.26
+      const s = x < 0 ? -1 : 1; x = Math.abs(x);
+      const t = 1 / (1 + 0.3275911 * x);
+      const poly = ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t;
+      return s * (1 - poly * Math.exp(-x * x));
+    };
+    const Phi = z => 0.5 * (1 + erf(z / Math.SQRT2));
+    const FNS = {
+      'sigmoid': z => 1 / (1 + Math.exp(-z)),
+      'tanh': z => Math.tanh(z),
+      'ReLU': z => Math.max(0, z),
+      'leaky ReLU': z => (z >= 0 ? z : 0.01 * z),
+      'GELU': z => z * Phi(z)
+    };
+    const phi = z => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+    const DFNS = {                            // exact derivatives, so the lower panel has no numerical artefacts
+      'sigmoid': z => { const s = 1 / (1 + Math.exp(-z)); return s * (1 - s); },
+      'tanh': z => 1 - Math.tanh(z) ** 2,
+      'ReLU': z => (z > 0 ? 1 : 0),
+      'leaky ReLU': z => (z >= 0 ? 1 : 0.01),
+      'GELU': z => Phi(z) + z * phi(z)
+    };
+    const NAMES = Object.keys(FNS);
+    let name = 'ReLU', probe = 2;
+    const VW = 420, VH = 312, Z = 3;          // input axis runs -Z to Z
+    // upper panel: the function. lower panel: its slope, on the same input axis.
+    // x and y share one scale in the upper panel, so a slope of 1 really looks like 45 degrees.
+    const S = 40, OX = 210, OY = 138;
+    const SY = 52, OY2 = 272;                 // slope 0 sits on OY2
+    const sx = x => OX + S * x;
+    const sy = y => OY - S * Math.max(-1.2, Math.min(3, y));
+    const sm = m => OY2 - SY * Math.max(-0.3, Math.min(1.3, m));
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'Activation function curves and their slopes' });
+    const out = h('div', { class: 'fs-out' });
+    const range = h('input', { type: 'range', class: 'fs-range', min: String(-Z * 10), max: String(Z * 10), step: '1', value: String(probe * 10), 'aria-label': 'probe point z' });
+
+    function draw() {
+      svg.replaceChildren();
+      const L = sx(-Z), R = sx(Z), N = 180;
+      const curve = (g, cls, w, op) => {
+        const pts = [];
+        for (let i = 0; i <= N; i++) { const z = -Z + 2 * Z * i / N; pts.push(`${sx(z)},${g(z)}`); }
+        sv('polyline', { points: pts.join(' '), fill: 'none', style: 'fill:none', class: cls, 'stroke-width': w, opacity: op }, svg);
+      };
+
+      // --- upper panel: the function itself
+      for (let k = -Z; k <= Z; k++) sv('line', { x1: sx(k), y1: sy(3), x2: sx(k), y2: sy(-1.2), class: 'grid faint' }, svg);
+      for (let k = -1; k <= 3; k++) sv('line', { x1: L, y1: sy(k), x2: R, y2: sy(k), class: 'grid faint' }, svg);
+      sv('line', { x1: L, y1: sy(0), x2: R, y2: sy(0), class: 'axis' }, svg);
+      sv('line', { x1: sx(0), y1: sy(3), x2: sx(0), y2: sy(-1.2), class: 'axis' }, svg);
+      NAMES.forEach(n => {
+        if (n === name) return;
+        curve(z => sy(FNS[n](z)), 'va', 1, 0.2);
+      });
+
+      const f = FNS[name], v = f(probe), m = DFNS[name](probe);
+
+      // the tangent: because x and y share a scale here, its steepness on screen IS the slope
+      const w = 1.1;
+      sv('line', { x1: sx(probe - w), y1: sy(v - w * m), x2: sx(probe + w), y2: sy(v + w * m), class: 'va dash', 'stroke-width': 1.6, opacity: 0.9 }, svg);
+      curve(z => sy(f(z)), 'vb', 2.6, 1);
+      sv('line', { x1: sx(probe), y1: sy(v), x2: sx(probe), y2: sm(1.3), class: 'vb dash', 'stroke-width': 1.1, opacity: 0.5 }, svg);
+      sv('circle', { cx: sx(probe), cy: sy(v), r: 4.5, class: 'vb' }, svg);
+      sv('text', { x: 8, y: 15, 'font-size': 11, 'font-weight': '700', class: 'tb' }, svg).textContent = name + '(z)';
+      sv('text', { x: 8, y: 27, 'font-size': 9, class: 'm' }, svg).textContent = 'output, with the tangent at the probe';
+
+      // --- lower panel: the slope at every input, which is the thing that matters
+      sv('rect', { x: L, y: sm(0.08), width: R - L, height: Math.abs(sm(-0.08) - sm(0.08)), class: 'band' }, svg);
+      sv('line', { x1: L, y1: sm(0), x2: R, y2: sm(0), class: 'axis' }, svg);
+      sv('line', { x1: L, y1: sm(1), x2: R, y2: sm(1), class: 'grid faint dash' }, svg);
+      sv('line', { x1: sx(0), y1: sm(1.3), x2: sx(0), y2: sm(-0.3), class: 'axis' }, svg);
+      curve(z => sm(DFNS[name](z)), 'vb', 2.2, 1);
+      sv('circle', { cx: sx(probe), cy: sm(m), r: 4, class: 'vb' }, svg);
+      sv('text', { x: 8, y: sm(1.3) + 2, 'font-size': 11, 'font-weight': '700', class: 'tb' }, svg).textContent = 'slope';
+      sv('text', { x: R + 5, y: sm(1) + 3.5, 'font-size': 9, class: 'm' }, svg).textContent = '1';
+      sv('text', { x: R + 5, y: sm(0) + 3.5, 'font-size': 9, class: 'm' }, svg).textContent = '0';
+      sv('text', { x: L, y: sm(-0.3) + 10, 'font-size': 9, class: 'm' }, svg).textContent = 'inside the shaded band, this layer has stopped learning';
+
+      out.textContent =
+        `${name} at z = ${fmt(probe, 2)}\n` +
+        `  output = ${fmt(v, 4)}\n` +
+        `  slope  = ${fmt(m, 4)}\n\n` +
+        (Math.abs(m) < 0.08
+          ? 'The curve is almost flat here, so the output barely responds to a change in the input. In training this means the layer receives almost no signal telling it how to improve, which is the vanishing gradient problem (Article 3).'
+          : Math.abs(m) > 0.5
+            ? 'The slope is healthy, so a change in the input produces a real change in the output and the training signal passes through undiminished.'
+            : 'The slope is small but not zero, so some signal still gets through. This is why leaky ReLU exists: a dying unit can still climb back.');
+    }
+    range.addEventListener('input', () => { probe = Math.round(+range.value) / 10; draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: how flat does each activation go?' }),
+      h('div', { class: 'fs-hint', text: 'Pick a function and slide the probe along the input axis. The upper panel is the function, with the tangent drawn at the probe. The lower panel is that tangent’s steepness at every input, which is the quantity training depends on: inside the shaded band a layer using this function has effectively stopped learning.' }),
+      buttons(NAMES, i => { name = NAMES[i]; draw(); }, 2),
+      range, svg, out);
+    draw();
   };
 
   /* ---------- Start ---------- */

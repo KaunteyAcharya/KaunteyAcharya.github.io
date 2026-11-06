@@ -1,4 +1,4 @@
-﻿---
+---
 title: "What Are Word Embeddings? Why AI Engineering Needs Vectors"
 date: 2026-11-02
 tags: [AI, maths]
@@ -8,8 +8,8 @@ series: token-by-token
 ---
 
 <div class="fs-series">
-<p><strong>AI from Scratch, Token by Token</strong> Â· Part 1</p>
-<p>Starts from absolute zero. You need school coordinates (x, y), Pythagoras, and what cos Î¸ means. No coding. Boxes marked "Try it" are interactive.</p>
+<p><strong>AI from Scratch, Token by Token</strong><br>Article 1</p>
+<p>Starts from absolute zero. You need school coordinates (x, y), Pythagoras, and what cos θ means. No coding. Boxes marked "Try it" are interactive.</p>
 </div>
 
 This note answers one question, from first principles: how can a computer, which can only add, multiply, and compare numbers, work with words and pictures at all? Answering it also explains how a machine can tell that a cat is more like a dog than like a car, and why the answer has to use vectors (lists of numbers) instead of single numbers. In short, each thing is described by a list of numbers, arranged so that similar things get similar lists, and similarity is then measured by the angle between those lists. Everything below builds that answer one step at a time, and each step uses only what came before it.
@@ -82,7 +82,7 @@ Text and pictures are already inside your computer as numbers. Before inventing 
 Every character gets a number from one agreed worldwide table called **Unicode**. It covers more than 150,000 characters across the world's writing systems: the Latin script (English, German), Cyrillic (Russian), Devanagari (Hindi, Marathi), Arabic, Chinese characters, and many more, plus emoji. In it, `c` is 99, `a` is 97, and `t` is 116. These numbers are then stored as bytes by a rule called **UTF-8**: common English letters take 1 byte each, a Hindi letter takes 3, and an emoji takes 4. So "cat" is stored as the bytes 99, 97, 116, and 99 is exactly the `01100011` you decoded in Step 1.
 
 <div class="fs-widget" data-widget="encode">
-<p class="fs-fallback"><strong>Example:</strong> "cat" is stored as the numbers 99, 97, 116, which are the bytes 01100011 01100001 01110100 (24 bits). "Cat" with a capital C starts with 67 instead of 99. The Hindi word à¤¨à¤®à¤¸à¥à¤¤à¥‡ is 6 Unicode characters and 18 bytes.</p>
+<p class="fs-fallback"><strong>Example:</strong> "cat" is stored as the numbers 99, 97, 116, which are the bytes 01100011 01100001 01110100 (24 bits). "Cat" with a capital C starts with 67 instead of 99. The Hindi word नमस्ते is 6 Unicode characters and 18 bytes.</p>
 </div>
 
 Type a few words and you will notice two things. "cat" and "Cat" are different numbers, though they mean the same animal. And "cat" and "kitten" share almost no numbers, though their meanings are close. These numbers record **which characters you typed**. They know nothing about what the word means.
@@ -91,7 +91,7 @@ Type a few words and you will notice two things. "cat" and "Cat" are different n
 
 ### Pictures
 
-A digital picture is a grid of tiny squares called **pixels**. In a grayscale picture each pixel stores one brightness number, say 0 for white and 1 for black. Read the grid row by row and you get one long list of numbers. A colour picture stores three numbers per pixel (red, green, and blue), so a 224 Ã— 224 colour picture, a size many vision models use, is
+A digital picture is a grid of tiny squares called **pixels**. In a grayscale picture each pixel stores one brightness number, say 0 for white and 1 for black. Read the grid row by row and you get one long list of numbers. A colour picture stores three numbers per pixel (red, green, and blue), so a 224 × 224 colour picture, a size many vision models use, is
 
 $$
 224 \times 224 \times 3 = 150{,}528 \text{ numbers.}
@@ -100,7 +100,7 @@ $$
 So a photo is already a list of numbers. Does that solve the problem? Try this before you decide.
 
 <div class="fs-widget" data-widget="pixels">
-<p class="fs-fallback"><strong>Experiment.</strong> Draw a "plus" sign on a 5 Ã— 5 grid: 9 black pixels, read row by row into a list of 25 numbers. Now move the same plus one pixel to the right. Only 4 of the 9 black squares are still in the same place, even though to your eye it is the same shape.</p>
+<p class="fs-fallback"><strong>Experiment.</strong> Draw a "plus" sign on a 5 × 5 grid: 9 black pixels, read row by row into a list of 25 numbers. Now move the same plus one pixel to the right. Only 4 of the 9 black squares are still in the same place, even though to your eye it is the same shape.</p>
 </div>
 
 The stored numbers say **where the ink is**, not **what the picture shows**. Move a cat one pixel, dim the light, or photograph a different cat, and the numbers change a lot.
@@ -331,14 +331,14 @@ The component formula, which never mentions an angle, secretly contains the angl
 
 | Angle $\varphi$ | $\cos\varphi$ | Dot product | Meaning |
 |---|---|---|---|
-| 0Â° | 1 | largest, $\|\mathbf{a}\|\|\mathbf{b}\|$ | same direction |
-| 90Â° | 0 | 0 | unrelated (perpendicular) |
-| 180Â° | âˆ’1 | most negative | opposite directions |
+| 0° | 1 | largest, $\|\mathbf{a}\|\|\mathbf{b}\|$ | same direction |
+| 90° | 0 | 0 | unrelated (perpendicular) |
+| 180° | −1 | most negative | opposite directions |
 
 Drag the arrows and watch it happen.
 
 <div class="fs-widget" data-widget="angle">
-<p class="fs-fallback"><strong>Worked example.</strong> For a = (2, 3) and b = (4, 1): a Â· b = 11, |a| = âˆš13 â‰ˆ 3.61, |b| = âˆš17 â‰ˆ 4.12, so cos Ï† = 11 / (3.61 Ã— 4.12) â‰ˆ 0.74 and Ï† â‰ˆ 42.3Â°. If b is doubled to (8, 2), the dot product doubles to 22 but cos Ï† stays 0.74.</p>
+<p class="fs-fallback"><strong>Worked example.</strong> For a = (2, 3) and b = (4, 1): a · b = 11, |a| = √13 ≈ 3.61, |b| = √17 ≈ 4.12, so cos φ = 11 / (3.61 × 4.12) ≈ 0.74 and φ ≈ 42.3°. If b is doubled to (8, 2), the dot product doubles to 22 but cos φ stays 0.74.</p>
 </div>
 
 Press "Make b longer". The dot product doubles, but the angle does not move. So the dot product still mixes direction and length, the same problem distance had. One more step removes the length.
@@ -400,7 +400,7 @@ $$
 That answers the question from the top of the note: 0.990 for cat and dog, 0.303 for cat and car. Notice that **the maths knew nothing about cats.** It only multiplied and added. All the meaning came from how the vectors were arranged, and that arrangement came from how words are used.
 
 <div class="fs-widget" data-widget="cosine3d">
-<p class="fs-fallback"><strong>The three pairs.</strong> cos(cat, dog) â‰ˆ 0.990, cos(cat, car) â‰ˆ 0.303, and cos(dog, car) â‰ˆ 0.389. Cat and dog point almost the same way (about 8Â° apart), while car points elsewhere (about 72Â° from cat).</p>
+<p class="fs-fallback"><strong>The three pairs.</strong> cos(cat, dog) ≈ 0.990, cos(cat, car) ≈ 0.303, and cos(dog, car) ≈ 0.389. Cat and dog point almost the same way (about 8° apart), while car points elsewhere (about 72° from cat).</p>
 </div>
 
 The pixel experiment from Step 2 can now be scored the same way. The plus has 9 black pixels and the shifted plus has 8 (one fell off the edge), with 4 in common. With 1 for black and 0 for white, the dot product counts the shared black pixels, so the cosine is $4 / (\sqrt{9}\sqrt{8}) \approx 0.47$. To your eye the two pictures are the same shape; to raw pixels they are less than half alike.
@@ -437,7 +437,7 @@ $$
 \mathbf{a} = (1, 1), \qquad \mathbf{b} = (10, 10), \qquad \mathbf{c} = (5, 0).
 $$
 
-$\mathbf{a}$ and $\mathbf{b}$ point exactly the same way, and $\mathbf{c}$ points 45Â° away. The dot products are $\mathbf{a} \cdot \mathbf{b} = 20$ and $\mathbf{a} \cdot \mathbf{c} = 5$, so far so good. But compare a fourth vector $\mathbf{d} = (50, 0)$, which points the same way as $\mathbf{c}$: $\mathbf{a} \cdot \mathbf{d} = 50$, more than double the score of the perfect match $\mathbf{b}$. A long document, or a very common word, can beat a better match just by being long.
+$\mathbf{a}$ and $\mathbf{b}$ point exactly the same way, and $\mathbf{c}$ points 45° away. The dot products are $\mathbf{a} \cdot \mathbf{b} = 20$ and $\mathbf{a} \cdot \mathbf{c} = 5$, so far so good. But compare a fourth vector $\mathbf{d} = (50, 0)$, which points the same way as $\mathbf{c}$: $\mathbf{a} \cdot \mathbf{d} = 50$, more than double the score of the perfect match $\mathbf{b}$. A long document, or a very common word, can beat a better match just by being long.
 
 The fix is to normalise.
 
@@ -481,7 +481,7 @@ $$
 The figure below generates random vectors in your browser and measures them.
 
 <div class="fs-widget" data-widget="highdim">
-<p class="fs-fallback"><strong>Random vectors.</strong> For 600 pairs of random vectors with 768 numbers each, the cosine similarities cluster tightly around 0 with a spread of about 0.036 (theory: 1/âˆš768 â‰ˆ 0.036), and practically none reach 0.3. In 2 dimensions, the same experiment gives cosines spread across the whole range from âˆ’1 to 1.</p>
+<p class="fs-fallback"><strong>Random vectors.</strong> For 600 pairs of random vectors with 768 numbers each, the cosine similarities cluster tightly around 0 with a spread of about 0.036 (theory: 1/√768 ≈ 0.036), and practically none reach 0.3. In 2 dimensions, the same experiment gives cosines spread across the whole range from −1 to 1.</p>
 </div>
 
 Two practical lessons follow. First, in 1,000 dimensions a cosine of 0.3 can be a strong signal, because chance alone almost never produces it; in 2D, 0.3 would mean nothing. Second, there is no universal "relevant" score. What counts as high depends on the space and the model.
@@ -614,93 +614,26 @@ It does not say that similar things always get nearly identical vectors, that ev
 - Cosine similarity, $\mathbf{a} \cdot \mathbf{b} / (\|\mathbf{a}\|\|\mathbf{b}\|)$, compares directions and ignores length. For the toy vectors here, cat and dog score 0.990 and cat and car score 0.303. Normalising first makes it a single dot product.
 - In 768 dimensions, random vectors have cosines of about $0 \pm 0.036$, so scores must be judged against the space they come from, never against a universal cut-off.
 
-## Test yourself
-
-Try each one on paper before opening the answer.
-
-**1.** Why is "cat = 17, dog = 9402" a bad way to feed words to a model?
-
-<details>
-<summary>Answer</summary>
-
-The model would treat the numbers as amounts, so it would see cat as close to anything numbered 16 or 18 and far from dog. That closeness comes from the arbitrary numbering, not from meaning. IDs are fine as labels, not as features.
-
-</details>
-
-**2.** Find the cosine similarity of (1, 0) and (0, 1), and of (1, 2) and (2, 4).
-
-<details>
-<summary>Answer</summary>
-
-For (1, 0) and (0, 1): the dot product is 0, so the cosine is 0 (perpendicular). For (1, 2) and (2, 4): the dot product is 2 + 8 = 10, the lengths are $\sqrt{5}$ and $\sqrt{20}$, and $10 / \sqrt{100} = 1$. They point the same way; the second is just twice as long.
-
-</details>
-
-**3.** Two vectors have a dot product of 12 and lengths 3 and 5. What is the angle between them?
-
-<details>
-<summary>Answer</summary>
-
-$\cos\varphi = 12 / (3 \times 5) = 0.8$, so $\varphi = \cos^{-1}(0.8) \approx 36.9^\circ$.
-
-</details>
-
-**4.** Why do "the dog chased the cat" and "the cat chased the dog" get the same vector when you average word vectors?
-
-<details>
-<summary>Answer</summary>
-
-Both sentences contain exactly the same words, and adding numbers gives the same total in any order. Averaging throws away word order, which is why modern models build contextual vectors instead.
-
-</details>
-
-**5.** A teammate embeds documents with model A and queries with model B. Both give 768 numbers, and the top match has a cosine of 0.9. Should you trust it?
-
-<details>
-<summary>Answer</summary>
-
-No. The two models learned their coordinate systems independently, so comparing their vectors means nothing. Re-embed the documents with the same model as the queries.
-
-</details>
-
-**6.** Why can a cosine of 0.3 be strong evidence of similarity in 1,024 dimensions but weak evidence in 2?
-
-<details>
-<summary>Answer</summary>
-
-Random vectors in $d$ dimensions have a cosine of about $0 \pm 1/\sqrt{d}$. In 1,024 dimensions that spread is about 0.03, so 0.3 is roughly ten times larger than chance would produce. In 2 dimensions, random pairs reach 0.3 or more very often.
-
-</details>
-
-**7.** In the count table, kitten is closer to scooter than to cat by distance. Why, and what fixes it?
-
-<details>
-<summary>Answer</summary>
-
-Kitten and scooter are both rare words, so both are short arrows near the origin, and short arrows are close to each other whatever their direction. Cosine similarity (or normalising first) compares only direction: kitten and cat score 1, kitten and scooter score 0.
-
-</details>
-
 ## Next in the series
 
-We now have vectors that capture meaning. But a model also has to *do* something with them: mix them, compress them, and turn them into new vectors that answer a question. The tool for that is the **matrix**, a machine that turns one vector into another. Part 2 shows why a matrix is best understood as a set of learned measurements, and why every layer of every neural network is, at its core, a matrix multiplied by a vector.
+We now have vectors that capture meaning. But a model also has to *do* something with them: mix them, compress them, and turn them into new vectors that answer a question. The tool for that is the **matrix**, a machine that turns one vector into another. [Article 2](notes/neural-network-layer-explained/) shows why a matrix is best understood as a set of learned measurements, and why every layer of every neural network is a matrix multiplied by a vector, a bias added, and a fold applied.
 
-Part 2 will also answer the question this note left open: where do the embedding numbers come from? A model's whole vocabulary of embeddings is stored as one matrix, with one row per token, and Part 2 will show, in plain terms, how a guessing game over text nudges the numbers in that matrix until similar words end up with similar rows. The full mathematics of that learning (probability, loss, and gradients) follows in the parts after it, each from first principles, and word2vec's training will get a dedicated note once those tools are in place.
+Article 2 also answers half of the question this note left open: where do the embedding numbers live? A model's whole vocabulary of embeddings is stored as one matrix, with one row per token, and looking a word up turns out to be a matrix multiplication in disguise. The other half, where the numbers in that matrix actually come from, needs gradients and loss, and those are built from first principles in Article 3. Word2vec's training will get a dedicated note once those tools are in place.
 
 ## Sources and further reading
 
 **Papers and books cited in this note**
 
 - The Unicode Consortium, [The Unicode Standard](https://www.unicode.org/standard/standard.html): the character numbering used here.
-- Z. S. Harris (1954), [Distributional Structure](https://doi.org/10.1080/00437956.1954.11659520), *Word* 10(2â€“3): the distributional hypothesis.
+- Z. S. Harris (1954), [Distributional Structure](https://doi.org/10.1080/00437956.1954.11659520), *Word* 10(2–3): the distributional hypothesis.
 - L. Wittgenstein (1953), *Philosophical Investigations*: the view of meaning as use.
-- J. R. Firth (1957), "A synopsis of linguistic theory, 1930â€“1955", in *Studies in Linguistic Analysis*: the "company it keeps" idea behind word embeddings.
+- J. R. Firth (1957), "A synopsis of linguistic theory, 1930–1955", in *Studies in Linguistic Analysis*: the "company it keeps" idea behind word embeddings.
 - G. E. Hinton, J. L. McClelland, and D. E. Rumelhart (1986), "Distributed representations", in *Parallel Distributed Processing*, Vol. 1, MIT Press.
 - J. R. Searle (1980), [Minds, brains, and programs](https://doi.org/10.1017/S0140525X00005756), *Behavioral and Brain Sciences* 3(3): the Chinese Room argument.
 - R. Quian Quiroga, L. Reddy, G. Kreiman, C. Koch, and I. Fried (2005), [Invariant visual representation by single neurons in the human brain](https://doi.org/10.1038/nature03687), *Nature* 435.
 - T. Mikolov, K. Chen, G. Corrado, and J. Dean (2013), [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781): word2vec.
 - T. Mikolov, I. Sutskever, K. Chen, G. Corrado, and J. Dean (2013), [Distributed Representations of Words and Phrases and their Compositionality](https://arxiv.org/abs/1310.4546): the improved word2vec training used in practice.
-- T. Mikolov, W. Yih, and G. Zweig (2013), [Linguistic Regularities in Continuous Space Word Representations](https://aclanthology.org/N13-1090/): the king âˆ’ man + woman â‰ˆ queen result.
+- T. Mikolov, W. Yih, and G. Zweig (2013), [Linguistic Regularities in Continuous Space Word Representations](https://aclanthology.org/N13-1090/): the king − man + woman ≈ queen result.
 - J. Pennington, R. Socher, and C. Manning (2014), [GloVe: Global Vectors for Word Representation](https://aclanthology.org/D14-1162/): word vectors built from co-occurrence counts.
 - A. M. J. Schakel and B. J. Wilson (2015), [Measuring Word Significance using Distributed Representations of Words](https://arxiv.org/abs/1508.02297): vector length and word significance.
 - A. Vaswani and colleagues (2017), [Attention Is All You Need](https://arxiv.org/abs/1706.03762): the transformer.

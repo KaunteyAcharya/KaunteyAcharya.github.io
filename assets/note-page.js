@@ -58,6 +58,61 @@
 })();
 
 
+/* A link to another note opens in a new tab, so a reader following a cross-reference
+   mid-article keeps their place. Links within this page still scroll normally. */
+(function () {
+  const body = document.getElementById('postBody');
+  if (!body) return;
+  const here = location.pathname.replace(/\/+$/, '');
+  body.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href');
+    if (!href || /^(https?:|mailto:|#)/.test(href)) return;   // external links already open in a new tab
+    let url;
+    try { url = new URL(a.href); } catch (e) { return; }
+    if (url.origin !== location.origin) return;
+    if (url.pathname.replace(/\/+$/, '') === here) return;     // same page, just scroll
+    if (!/\/notes\//.test(url.pathname)) return;               // only note-to-note links
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+})();
+
+/* Arriving at #step-6 from another tab: make the target obvious for a moment */
+(function () {
+  const flash = () => {
+    const id = location.hash.slice(1);
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('target-flash');
+    void el.offsetWidth;
+    el.classList.add('target-flash');
+  };
+  window.addEventListener('hashchange', flash);
+  if (location.hash) setTimeout(flash, 60);
+})();
+
+/* Contents rail: mark the section currently on screen, so the bars say where you are */
+(function () {
+  const rail = document.querySelector('.note-rail');
+  if (!rail) return;
+  const links = [].slice.call(rail.querySelectorAll('a.rl'));
+  const targets = links.map(a => document.getElementById(a.getAttribute('href').split('#')[1] || ''));
+  if (targets.some(t => !t)) return;
+  let queued = false;
+  const mark = () => {
+    queued = false;
+    let i = 0;
+    targets.forEach((t, k) => { if (t.getBoundingClientRect().top <= 120) i = k; });
+    links.forEach((a, k) => a.classList.toggle('here', k === i));
+  };
+  addEventListener('scroll', () => {
+    if (!queued) { queued = true; requestAnimationFrame(mark); }
+  }, { passive: true });
+  addEventListener('resize', mark, { passive: true });
+  mark();
+})();
+
 /* Interactive figures in the "AI from Scratch" notes: load their script only on pages that have them */
 (function () {
   if (!document.querySelector('.fs-widget')) return;

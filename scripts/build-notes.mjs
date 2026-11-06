@@ -67,12 +67,61 @@ function parseNote(md, slug) {
 }
 
 // Markdown to HTML, keeping LaTeX intact for KaTeX (same approach as assets/notes.js)
-function render(md) {
+// A note page carries <base href="../../">, against which a bare "#step-6" resolves to
+// the site root rather than this page. Every in-page link therefore needs the page's
+// own path in front of the hash.
+function render(md, slug) {
+  const self = slug ? `notes/${slug}/` : '';
   const stash = [];
   const safe = md.replace(/(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|(?<![\\$])\$(?!\s)[^$\n]+?\$)/g,
     m => { stash.push(m); return '@@MATH' + (stash.length - 1) + '@@'; });
   let html = marked.parse(safe);
   html = html.replace(/@@MATH(\d+)@@/g, (_, i) => stash[+i].replace(/&/g, '&amp;').replace(/</g, '&lt;'));
+
+  // Stable anchors on headings, so one step of a note can be linked directly.
+  // "Step 6: ..." becomes id="step-6", which survives the heading being reworded.
+  const used = new Set();
+  const steps = new Set();
+  const outline = [];
+  html = html.replace(/<(h[23])>([\s\S]*?)<\/\1>/g, (m, tag, inner) => {
+    const text = inner.replace(/<[^>]+>/g, '')
+      .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(+d))
+      .replace(/&[a-z]+;/gi, '')
+      .trim();
+    const step = text.match(/^Step\s+(\d+)\b/i);
+    let id = step ? 'step-' + step[1]
+      : text.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').slice(0, 50).replace(/-+$/, '');
+    if (!id) return m;
+    let n = 2; const base = id;
+    while (used.has(id)) id = base + '-' + n++;
+    used.add(id);
+    if (step) steps.add(step[1]);
+    outline.push({ tag, id, text });
+    return `<${tag} id="${id}">${inner}<a class="hanchor" href="${self}#${id}" aria-label="Link to this section">#</a></${tag}>`;
+  });
+
+  // A bare "Step 7" in the text jumps to that step of this note. Existing links,
+  // code and headings are protected, so an explicit cross-article link always wins.
+  if (steps.size) {
+    const keep = [];
+    const hide = s => s.replace(/<a\b[\s\S]*?<\/a>|<code>[\s\S]*?<\/code>|<pre>[\s\S]*?<\/pre>|<h[1-6]\b[\s\S]*?<\/h[1-6]>/g,
+      m => { keep.push(m); return '@@KEEP' + (keep.length - 1) + '@@'; });
+    html = hide(html)
+      .replace(/\bStep (\d+)\b/g, (m, n) => steps.has(n) ? `<a class="steplink" href="${self}#step-${n}">${m}</a>` : m)
+      .replace(/@@KEEP(\d+)@@/g, (_, i) => keep[+i]);
+  }
+
+  // Contents for long notes, so a reader can jump straight to a step and come back.
+  // Built from the same ids as the heading anchors above, and placed before the first h2.
+  // Wide screens show it as a rail of bars pinned to the left margin, which opens on
+  // hover; narrow ones get the same links as a plain list in the flow.
+  if (outline.filter(o => o.tag === 'h2').length >= 6) {
+    const link = o => `<a class="rl rl${o.tag[1]}" href="${self}#${o.id}"><i></i><span>${esc(o.text)}</span></a>`;
+    const rail = `<nav class="note-rail" aria-label="Contents"><p class="note-rail-head">Contents</p>`
+      + outline.map(link).join('') + `</nav>\n`;
+    html = html.replace(/<h2\b/, rail + '<h2');
+  }
+
   html = html.replace(/<a href="(https?:[^"]+)"/g, '<a href="$1" target="_blank" rel="noopener noreferrer"');
   html = html.replace(/<img src="([^"]+)" alt="([^"]*)"([^>]*)>/g,
     '<a href="$1" target="_blank" rel="noopener" title="Open full size"><img src="$1" alt="$2"$3 loading="lazy"></a>');
@@ -120,7 +169,7 @@ const bottom = shell.slice(shell.indexOf('</main>') + 7)
 notes.forEach((n, i) => {
   const url = `${SITE}/notes/${n.slug}/`;
   const img = `${SITE}/og/${n.slug}.png`;
-  const { html, math } = render(n.body);
+  const { html, math } = render(n.body, n.slug);
   const older = notes[i + 1], newer = notes[i - 1];
   const related = relatedFor(n);
   const ld = {
@@ -223,7 +272,7 @@ ${notes.map(n => `  <item>
     <pubDate>${rfc822(n.date)}</pubDate>
     <description>${esc(n.summary)}</description>
 ${n.tags.map(t => `    <category>${esc(t)}</category>`).join('\n')}
-    <content:encoded>${cdata(absolute(render(n.body).html))}</content:encoded>
+    <content:encoded>${cdata(absolute(render(n.body, n.slug).html))}</content:encoded>
   </item>`).join('\n')}
 </channel>
 </rss>

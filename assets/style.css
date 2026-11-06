@@ -567,3 +567,73 @@ html { scrollbar-color: var(--line) transparent; }
 }
 .filter-bar .filter-series { border-style: dashed; }
 .filter-bar .filter-series[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); border-style: dashed; }
+
+/* Deep links into a note: a quiet # beside each heading, and a step reference in the text */
+.prose h2, .prose h3 { scroll-margin-top: 4.5rem; position: relative; }
+.prose .hanchor {
+  margin-left: .4rem; font-weight: 400; text-decoration: none; color: var(--muted);
+  opacity: 0; transition: opacity .12s ease;
+}
+.prose h2:hover .hanchor, .prose h3:hover .hanchor,
+.prose .hanchor:focus { opacity: 1; }
+.prose .hanchor:hover { color: var(--text); }
+@media (hover: none) { .prose .hanchor { opacity: .35; } }
+
+.prose a.steplink { text-decoration-style: dotted; text-underline-offset: 2px; }
+
+/* Contents for a long note. Narrow screens: a plain list where it sits in the flow.
+   Wide screens: a rail of bars pinned to the left margin, opening on hover. */
+.prose .note-rail {
+  margin: 2em 0; padding: .65rem .9rem; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--surface); max-height: 16rem; overflow: auto;
+}
+.prose .note-rail-head { font-weight: 600; font-size: .9rem; margin: 0 0 .45rem; column-span: all; }
+@media (min-width: 560px) { .prose .note-rail { columns: 2; column-gap: 1.8rem; } }
+.prose .note-rail a.rl {
+  display: flex; align-items: center; gap: .55rem; padding: .14rem 0;
+  font-size: .85rem; line-height: 1.35; color: var(--muted); text-decoration: none;
+  break-inside: avoid;
+}
+.prose .note-rail a.rl2 { color: var(--text); }
+.prose .note-rail a.rl > i { flex: none; height: 2px; border-radius: 2px; background: currentColor; opacity: .45; }
+.prose .note-rail a.rl2 > i { width: 18px; }
+.prose .note-rail a.rl3 > i { width: 10px; margin-left: 8px; }
+.prose .note-rail a.rl:hover, .prose .note-rail a.rl:focus-visible { color: var(--accent); }
+.prose .note-rail a.rl:hover > i, .prose .note-rail a.rl.here > i { opacity: 1; }
+.prose .note-rail a.rl.here { color: var(--accent); }
+.prose .note-rail a.rl.here > i { height: 3px; }
+
+@media (min-width: 1280px) {
+  .prose .note-rail {
+    /* Anchored by its right edge, just clear of the text column, so opening only ever
+       grows the box leftwards. If it moved or narrowed on that edge the pointer would
+       fall outside the moment it opened, and it would flicker open and shut. */
+    position: fixed; top: 50%; transform: translateY(-50%); z-index: 5;
+    right: calc(50% + 21rem + 1rem);
+    margin: 0; width: 3.6rem; padding: .5rem .4rem;
+    max-height: 86vh; overflow: hidden auto; scrollbar-width: none;
+    columns: 1; background: none; border: 1px solid transparent; border-radius: 8px;
+    transition: width .12s ease, background-color .12s ease, border-color .12s ease;
+  }
+  .prose .note-rail::-webkit-scrollbar { display: none; }
+  .prose .note-rail-head, .prose .note-rail a.rl > span { display: none; }
+  .prose .note-rail:hover, .prose .note-rail:focus-within {
+    /* opens towards the window edge, never over the column of text */
+    width: min(21rem, calc(50% - 21rem - 2.5rem)); padding: .75rem .85rem;
+    /* --surface is translucent, so layer it over the page colour: a popover must be opaque */
+    background: linear-gradient(var(--surface), var(--surface)), var(--bg);
+    border-color: var(--line); box-shadow: 0 10px 30px rgb(0 0 0 / .25);
+  }
+  .prose .note-rail:hover .note-rail-head,
+  .prose .note-rail:focus-within .note-rail-head { display: block; }
+  .prose .note-rail:hover a.rl > span,
+  .prose .note-rail:focus-within a.rl > span {
+    display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+@media (prefers-reduced-motion: reduce) { .prose .note-rail { transition: none; } }
+
+/* Landing on a linked step from another tab */
+@keyframes ka-target-flash { from { background: var(--surface); } to { background: transparent; } }
+.prose .target-flash { animation: ka-target-flash 1.8s ease-out; border-radius: 3px; }
+@media (prefers-reduced-motion: reduce) { .prose .target-flash { animation: none; } }
