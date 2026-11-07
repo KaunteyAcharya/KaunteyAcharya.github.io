@@ -1,5 +1,5 @@
 ---
-title: Building TickerBrief, an equity research agent with n8n, Python, and a local LLM
+title: Building TickerBrief, an automated equity research pipeline with n8n, Python, and a local LLM
 date: 2026-10-01
 updated: 2026-10-30
 tags: [AI, projects]

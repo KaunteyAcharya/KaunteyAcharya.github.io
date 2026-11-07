@@ -105,16 +105,25 @@
     },
     {
       "@type": "SoftwareSourceCode",
-      "name": "Model Monitoring + Drift Alert Agent",
-      "description": "A local MLOps stack that watches a deployed model. An n8n workflow scores new traffic, logs predictions to Postgres, and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.",
-      "codeRepository": "https://github.com/KaunteyAcharya/ML-model-drift-alert-agent",
+      "name": "Aditi: Hindi + English Real Estate Voice Agent",
+      "description": "A real-time Hindi and English voice agent for a fictional Ahmedabad real estate agency, built with Pipecat. The LLM chooses among ten tools to search listings, calculate home-loan EMIs, and book, move, or cancel site visits, then texts the caller a follow-up SMS. Callers can interrupt mid-sentence or switch language mid-call, and it runs on free tiers with model and voice fallbacks.",
+      "codeRepository": "https://github.com/KaunteyAcharya/voice-ai-agent",
       "author": {
         "@id": "https://kaunteyacharya.com/#person"
       }
     },
     {
       "@type": "SoftwareSourceCode",
-      "name": "ArXiv Research Analysis Agent",
+      "name": "Model Monitoring + Drift Alert System",
+      "description": "A local MLOps stack that watches a deployed model. An n8n workflow scores new traffic, logs predictions to Postgres, and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.",
+      "codeRepository": "https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor",
+      "author": {
+        "@id": "https://kaunteyacharya.com/#person"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "ArXiv Research Analysis Workflow",
       "description": "Monitors arXiv every morning (gr-qc and q-fin by default), filters new papers by keyword, and sends a Telegram brief with a yes/no prompt. On “yes” it downloads the PDF, has a local LLM walk through the paper from first principles, and returns a Markdown report.",
       "codeRepository": "https://github.com/KaunteyAcharya/n8n-arxiv-research-automation",
       "author": {
@@ -123,9 +132,9 @@
     },
     {
       "@type": "SoftwareSourceCode",
-      "name": "Local RAG Document Q&A Agent",
+      "name": "Local RAG Document Q&A Assistant",
       "description": "A fully local retrieval-augmented generation pipeline. Upload a PDF, TXT, DOCX, or MD file; it is chunked, embedded with nomic-embed-text, and stored in ChromaDB, and questions are answered by llama3.2 under a strict answer-only-from-context prompt. No cloud APIs, and no data leaves the machine.",
-      "codeRepository": "https://github.com/KaunteyAcharya/RAG-doc-qa-agent",
+      "codeRepository": "https://github.com/KaunteyAcharya/RAG-doc-qa-assistant",
       "author": {
         "@id": "https://kaunteyacharya.com/#person"
       }
@@ -396,7 +405,7 @@
     <div class="section-body">
       <p>I am an AI Automation Engineer and Analyst at Innodata Inc., and I also work as an AI strategist and
         consultant. I help identify where AI can create practical leverage, translate business problems into AI
-        solutions, and build working prototypes for real workflows: agentic workflows, RAG systems, research agents,
+        solutions, and build working prototypes for real workflows: AI agents, LLM workflows, RAG systems, research assistants,
         API automations, and human-in-the-loop systems using n8n, Python, LLMs, and local AI.</p>
       <p>Evaluation is a big part of my work. I test LLM behaviour, retrieval quality, workflow reliability, and
         automation performance to understand where and why AI systems succeed or fail. I bring the same quantitative
@@ -460,6 +469,14 @@
           <div class="row-links"><a href="ai-stack-advisor/">Try it live →</a><a href="https://github.com/KaunteyAcharya/ai-stack-advisor" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="notes/ai-stack-advisor/">Note →</a><a href="ai-stack-advisor/about.html">How it works →</a></div>
         </li>
         <li class="row">
+          <h3><a href="https://github.com/KaunteyAcharya/voice-ai-agent" target="_blank" rel="noopener noreferrer">Aditi: Hindi + English Real Estate Voice Agent</a></h3>
+          <p>A real-time voice agent for a fictional Ahmedabad real estate agency. The LLM decides which of ten tools to use: it searches
+            listings, works out home-loan EMIs, books, moves, or cancels site visits, and texts the caller a follow-up SMS. Callers can
+            interrupt mid-sentence or switch between Hindi and English mid-call, and it runs on free tiers with backup models and voices.</p>
+          <ul class="tags"><li>Pipecat</li><li>Voice AI</li><li>Tool calling</li><li>Groq</li><li>WebRTC</li><li>SQLite</li></ul>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/voice-ai-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="notes/voice-ai-agent/">Note →</a></div>
+        </li>
+        <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/tickerbrief" target="_blank" rel="noopener noreferrer">TickerBrief: Automated Equity Research Reports</a></h3>
           <p>Type a ticker and get a full equity research report as an interactive web page and a PDF. An n8n workflow pulls prices,
             fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technical indicators, and sentiment; and a
@@ -468,15 +485,15 @@
           <div class="row-links"><a href="https://github.com/KaunteyAcharya/tickerbrief" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/tickerbrief#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/tickerbrief/">Note →</a></div>
         </li>
         <li class="row">
-          <h3><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent" target="_blank" rel="noopener noreferrer">Model Monitoring + Drift Alert Agent</a></h3>
+          <h3><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor" target="_blank" rel="noopener noreferrer">Model Monitoring + Drift Alert System</a></h3>
           <p>A local MLOps stack that watches a deployed model. An n8n workflow scores new traffic, logs predictions to Postgres,
             and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains
             the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.</p>
           <ul class="tags"><li>MLOps</li><li>n8n</li><li>Evidently AI</li><li>Ollama</li><li>Postgres</li><li>Grafana</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/ml-drift-alert-agent/">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/ml-drift-alert-agent/">Note →</a></div>
         </li>
         <li class="row">
-          <h3><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">ArXiv Research Analysis Agent</a></h3>
+          <h3><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">ArXiv Research Analysis Workflow</a></h3>
           <p>Monitors arXiv every morning (gr-qc and q-fin by default), filters new papers by keyword, and sends a
             Telegram brief with a yes/no prompt. On “yes” it downloads the PDF, has a local LLM walk through the
             paper from first principles, and returns a Markdown report.</p>
@@ -484,12 +501,12 @@
           <div class="row-links"><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/n8n-arxiv-research-automation#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/automating-arxiv/">Note →</a></div>
         </li>
         <li class="row">
-          <h3><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent" target="_blank" rel="noopener noreferrer">Local RAG Document Q&amp;A Agent</a></h3>
+          <h3><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-assistant" target="_blank" rel="noopener noreferrer">Local RAG Document Q&amp;A Assistant</a></h3>
           <p>A fully local retrieval-augmented generation pipeline. Upload a PDF, TXT, DOCX, or MD file; it is chunked,
             embedded with nomic-embed-text, and stored in ChromaDB, and questions are answered by llama3.2 under a strict
             answer-only-from-context prompt. No cloud APIs, and no data leaves the machine.</p>
           <ul class="tags"><li>RAG</li><li>n8n</li><li>Ollama</li><li>ChromaDB</li><li>Docker</li></ul>
-          <div class="row-links"><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-agent#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/local-rag-agent/">Note →</a></div>
+          <div class="row-links"><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-assistant" target="_blank" rel="noopener noreferrer">GitHub →</a><a href="https://github.com/KaunteyAcharya/RAG-doc-qa-assistant#readme" target="_blank" rel="noopener noreferrer">Live demo →</a><a href="notes/local-rag-agent/">Note →</a></div>
         </li>
         <li class="row">
           <h3><a href="https://github.com/KaunteyAcharya/yfinance-banking-stock-analysis" target="_blank" rel="noopener noreferrer">Banking &amp; Financial Stock Analysis</a></h3>
@@ -534,22 +551,22 @@
           <p class="proof">See: <a href="ai-stack-advisor/">AI Stack Advisor</a></p>
         </li>
         <li class="row">
-          <h3>Agentic workflows and automation</h3>
+          <h3>AI agents and workflow automation</h3>
           <p>n8n and Python workflows that connect your tools and APIs, use an LLM where it helps, and keep a human approval
             step where it matters.</p>
-          <p class="proof">See: <a href="notes/tickerbrief/">TickerBrief</a>, <a href="notes/automating-arxiv/">arXiv research agent</a></p>
+          <p class="proof">See: <a href="notes/tickerbrief/">TickerBrief</a>, <a href="notes/automating-arxiv/">arXiv research workflow</a></p>
         </li>
         <li class="row">
           <h3>RAG and document Q&amp;A</h3>
           <p>Assistants that answer from your own documents and say so when the answer is not there, including fully local
             setups where no data leaves your machines.</p>
-          <p class="proof">See: <a href="notes/local-rag-agent/">Local RAG agent</a></p>
+          <p class="proof">See: <a href="notes/local-rag-agent/">Local RAG assistant</a></p>
         </li>
         <li class="row">
           <h3>LLM evaluation and model monitoring</h3>
           <p>Testing LLM behaviour, retrieval quality, and workflow reliability before launch, and monitoring models after it,
             so problems show up before your users notice them.</p>
-          <p class="proof">See: <a href="notes/ml-drift-alert-agent/">Drift alert agent</a></p>
+          <p class="proof">See: <a href="notes/ml-drift-alert-agent/">Model drift monitor</a>, <a href="notes/voice-ai-agent/">Voice AI agent</a></p>
         </li>
       </ol>
       <h3 class="steps-h">How it works</h3>

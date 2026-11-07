@@ -1,5 +1,5 @@
 ---
-title: Building a model drift alert agent with Evidently, n8n, and a local LLM
+title: Building a model drift monitor with Evidently, n8n, and a local LLM
 date: 2026-09-29
 updated: 2026-10-30
 tags: [AI, projects]
@@ -7,7 +7,7 @@ summary: A local MLOps stack that notices when a model starts going wrong and ex
 related: [local-rag-agent, tickerbrief, ai-benchmarks]
 ---
 
-A machine learning model can look great on the day it ships and then quietly get worse. The data coming in slowly changes, and nobody notices until the predictions are already off. I wanted to see what it takes to catch that early, so I built a [Model Monitoring + Drift Alert Agent](https://github.com/KaunteyAcharya/ML-model-drift-alert-agent). There is a short video demo in the [README](https://github.com/KaunteyAcharya/ML-model-drift-alert-agent#readme).
+A machine learning model can look great on the day it ships and then quietly get worse. The data coming in slowly changes, and nobody notices until the predictions are already off. I wanted to see what it takes to catch that early, so I built a [Model Monitoring + Drift Alert System](https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor). There is a short video demo in the [README](https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor#readme).
 
 In short: every 15 minutes it scores a batch of traffic, measures how far the data, the predictions, and the accuracy have moved from a frozen baseline, and if a rule fires, a local LLM writes a plain-English guess at the cause and posts it to Slack. The main lesson from testing it: **drift and degradation are different signals**. One scenario moved about 90% of the features and the model stayed accurate; another moved only a quarter of them and accuracy fell by 15 points.
 
@@ -101,4 +101,4 @@ Everything runs on my machine, and nothing leaves it except the Slack message.
 - The LLM's explanations are not yet scored automatically against the stored ground truth, which would make it possible to compare prompts and models.
 - On a CPU, Llama 3.1 8B can take 30 to 90 seconds per explanation. A smaller model such as `qwen3:4b` is faster.
 
-The full design, metrics, and setup steps are in the [repository's architecture document](https://github.com/KaunteyAcharya/ML-model-drift-alert-agent/blob/main/docs/ARCHITECTURE.md).
+The full design, metrics, and setup steps are in the [repository's architecture document](https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor/blob/main/docs/ARCHITECTURE.md).

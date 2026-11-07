@@ -1,13 +1,13 @@
 ---
-title: Building a fully local RAG agent with n8n, Ollama, and ChromaDB
+title: Building a fully local RAG document assistant with n8n, Ollama, and ChromaDB
 date: 2026-09-22
 updated: 2026-10-30
 tags: [AI, projects]
-summary: A document Q&A agent that runs entirely on my machine. How it splits, embeds, and retrieves text, the prompt that stops a small model from guessing, and what would change with a cloud model, different chunk sizes, or conversation memory.
+summary: A document Q&A assistant that runs entirely on my machine. How it splits, embeds, and retrieves text, the prompt that stops a small model from guessing, and what would change with a cloud model, different chunk sizes, or conversation memory.
 related: [what-is-rag, ml-drift-alert-agent, automating-arxiv]
 ---
 
-I wanted a simple way to ask questions about my own documents without sending them to a cloud API. No API keys, no usage bills, and no data leaving my machine. So I built a [local RAG document Q&A agent](https://github.com/KaunteyAcharya/RAG-doc-qa-agent). There is a short video demo in the [README](https://github.com/KaunteyAcharya/RAG-doc-qa-agent#readme).
+I wanted a simple way to ask questions about my own documents without sending them to a cloud API. No API keys, no usage bills, and no data leaving my machine. So I built a [local RAG document Q&A assistant](https://github.com/KaunteyAcharya/RAG-doc-qa-assistant). There is a short video demo in the [README](https://github.com/KaunteyAcharya/RAG-doc-qa-assistant#readme).
 
 In one line: you upload a document through a form, it gets split into small overlapping pieces that are turned into vectors and stored in ChromaDB, and when you ask a question, the 15 most relevant pieces are handed to a small local model that is only allowed to answer from them. Every part (n8n, Ollama, and ChromaDB) runs on the same laptop.
 
@@ -79,7 +79,7 @@ Swapping the local model for a hosted one is a small change in n8n: replace the 
 - **Room for more context.** Hosted models accept very long prompts, so you could retrieve more chunks, or larger ones, without the model losing track.
 - **Embeddings are a separate decision.** OpenAI offers embedding models. Anthropic does not offer its own embedding model and points to third-party providers such as Voyage AI. So "switch to Claude" usually means Claude for answers plus a separate embedding model, which could stay `nomic-embed-text` on your machine.
 - **Privacy changes.** The question and the retrieved chunks are sent to the provider with every message. The document as a whole and the vector store can still stay local, because only the chunks needed for one answer travel. Whether that is acceptable depends on the document and the provider's data terms.
-- **Cost and dependency.** Every question is billed per token, and the agent stops working without an internet connection or an API key.
+- **Cost and dependency.** Every question is billed per token, and the assistant stops working without an internet connection or an API key.
 
 A practical middle ground is a hybrid: local embeddings and ChromaDB, with a hosted model for answers. It keeps the full document on your machine while fixing most of the reasoning limits of a small model.
 
@@ -110,4 +110,4 @@ Adding memory alone would not fully fix that. The retriever searches with the qu
 
 Retrieval quality depends heavily on chunk size and top-k, and no single setting works for every document type. A strict, explicit prompt does more for trustworthiness than a bigger model, at least for questions whose answers are written in the document. And building the whole pipeline locally is a nice, hands-on way to feel the trade-offs in a [RAG system](notes/what-is-rag/) rather than just read about them.
 
-The code, the workflow file, and setup steps are in the [GitHub repository](https://github.com/KaunteyAcharya/RAG-doc-qa-agent).
+The code, the workflow file, and setup steps are in the [GitHub repository](https://github.com/KaunteyAcharya/RAG-doc-qa-assistant).

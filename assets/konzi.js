@@ -113,10 +113,11 @@
 
   // One-liners when a visitor hovers a project (matched by its GitHub link) or a paper (matched by title)
   const HOVER = [
+    ['a[href*="voice-ai-agent"]', 'shocked', 'A voice agent that speaks Hindi AND English, books site visits, and does EMI maths? Finally, a real agent! 🎙️'],
     ['a[href*="ai-stack-advisor"]', 'wink', 'Build or buy? This calculator does the maths for you, with error bars. Of course with error bars. 📊'],
-    ['a[href*="/tickerbrief"]', 'happy', 'TickerBrief! Type one stock ticker and an agent writes a whole research report. Fancy! 📈'],
-    ['a[href*="drift-alert"]', 'wink', 'The drift agent! It notices when a model goes off the rails, then explains why on Slack. Very responsible. 🧐'],
-    ['a[href*="arxiv"]', 'laugh', 'The arXiv agent! He automated reading papers... so he could read even MORE papers. 🤓'],
+    ['a[href*="/tickerbrief"]', 'happy', 'TickerBrief! Type one stock ticker and a whole pipeline writes a research report. Fancy! 📈'],
+    ['a[href*="drift-alert"]', 'wink', 'The drift monitor! It notices when a model goes off the rails, then explains why on Slack. Very responsible. 🧐'],
+    ['a[href*="arxiv"]', 'laugh', 'The arXiv workflow! He automated reading papers... so he could read even MORE papers. 🤓'],
     ['a[href*="RAG-doc"]', 'happy', 'Fully local RAG! Your documents never leave your machine. Privacy, but make it nerdy.'],
     ['a[href*="banking-stock"]', 'smug', 'Bank stocks, volatility, risk. He calls it research. I say he just likes charts.'],
     ['a[href*="GW-GR"]', 'shocked', 'Testing Einstein with gravitational waves?! Bold move, Kauntey. Bold move.'],
@@ -130,8 +131,9 @@
   // What Konzi says when a visitor opens a note (by file name). New notes get a generic line.
   const NOTE_LINES = {
     'ai-stack-advisor': [['wink', 'Build or buy? I was built, obviously. Very cost-effective, zero GPUs. 💸']],
+    'voice-ai-agent': [['happy', 'Meet Aditi! She talks, books visits, and switches to Hindi mid-call. Way more social than Kauntey. 🎙️']],
     'tickerbrief': [['happy', "The TickerBrief story! Ask him how many tickers he tested. Actually, don't. It's a lot."]],
-    'ml-drift-alert-agent': [['wink', 'Models drift, Kauntey notices. This agent is basically a babysitter for ML models.']],
+    'ml-drift-alert-agent': [['wink', 'Models drift, Kauntey notices. This monitor is basically a babysitter for ML models.']],
     'local-rag-agent': [['happy', 'Fully local RAG! No cloud, no leaks, just one laptop working very hard. 💪']],
     'what-is-rag': [['neutral', 'RAG explained without the jargon. Bookmark-worthy, if you ask me.']],
     'ai-benchmarks': [['smug', 'Benchmarks from first principles, with error bars. He really, REALLY likes error bars.']],

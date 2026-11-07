@@ -3,13 +3,13 @@ title: Automating my morning arXiv routine with n8n, Telegram, and an LLM
 date: 2026-06-02
 updated: 2026-10-30
 tags: [AI, projects]
-summary: Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it. How it works, the bugs that made it silently return nothing, and how it went from a small local model to full-paper derivations.
+summary: Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n workflow to do it. How it works, the bugs that made it silently return nothing, and how it went from a small local model to full-paper derivations.
 related: [tickerbrief, local-rag-agent, ml-drift-alert-agent]
 ---
 
 Every morning I used to do the same thing: open arXiv, scroll through the new submissions in my categories, skim abstracts to guess which papers mattered, download a few PDFs, and then paste them into an LLM to walk me through the derivations. It was useful, but it quietly ate a big chunk of my morning. So I automated it.
 
-The result is the [ArXiv Research Analysis Agent](https://github.com/KaunteyAcharya/n8n-arxiv-research-automation). In one line: each morning it reads arXiv's new-submissions pages, keeps the papers that match my keywords, and sends each one to me on Telegram; if I reply yes, an LLM reads the full paper and sends back a detailed, step-by-step walkthrough of its derivation.
+The result is the [ArXiv Research Analysis Workflow](https://github.com/KaunteyAcharya/n8n-arxiv-research-automation). In one line: each morning it reads arXiv's new-submissions pages, keeps the papers that match my keywords, and sends each one to me on Telegram; if I reply yes, an LLM reads the full paper and sends back a detailed, step-by-step walkthrough of its derivation.
 
 ## What it does
 
