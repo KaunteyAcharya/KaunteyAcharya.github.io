@@ -129,7 +129,9 @@ function render(md, slug) {
 }
 // Relative links point at the site root; feed readers need full addresses
 const absolute = html => html.replace(/(href|src)="(?!https?:|mailto:|#|\/\/)([^"]+)"/g, (_, a, u) => `${a}="${SITE}/${u.replace(/^\.?\//, '')}"`);
-const words = md => md.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length;
+// Reading time counts prose only: code blocks and HTML markup (inline SVG figures,
+// widget wrappers) are not read, so they must not inflate the estimate.
+const words = md => md.replace(/```[\s\S]*?```/g, ' ').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
 
 /* ---------- Read the notes ---------- */
 const notes = fs.readdirSync(POSTS)

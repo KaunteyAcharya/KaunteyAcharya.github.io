@@ -40,7 +40,7 @@
   .fs-svg .tb { fill: var(--fs-b); }
   .fs-svg .faint { opacity: .25; }
   .fs-svg .band { fill: var(--muted); opacity: .26; stroke: none; }
-  .fs-svg polyline { fill: none; }
+  .fs-svg polyline, .fs-svg polyline.va, .fs-svg polyline.vb, .fs-svg polyline.axis { fill: none; }
   .fs-svg .handle { fill: transparent; stroke: none; cursor: grab; }
   .fs-svg .dash { stroke-dasharray: 5 4; fill: none; }
   .fs-range { width: 100%; max-width: 22rem; accent-color: var(--fs-b); }
@@ -1023,6 +1023,317 @@
       h('div', { class: 'fs-hint', text: 'Pick a function and slide the probe along the input axis. The upper panel is the function, with the tangent drawn at the probe. The lower panel is that tangent’s steepness at every input, which is the quantity training depends on: inside the shaded band a layer using this function has effectively stopped learning.' }),
       buttons(NAMES, i => { name = NAMES[i]; draw(); }, 2),
       range, svg, out);
+    draw();
+  };
+
+  /* =========================================================
+     Article 3: loss, slopes, gradients and the chain rule
+     ========================================================= */
+
+  /* 15. lossdial: the loss of a one-weight model, as a curve over the weight */
+  widgets.lossdial = function (root) {
+    const X = 3, Y = 5;                       // the example: p = w*3, target 5
+    const L = w => (X * w - Y) * (X * w - Y);
+    const VW = 360, VH = 240, S = 86, SY = 11, OX = 34, OY = 212;
+    const WMIN = 0, WMAX = 3.4, LMAX = 17;
+    const sx = w => OX + S * w;
+    const sy = v => OY - SY * Math.min(LMAX, v);
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'The loss of a one-weight model plotted against the weight' });
+    const out = h('div', { class: 'fs-out' });
+    let w = 2;
+
+    // static background: axes, the curve, the minimum
+    sv('line', { x1: OX, y1: OY, x2: sx(WMAX), y2: OY, class: 'axis' }, svg);
+    sv('line', { x1: OX, y1: 16, x2: OX, y2: OY, class: 'axis' }, svg);
+    sv('text', { x: sx(WMAX), y: OY - 8, 'text-anchor': 'end', 'font-size': 11, class: 'm' }, svg).textContent = 'weight w';
+    sv('text', { x: OX - 4, y: 22, 'text-anchor': 'end', 'font-size': 11, class: 'm' }, svg).textContent = 'L';
+    for (let k = 0; k <= 3; k++) {
+      sv('line', { x1: sx(k), y1: OY, x2: sx(k), y2: OY + 4, class: 'axis' }, svg);
+      sv('text', { x: sx(k), y: OY + 16, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, svg).textContent = String(k);
+    }
+    const pts = [];
+    for (let i = 0; i <= 200; i++) { const v = WMIN + (WMAX - WMIN) * i / 200; if (L(v) <= LMAX) pts.push(`${sx(v)},${sy(L(v))}`); }
+    sv('polyline', { points: pts.join(' '), class: 'va', 'stroke-width': 2 }, svg);
+    sv('line', { x1: sx(Y / X), y1: OY, x2: sx(Y / X), y2: sy(0), class: 'axis dash' }, svg);
+    sv('text', { x: sx(Y / X), y: OY - 6, 'text-anchor': 'middle', 'font-size': 10, class: 'm' }, svg).textContent = '5/3';
+
+    const drop = sv('line', { class: 'vb dash', 'stroke-width': 1.5 }, svg);
+    const dot = sv('circle', { r: 6, class: 'vb' }, svg);
+    const lbl = sv('text', { 'font-size': 11, class: 'tb', 'text-anchor': 'middle' }, svg);
+    const range = h('input', { class: 'fs-range', type: 'range', min: '0', max: '3.4', step: '0.01', value: '2', 'aria-label': 'weight' });
+
+    function draw() {
+      const loss = L(w), p = X * w;
+      dot.setAttribute('cx', sx(w)); dot.setAttribute('cy', sy(loss));
+      drop.setAttribute('x1', sx(w)); drop.setAttribute('y1', sy(loss));
+      drop.setAttribute('x2', sx(w)); drop.setAttribute('y2', OY);
+      lbl.setAttribute('x', sx(w)); lbl.setAttribute('y', Math.max(14, sy(loss) - 11));
+      lbl.textContent = 'L = ' + fmt(loss, 2);
+      out.textContent =
+        `w = ${fmt(w, 2)}\n` +
+        `prediction  p = w·x = ${fmt(w, 2)}·3 = ${fmt(p, 2)}\n` +
+        `error       e = p − y = ${fmt(p, 2)} − 5 = ${fmt(p - Y, 2)}\n` +
+        `loss        L = e² = ${fmt(loss, 3)}\n\n` +
+        (loss < 0.01 ? 'As low as this curve goes. The weight is 5/3 and the prediction is exactly 5.'
+          : p > Y ? 'The prediction is too high, so the weight should come down.'
+            : 'The prediction is too low, so the weight should go up.');
+    }
+    range.addEventListener('input', () => { w = parseFloat(range.value); draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: the loss as a function of the weight' }),
+      h('div', { class: 'fs-hint', text: 'One weight, one example: x = 3 and the right answer is y = 5. Drag the weight and watch the loss. Training means finding the bottom of this curve without being allowed to see it.' }),
+      range, svg, out);
+    draw();
+  };
+
+  /* 16. slope: the secant collapsing onto the tangent */
+  widgets.slope = function (root) {
+    const f = x => x * x, A = 3;              // the point we are taking the slope at
+    const HS = [1, 0.5, 0.2, 0.1, 0.01];
+    let hi = 0;
+    const VW = 360, VH = 250, S = 58, SY = 8.2, OX = 28, OY = 226;
+    const sx = x => OX + S * x, sy = y => OY - SY * y;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'A secant line on the curve y = x squared collapsing onto the tangent at x = 3' });
+    const out = h('div', { class: 'fs-out' });
+
+    sv('line', { x1: OX, y1: OY, x2: VW - 10, y2: OY, class: 'axis' }, svg);
+    sv('line', { x1: OX, y1: 12, x2: OX, y2: OY, class: 'axis' }, svg);
+    for (let k = 1; k <= 5; k++) {
+      sv('line', { x1: sx(k), y1: OY, x2: sx(k), y2: OY + 4, class: 'axis' }, svg);
+      sv('text', { x: sx(k), y: OY + 16, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, svg).textContent = String(k);
+    }
+    const cp = [];
+    for (let i = 0; i <= 200; i++) { const x = 5.3 * i / 200; if (f(x) <= 26) cp.push(`${sx(x)},${sy(f(x))}`); }
+    sv('polyline', { points: cp.join(' '), class: 'va', 'stroke-width': 2 }, svg);
+    // the tangent, slope 6, drawn faintly so the secant can be compared against it
+    sv('line', { x1: sx(1.6), y1: sy(f(A) + 6 * (1.6 - A)), x2: sx(4.4), y2: sy(f(A) + 6 * (4.4 - A)), class: 'axis faint', 'stroke-width': 2 }, svg);
+    sv('circle', { cx: sx(A), cy: sy(f(A)), r: 5, class: 'va' }, svg);
+
+    const sec = sv('line', { class: 'vb', 'stroke-width': 2 }, svg);
+    const rise = sv('line', { class: 'vb dash', 'stroke-width': 1.3 }, svg);
+    const run = sv('line', { class: 'vb dash', 'stroke-width': 1.3 }, svg);
+    const dot2 = sv('circle', { r: 5, class: 'vb' }, svg);
+
+    function draw() {
+      const hh = HS[hi], b = A + hh, m = (f(b) - f(A)) / hh;
+      const x1 = 1.6, x2 = 4.4;
+      sec.setAttribute('x1', sx(x1)); sec.setAttribute('y1', sy(f(A) + m * (x1 - A)));
+      sec.setAttribute('x2', sx(x2)); sec.setAttribute('y2', sy(f(A) + m * (x2 - A)));
+      run.setAttribute('x1', sx(A)); run.setAttribute('y1', sy(f(A)));
+      run.setAttribute('x2', sx(b)); run.setAttribute('y2', sy(f(A)));
+      rise.setAttribute('x1', sx(b)); rise.setAttribute('y1', sy(f(A)));
+      rise.setAttribute('x2', sx(b)); rise.setAttribute('y2', sy(f(b)));
+      dot2.setAttribute('cx', sx(b)); dot2.setAttribute('cy', sy(f(b)));
+      out.textContent =
+        `h = ${hh}\n` +
+        `rise  f(3+h) − f(3) = ${fmt(f(b), 4)} − 9 = ${fmt(f(b) - f(A), 4)}\n` +
+        `run   h              = ${hh}\n` +
+        `slope of the secant  = ${fmt(m, 4)}\n\n` +
+        `The secant slope is exactly 6 + h, so it closes on 6 as h shrinks.\n` +
+        (hh <= 0.1 ? 'At this size the secant and the faint tangent line are already hard to tell apart.'
+          : 'Pick a smaller h and watch the orange line settle onto the faint one.');
+    }
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: a slope is a limit of slopes' }),
+      h('div', { class: 'fs-hint', text: 'The curve is f(x) = x². The orange line joins the point at x = 3 to the point at x = 3 + h. The faint straight line is the tangent, slope 6. Shrink h.' }),
+      buttons(HS.map(v => 'h = ' + v), i => { hi = i; draw(); }, 0),
+      svg, out);
+    draw();
+  };
+
+  /* 17. descent: gradient descent on a parabola, and what the learning rate does */
+  widgets.descent = function (root) {
+    const X = 3, Y = 5;
+    const L = w => (X * w - Y) * (X * w - Y), G = w => 2 * X * (X * w - Y);
+    const RATES = [0.05, 0.1, 0.2];
+    let eta = 0.05, path = [2];
+    const VW = 360, VH = 230, S = 86, SY = 10, OX = 40, OY = 200;
+    const sx = w => OX + S * Math.max(-0.4, Math.min(3.5, w));
+    const sy = v => OY - SY * Math.min(18, v);
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'Gradient descent steps on a parabola' });
+    const out = h('div', { class: 'fs-out' });
+    const marks = sv('g', {}, svg);
+
+    sv('line', { x1: sx(-0.4), y1: OY, x2: sx(3.5), y2: OY, class: 'axis' }, svg);
+    for (let k = 0; k <= 3; k++) {
+      sv('line', { x1: sx(k), y1: OY, x2: sx(k), y2: OY + 4, class: 'axis' }, svg);
+      sv('text', { x: sx(k), y: OY + 16, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, svg).textContent = String(k);
+    }
+    const cp = [];
+    for (let i = 0; i <= 240; i++) { const v = -0.4 + 3.9 * i / 240; if (L(v) <= 18) cp.push(`${sx(v)},${sy(L(v))}`); }
+    sv('polyline', { points: cp.join(' '), class: 'va', 'stroke-width': 2 }, svg);
+    sv('line', { x1: sx(Y / X), y1: OY, x2: sx(Y / X), y2: sy(0), class: 'axis dash' }, svg);
+
+    function draw() {
+      while (marks.firstChild) marks.removeChild(marks.firstChild);
+      for (let i = 0; i < path.length; i++) {
+        const w = path[i], last = i === path.length - 1;
+        if (i > 0) sv('line', { x1: sx(path[i - 1]), y1: sy(L(path[i - 1])), x2: sx(w), y2: sy(L(w)), class: 'vb dash', 'stroke-width': 1.4 }, marks);
+        sv('circle', { cx: sx(w), cy: sy(L(w)), r: last ? 6 : 4, class: 'vb', opacity: last ? 1 : 0.45 }, marks);
+      }
+      let txt = `learning rate η = ${eta}\n\nstep    w        dL/dw     L\n`;
+      path.forEach((w, i) => {
+        txt += `${String(i).padEnd(7)} ${fmt(w, 3).padEnd(8)} ${fmt(G(w), 3).padEnd(9)} ${fmt(L(w), 4)}\n`;
+      });
+      const w = path[path.length - 1];
+      txt += '\n' + (Math.abs(G(w)) < 0.02 ? 'The slope has flattened, so the steps have shrunk to nothing on their own. This is the bottom.'
+        : eta >= 0.2 ? 'Each step jumps past the bottom and lands further away than it started. Above η = 1/9 this diverges.'
+          : eta >= 0.1 ? 'Each step overshoots and lands on the far side, so the weight zigzags across the valley. The loss still falls.'
+            : 'Each step lands short of the bottom, so the weight walks straight in.');
+      out.textContent = txt;
+    }
+    const stepBtn = h('button', { type: 'button', class: 'fs-btn' }, 'Take a step');
+    const resetBtn = h('button', { type: 'button', class: 'fs-btn' }, 'Reset');
+    stepBtn.addEventListener('click', () => {
+      const w = path[path.length - 1];
+      if (path.length < 9 && Math.abs(w) < 100) path.push(w - eta * G(w));
+      draw();
+    });
+    resetBtn.addEventListener('click', () => { path = [2]; draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: stepping downhill' }),
+      h('div', { class: 'fs-hint', text: 'The same curve, starting at w = 2. Each step moves the weight by the learning rate times the slope, against the slope. Change the rate and step again.' }),
+      buttons(RATES.map(v => 'η = ' + v), i => { eta = RATES[i]; path = [2]; draw(); }, 0),
+      h('div', { class: 'fs-row' }, stepBtn, resetBtn),
+      svg, out);
+    draw();
+  };
+
+  /* 18. steepest: why the gradient is the steepest direction */
+  widgets.steepest = function (root) {
+    const GX = 2, GY = 6;                     // gradient of x² + 3y² at (1, 1)
+    const GN = Math.sqrt(GX * GX + GY * GY);
+    const VW = 320, VH = 250, S = 52, OX = 160, OY = 132;
+    const sx = x => OX + S * x, sy = y => OY - S * y;
+    const EPS = 0.9;                          // length of the step arrow, in graph units
+    let ang = Math.atan2(GY, GX);             // start pointing along the gradient
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'Contours of a bowl with the gradient and a step of fixed length' });
+    const out = h('div', { class: 'fs-out' });
+
+    [0.5, 1.5, 4, 8, 14].forEach(c => sv('ellipse', {
+      cx: OX, cy: OY, rx: S * Math.sqrt(c), ry: S * Math.sqrt(c / 3), class: 'grid', fill: 'none'
+    }, svg));
+    sv('line', { x1: 8, y1: OY, x2: VW - 8, y2: OY, class: 'axis faint' }, svg);
+    sv('line', { x1: OX, y1: 8, x2: OX, y2: VH - 8, class: 'axis faint' }, svg);
+    sv('circle', { cx: sx(1), cy: sy(1), r: 4, class: 'va' }, svg);
+    sv('text', { x: sx(1) + 8, y: sy(1) + 13, 'font-size': 11, class: 'm' }, svg).textContent = '(1, 1)';
+    // the gradient itself, scaled down to fit
+    const gstatic = sv('g', {}, svg);
+    arrow(gstatic, sx(1), sy(1), sx(1 + GX / GN * 1.25), sy(1 + GY / GN * 1.25), 'va', 2);
+    sv('text', { x: sx(1 + GX / GN * 1.25) + 6, y: sy(1 + GY / GN * 1.25) + 4, 'font-size': 11 }, svg).textContent = '∇f';
+    const gstep = sv('g', {}, svg);
+    const circ = sv('circle', { cx: sx(1), cy: sy(1), r: S * EPS, class: 'axis dash', fill: 'none' }, svg);
+    const grab = sv('circle', { r: 16, class: 'handle' }, svg);
+
+    function draw() {
+      while (gstep.firstChild) gstep.removeChild(gstep.firstChild);
+      const hx = EPS * Math.cos(ang), hy = EPS * Math.sin(ang);
+      arrow(gstep, sx(1), sy(1), sx(1 + hx), sy(1 + hy), 'vb', 2.5);
+      grab.setAttribute('cx', sx(1 + hx)); grab.setAttribute('cy', sy(1 + hy));
+      const dL = GX * hx + GY * hy;
+      const phi = Math.acos(Math.max(-1, Math.min(1, (GX * hx + GY * hy) / (GN * EPS))));
+      out.textContent =
+        `step   h = (${fmt(hx, 2)}, ${fmt(hy, 2)}),  length ${EPS}\n` +
+        `angle to the gradient  φ = ${fmt(deg(phi), 0)}°,  cos φ = ${fmt(Math.cos(phi), 3)}\n` +
+        `change in loss  ∇f · h = 2(${fmt(hx, 2)}) + 6(${fmt(hy, 2)}) = ${fmt(dL, 3)}\n` +
+        `               = ‖∇f‖ · ${EPS} · cos φ = ${fmt(GN, 2)} · ${EPS} · ${fmt(Math.cos(phi), 3)}\n\n` +
+        (deg(phi) < 8 ? 'Pointing along the gradient. No step of this length raises the loss more.'
+          : deg(phi) > 172 ? 'Pointing against the gradient. This is the steepest way down, and it is the direction training takes.'
+            : Math.abs(deg(phi) - 90) < 6 ? 'At right angles to the gradient the loss does not change at all, to first order. You are walking along a contour.'
+              : 'Any other direction gets only the cosine of the full slope.');
+    }
+    function point(evt) {
+      const p = svgPoint(svg, evt);
+      ang = Math.atan2(sy(1) - p.y, p.x - sx(1));
+      draw();
+    }
+    let dragging = false;
+    svg.addEventListener('pointerdown', e => { dragging = true; svg.setPointerCapture(e.pointerId); point(e); });
+    svg.addEventListener('pointermove', e => { if (dragging) point(e); });
+    svg.addEventListener('pointerup', e => { dragging = false; try { svg.releasePointerCapture(e.pointerId); } catch (x) {} });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: every direction, same step length' }),
+      h('div', { class: 'fs-hint', text: 'Contours of f(x, y) = x² + 3y², with the gradient at (1, 1) drawn in black. Drag the orange arrow around the circle: the step is always the same length, and only its direction changes.' }),
+      svg, out);
+    draw();
+  };
+
+  /* 19. backprop: forward values, then the adjoint walking back */
+  widgets.backprop = function (root) {
+    let W = 2, X = 3, Y = 5, stage = 7;       // 0 nothing, 1..4 forward, 4..7 backward
+    const VW = 440, VH = 180;
+    const NX = [50, 163, 276, 389], HW = 34, NY = 58;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'The chain w to p to e to L, with forward values above and gradients below' });
+    const out = h('div', { class: 'fs-out' });
+    const layer = sv('g', {}, svg);
+    const mk = (v, lbl) => h('input', { class: 'fs-input fs-num', type: 'number', step: '1', value: String(v), 'aria-label': lbl });
+    const wi = mk(W, 'weight'), xi = mk(X, 'input'), yi = mk(Y, 'target');
+    const tidy = v => { const s = fmt(v, 3); return s.indexOf('.') < 0 ? s : s.replace(/0+$/, '').replace(/\.$/, ''); };
+
+    function draw() {
+      while (layer.firstChild) layer.removeChild(layer.firstChild);
+      const p = W * X, e = p - Y, L = e * e;
+      const fwd = [W, p, e, L];
+      const names = ['w', 'p = wx', 'e = p − y', 'L = e²'];
+      const dLde = 2 * e, dLdp = dLde, dLdw = dLdp * X;
+      const back = [dLdw, dLdp, dLde, 1];
+      const bnames = ['∂L/∂w', '∂L/∂p', '∂L/∂e', 'start'];
+      const edge = ['× x', '− y', 'square'];
+      const local = ['× x = ' + tidy(X), '× 1', '× 2e = ' + tidy(2 * e)];
+
+      for (let i = 0; i < 4; i++) {
+        const on = stage >= i + 1;
+        sv('rect', { x: NX[i] - HW, y: NY - 17, width: HW * 2, height: 34, rx: 5, class: 'grid', fill: 'none', opacity: on ? 1 : 0.3 }, layer);
+        sv('text', { x: NX[i], y: NY + 5, 'text-anchor': 'middle', 'font-size': 13, opacity: on ? 1 : 0.3 }, layer)
+          .textContent = on ? tidy(fwd[i]) : '?';
+        sv('text', { x: NX[i], y: NY - 25, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, layer).textContent = names[i];
+        if (stage >= 7 - i) {                 // i=3 at stage 4, down to i=0 at stage 7
+          sv('text', { x: NX[i], y: 132, 'text-anchor': 'middle', 'font-size': 13, class: 'tb' }, layer)
+            .textContent = tidy(back[i]);
+          sv('text', { x: NX[i], y: 148, 'text-anchor': 'middle', 'font-size': 10, class: 'm' }, layer).textContent = bnames[i];
+        }
+      }
+      for (let i = 0; i < 3; i++) {
+        const mid = (NX[i] + NX[i + 1]) / 2;
+        arrow(layer, NX[i] + HW + 4, NY - 4, NX[i + 1] - HW - 4, NY - 4, 'axis', 1.4);
+        sv('text', { x: mid, y: NY - 11, 'text-anchor': 'middle', 'font-size': 10, class: 'm' }, layer).textContent = edge[i];
+        if (stage >= 7 - i) {
+          arrow(layer, NX[i + 1] - HW - 4, NY + 10, NX[i] + HW + 4, NY + 10, 'vb', 1.6);
+          sv('text', { x: mid, y: NY + 50, 'text-anchor': 'middle', 'font-size': 10, class: 'tb' }, layer).textContent = local[i];
+        }
+      }
+
+      const lines = [
+        'Forward: the weight is where we start.',
+        `Forward: p = w·x = ${tidy(W)}·${tidy(X)} = ${tidy(p)}.`,
+        `Forward: e = p − y = ${tidy(p)} − ${tidy(Y)} = ${tidy(e)}.`,
+        `Forward: L = e² = ${tidy(e)}² = ${tidy(L)}. The model is this wrong.`,
+        'Backward: start the running number at 1. Nudging the loss by one moves the loss by one.',
+        `Backward: through the square. ∂L/∂e = 2e = ${tidy(dLde)}.`,
+        `Backward: through the subtraction, whose local derivative is 1. ∂L/∂p = ${tidy(dLdp)}.`,
+        `Backward: through the multiplication, whose local derivative is x = ${tidy(X)}. ∂L/∂w = ${tidy(dLdp)} × ${tidy(X)} = ${tidy(dLdw)}.`
+      ];
+      out.textContent = lines.slice(0, Math.min(stage + 1, 8)).join('\n') +
+        (stage >= 7
+          ? `\n\nThe gradient on w is ${tidy(dLdw)}. ` + (dLdw > 0
+            ? 'Positive, so decreasing w reduces the loss.'
+            : dLdw < 0 ? 'Negative, so increasing w reduces the loss.'
+              : 'Zero: this example is already satisfied, so it asks for no change.')
+          : '');
+    }
+    const next = h('button', { type: 'button', class: 'fs-btn' }, 'Next');
+    const reset = h('button', { type: 'button', class: 'fs-btn' }, 'Start again');
+    next.addEventListener('click', () => { stage = Math.min(7, stage + 1); draw(); });
+    reset.addEventListener('click', () => { stage = 0; draw(); });
+    [[wi, v => W = v], [xi, v => X = v], [yi, v => Y = v]].forEach(([el, set]) => {
+      el.addEventListener('input', () => { const v = parseFloat(el.value); if (!isNaN(v)) { set(v); stage = 7; draw(); } });
+    });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: one forward pass, one backward pass' }),
+      h('div', { class: 'fs-hint', text: 'Values flow left to right. The gradient flows right to left, starting at 1 and picking up one local derivative per stage. Press Start again to walk through it one stage at a time.' }),
+      h('div', { class: 'fs-row' }, h('span', { text: 'w =' }), wi, h('span', { text: 'x =' }), xi, h('span', { text: 'y =' }), yi),
+      h('div', { class: 'fs-row' }, reset, next),
+      svg, out);
     draw();
   };
 

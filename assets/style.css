@@ -12,6 +12,7 @@
   --muted:   rgba(27, 26, 23, .68);
   --line:    rgba(27, 26, 23, .18);
   --accent:  #1B1A17;
+  --fs-b:    #B4532A;          /* figure accent, shared with assets/fromscratch.js */
 
   --mono:  monospace;
   --serif: monospace;
@@ -34,6 +35,7 @@
   --muted:   rgba(236, 231, 220, .66);
   --line:    rgba(236, 231, 220, .18);
   --accent:  #ECE7DC;
+  --fs-b:    #E58C5F;
   --paper:   #171614;
   color-scheme: dark;
 }
@@ -580,6 +582,19 @@ html { scrollbar-color: var(--line) transparent; }
 @media (hover: none) { .prose .hanchor { opacity: .35; } }
 
 .prose a.steplink { text-decoration-style: dotted; text-underline-offset: 2px; }
+
+/* Static diagrams drawn inline in a note (no JavaScript needed) */
+.prose .fs-fig { margin: 1.9em 0; }
+.prose .fs-fig svg { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.prose .fs-fig svg text { font-family: var(--mono, monospace); fill: var(--text); }
+.prose .fs-fig svg .fg-m { fill: var(--muted); }
+.prose .fs-fig svg .fg-line { stroke: var(--line); fill: none; }
+.prose .fs-fig svg .fg-ax { stroke: var(--muted); fill: none; }
+.prose .fs-fig svg .fg-curve { stroke: var(--text); fill: none; stroke-width: 2.2; }
+.prose .fs-fig svg .fg-hi { stroke: var(--fs-b); fill: none; stroke-width: 2.2; }
+.prose .fs-fig svg .fg-hit { fill: var(--fs-b); stroke: none; }
+.prose .fs-fig svg .fg-dash { stroke-dasharray: 5 4; }
+.prose .fs-fig figcaption { font-size: .83rem; color: var(--muted); margin-top: .6rem; line-height: 1.6; }
 
 /* Contents for a long note. Narrow screens: a plain list where it sits in the flow.
    Wide screens: a rail of bars pinned to the left margin, opening on hover. */

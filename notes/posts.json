@@ -1,5 +1,25 @@
 [
   {
+    "slug": "ai-agent-memory-experiments",
+    "title": "Experiments with AI agents: memory and retrieval",
+    "date": "2026-11-12",
+    "tags": [
+      "AI",
+      "projects"
+    ],
+    "summary": "Five experiments on two months of my real coding-session history, testing ideas from the Mem0 and MemoryTax papers on a free-tier model. Overwriting memory destroyed history; facts plus raw text plus mixed keyword and embedding search did best."
+  },
+  {
+    "slug": "building-a-personal-ai-agent",
+    "title": "Building a personal AI agent (Saati) that keeps track of everything I work on",
+    "date": "2026-11-12",
+    "tags": [
+      "AI",
+      "projects"
+    ],
+    "summary": "Saati is a personal AI agent I talk to on Telegram. It tracks my projects, ideas, and decisions, follows my coding sessions and voice notes, and runs in the cloud on a Gemini model."
+  },
+  {
     "slug": "ai-stack-advisor",
     "title": "Building AI Stack Advisor, a build-vs-buy calculator for AI",
     "date": "2026-10-21",
