@@ -1,9 +1,9 @@
 ---
-title: "What Is a Neural Network Layer? Matrices, Bias, and ReLU"
+title: "How a neural network layer works: matrices, bias, and ReLU"
 date: 2026-11-05
 tags: [AI, maths]
 summary: "A neural network layer is a matrix, a bias, and a nonlinearity. This note builds it from nothing: what a matrix does to a vector, why stacking linear layers collapses into a single layer, and why ReLU is what makes depth worth having."
-related: [gradients-chain-rule-explained, word-embeddings-explained, ml-vs-deep-learning]
+related: [how-gradient-descent-works, word-embeddings-explained, ml-vs-deep-learning]
 series: token-by-token
 ---
 
@@ -450,7 +450,7 @@ That is precisely what was missing. ReLU does different things in different regi
 
 ReLU is not the only choice and was not the first. For about forty years the standard was the sigmoid, $\sigma(z)=1/(1+e^{-z})$, a smooth S-curve squashing everything into the range 0 to 1, which was preferred partly because it looks like a neuron deciding and partly because it is smooth everywhere.
 
-One fact decided it, and it is worth carrying forward even though its machinery arrives in [Article 3](notes/gradients-chain-rule-explained/). Training works by asking each number "if I nudged you slightly, how much would the final answer improve?" Where a function is flat, the honest answer is "almost nothing", so the nudge is almost nothing and that layer stops learning. The sigmoid flattens at both ends: at $z=6$ it returns about 0.9975, and at $z=8$ about 0.9997, so the input moved by 2 and the output barely noticed. Stack ten such layers and multiply ten almost-nothings together, and the layers near the input receive effectively no signal at all.
+One fact decided it, and it is worth carrying forward even though its machinery arrives in [Article 3](notes/how-gradient-descent-works/). Training works by asking each number "if I nudged you slightly, how much would the final answer improve?" Where a function is flat, the honest answer is "almost nothing", so the nudge is almost nothing and that layer stops learning. The sigmoid flattens at both ends: at $z=6$ it returns about 0.9975, and at $z=8$ about 0.9997, so the input moved by 2 and the output barely noticed. Stack ten such layers and multiply ten almost-nothings together, and the layers near the input receive effectively no signal at all.
 
 ReLU never flattens on the positive side. For any positive input its slope is exactly 1, so the signal crosses any number of layers undiminished. It is also the cheapest nonlinear function there is, a single comparison against zero. [Krizhevsky, Sutskever, and Hinton (2012)](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks) reported their network reaching a given error rate about six times faster with ReLU than with the smooth alternative, and said plainly that they could not have trained it at all with the saturating one. That paper is usually cited as the start of the modern era, and one of the things it changed was which function everybody put between their matrices.
 
@@ -497,7 +497,7 @@ Stay with the support tickets. Suppose one row of $W$ has settled into a money d
 
 That distinction matters because the right answer depends on the data, not on the concept. Suppose this company emails an invoice with every single reply, so the word "charged" turns up in almost every ticket, technical ones included. The money detector now scores a baseline 3 on everything. The direction is still correct, so $W$ needs no change at all; what needs to change is the bias, from $-1$ to something nearer $-4$, so the baseline is subtracted away and only genuine billing tickets survive the cut. Move to a second company whose customers never mention money unless they mean it, and the same row wants a bias near zero, because there is no baseline to subtract. One learned direction, two different thresholds, decided entirely by what the incoming mail looks like.
 
-Nobody sits down and picks either. A person chooses the architecture, which is the shapes of the matrices and how many layers there are, and then every individual number inside $W$ and $\mathbf{b}$ is set by the training algorithm, which starts them off random and nudges each one repeatedly in whichever direction reduces the model's mistakes. The bias is nudged by exactly the same mechanism as the weights, which is why it drifts to $-4$ at the first company and to $0$ at the second without anyone noticing it happened. How that nudging works is [Article 3](notes/gradients-chain-rule-explained/), and it is the one question this note leaves standing.
+Nobody sits down and picks either. A person chooses the architecture, which is the shapes of the matrices and how many layers there are, and then every individual number inside $W$ and $\mathbf{b}$ is set by the training algorithm, which starts them off random and nudges each one repeatedly in whichever direction reduces the model's mistakes. The bias is nudged by exactly the same mechanism as the weights, which is why it drifts to $-4$ at the first company and to $0$ at the second without anyone noticing it happened. How that nudging works is [Article 3](notes/how-gradient-descent-works/), and it is the one question this note leaves standing.
 
 ## Step 10: one complete layer, by hand
 
@@ -748,7 +748,7 @@ It does not say that every useful transformation is a matrix; attention, normali
 
 ## Next in the series
 
-Every matrix in this note was written down by hand, by me, to make a point. In a real model there are billions of these numbers and no person chooses any of them. **Where do the numbers in $W$ and $\mathbf{b}$ actually come from?** [Article 3](notes/gradients-chain-rule-explained/) answers that, starting from the slope of a straight line and building two things: a **loss function**, which turns a wrong answer into a single number saying how wrong it is, and the **gradient**, which says for each individual weight whether nudging it up or down would make that number smaller. Step 8's claim about the sigmoid's flatness becomes a calculation you can do rather than a picture you have to trust.
+Every matrix in this note was written down by hand, by me, to make a point. In a real model there are billions of these numbers and no person chooses any of them. **Where do the numbers in $W$ and $\mathbf{b}$ actually come from?** [Article 3](notes/how-gradient-descent-works/) answers that, starting from the slope of a straight line and building two things: a **loss function**, which turns a wrong answer into a single number saying how wrong it is, and the **gradient**, which says for each individual weight whether nudging it up or down would make that number smaller. Step 8's claim about the sigmoid's flatness becomes a calculation you can do rather than a picture you have to trust.
 
 After that comes the descent itself: take a small step downhill for every weight at once, repeat a few million times. A network of the layers built in this note, trained by the method built in the next two, is a working model.
 

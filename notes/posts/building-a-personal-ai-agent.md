@@ -1,5 +1,5 @@
 ---
-title: Building a personal AI agent (Saati) that keeps track of everything I work on
+title: Building a personal AI agent that keeps track of everything I work on
 date: 2026-11-12
 tags: [AI, projects]
 summary: Saati is a personal AI agent I talk to on Telegram. It tracks my projects, ideas, and decisions, follows my coding sessions and voice notes, and runs in the cloud on a Gemini model.

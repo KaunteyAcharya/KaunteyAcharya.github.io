@@ -1,6 +1,6 @@
 ---
-title: What is RAG, and why does it matter so much?
-date: 2026-08-24
+title: "What is RAG (retrieval augmented generation), and why does it matter so much?"
+date: 2024-07-15
 tags: [AI]
 summary: Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong.
 related: [local-rag-agent, how-labs-train-ai-models, ml-vs-deep-learning]

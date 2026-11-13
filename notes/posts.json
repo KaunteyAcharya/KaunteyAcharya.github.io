@@ -1,23 +1,72 @@
 [
   {
     "slug": "ai-agent-memory-experiments",
-    "title": "Experiments with AI agents: memory and retrieval",
+    "title": "AI agent memory: 5 research based experiments on an agent with real data",
     "date": "2026-11-12",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "Five experiments on two months of my real coding-session history, testing ideas from the Mem0 and MemoryTax papers on a free-tier model. Overwriting memory destroyed history; facts plus raw text plus mixed keyword and embedding search did best."
+    "summary": "Five experiments on two months of my real coding-session history, testing ideas from the Mem0 and MemoryTax papers on a free-tier model. Overwriting memory destroyed history; facts plus raw text plus mixed keyword and embedding search did best.",
+    "mins": 19
   },
   {
     "slug": "building-a-personal-ai-agent",
-    "title": "Building a personal AI agent (Saati) that keeps track of everything I work on",
+    "title": "Building a personal AI agent that keeps track of everything I work on",
     "date": "2026-11-12",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "Saati is a personal AI agent I talk to on Telegram. It tracks my projects, ideas, and decisions, follows my coding sessions and voice notes, and runs in the cloud on a Gemini model."
+    "summary": "Saati is a personal AI agent I talk to on Telegram. It tracks my projects, ideas, and decisions, follows my coding sessions and voice notes, and runs in the cloud on a Gemini model.",
+    "mins": 5
+  },
+  {
+    "slug": "how-gradient-descent-works",
+    "title": "How gradient descent works in AI: loss, slopes, and the chain rule",
+    "date": "2026-11-10",
+    "tags": [
+      "AI",
+      "maths"
+    ],
+    "summary": "A model learns by measuring how wrong it is and nudging every number towards less wrong. This note builds that from nothing: what a loss function is, what a slope really measures, why the gradient points uphill, and how the chain rule prices a weight buried ten layers deep.",
+    "mins": 47,
+    "series": "token-by-token"
+  },
+  {
+    "slug": "voice-ai-agent",
+    "title": "Building Aditi, a Hindi and English voice agent with Pipecat and tool calling",
+    "date": "2026-11-07",
+    "tags": [
+      "AI",
+      "projects"
+    ],
+    "summary": "A real-time voice agent for a fictional Ahmedabad real estate agency. She searches listings, works out EMIs, books site visits, and texts a follow-up, in Hindi or English, on a laptop CPU and free tiers.",
+    "mins": 5
+  },
+  {
+    "slug": "neural-network-layer-explained",
+    "title": "How a neural network layer works: matrices, bias, and ReLU",
+    "date": "2026-11-05",
+    "tags": [
+      "AI",
+      "maths"
+    ],
+    "summary": "A neural network layer is a matrix, a bias, and a nonlinearity. This note builds it from nothing: what a matrix does to a vector, why stacking linear layers collapses into a single layer, and why ReLU is what makes depth worth having.",
+    "mins": 46,
+    "series": "token-by-token"
+  },
+  {
+    "slug": "word-embeddings-explained",
+    "title": "What are word embeddings? How text becomes vectors",
+    "date": "2026-11-02",
+    "tags": [
+      "AI",
+      "maths"
+    ],
+    "summary": "A computer has no notion of meaning or context. This note builds word embeddings from nothing: why one number per word fails, why vectors work, and why the angle between two vectors tells you a cat is closer to a dog than to a car.",
+    "mins": 39,
+    "series": "token-by-token"
   },
   {
     "slug": "ai-stack-advisor",
@@ -27,55 +76,51 @@
       "AI",
       "projects"
     ],
-    "summary": "Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI."
+    "summary": "Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI, in your own currency and with your country's tax rules.",
+    "mins": 12
   },
   {
     "slug": "tickerbrief",
-    "title": "Building TickerBrief, an equity research agent",
+    "title": "Building TickerBrief, an automated equity research pipeline with n8n, Python, and a local LLM",
     "date": "2026-10-01",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. All local and free."
+    "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. How the data, the scorecard, and the three LLM passes work, and why the LLM never touches a number.",
+    "mins": 8
   },
   {
     "slug": "ml-drift-alert-agent",
-    "title": "Building a model drift alert agent",
+    "title": "Building a model drift monitor with Evidently, n8n, and a local LLM",
     "date": "2026-09-29",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack."
+    "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack. The metrics, the alert rules, four failure scenarios, and what the test runs showed.",
+    "mins": 6
   },
   {
     "slug": "local-rag-agent",
-    "title": "Building a fully local RAG agent",
+    "title": "Building a fully local RAG document assistant with n8n, Ollama, and ChromaDB",
     "date": "2026-09-22",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine."
-  },
-  {
-    "slug": "what-is-rag",
-    "title": "What is RAG, and why does it matter so much?",
-    "date": "2026-08-24",
-    "tags": [
-      "AI"
-    ],
-    "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong."
+    "summary": "A document Q&A assistant that runs entirely on my machine. How it splits, embeds, and retrieves text, the prompt that stops a small model from guessing, and what would change with a cloud model, different chunk sizes, or conversation memory.",
+    "mins": 7
   },
   {
     "slug": "creating-focuspulse",
-    "title": "Creating FocusPulse",
+    "title": "FocusPulse: a Chrome extension for tracking your own focus",
     "date": "2026-08-17",
     "tags": [
       "projects"
     ],
-    "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome."
+    "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome.",
+    "mins": 1
   },
   {
     "slug": "ai-benchmarks",
@@ -84,16 +129,18 @@
     "tags": [
       "AI"
     ],
-    "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work."
+    "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work.",
+    "mins": 9
   },
   {
     "slug": "creating-easyautofill",
-    "title": "Creating EasyAutoFill",
+    "title": "EasyAutoFill: a browser extension that fills any form from your own profile file",
     "date": "2026-07-20",
     "tags": [
       "projects"
     ],
-    "summary": "A local, open-source browser extension that fills any form from your own profile file."
+    "summary": "A local, open-source browser extension that fills any form from your own profile file.",
+    "mins": 1
   },
   {
     "slug": "stats-with-first-principles",
@@ -102,17 +149,19 @@
     "tags": [
       "maths"
     ],
-    "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time."
+    "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time.",
+    "mins": 1
   },
   {
     "slug": "automating-arxiv",
-    "title": "Automating my morning arXiv routine",
+    "title": "Automating my morning arXiv routine with n8n, Telegram, and an LLM",
     "date": "2026-06-02",
     "tags": [
       "AI",
       "projects"
     ],
-    "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
+    "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n workflow to do it. How it works, the bugs that made it silently return nothing, and how it went from a small local model to full-paper derivations.",
+    "mins": 5
   },
   {
     "slug": "ml-vs-deep-learning",
@@ -121,7 +170,8 @@
     "tags": [
       "AI"
     ],
-    "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation."
+    "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation.",
+    "mins": 7
   },
   {
     "slug": "how-labs-train-ai-models",
@@ -130,16 +180,18 @@
     "tags": [
       "AI"
     ],
-    "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently."
+    "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently.",
+    "mins": 7
   },
   {
     "slug": "gradient-descent-better-code",
-    "title": "Karpathy in 2017: “Gradient descent can write better code than you”",
+    "title": "Why Karpathy said gradient descent writes better code than you",
     "date": "2025-01-08",
     "tags": [
       "AI"
     ],
-    "summary": "In 2017, Andrej Karpathy joked that gradient descent writes better code than us. Seven years later, it doesn't feel like much of a joke."
+    "summary": "In 2017 Andrej Karpathy tweeted that gradient descent can write code better than you, then made the case in his Software 2.0 essay. What he actually meant, what the essay gets right, what it admitted would go wrong, and how the claim reads nine years later.",
+    "mins": 10
   },
   {
     "slug": "claude-overtook-gpt",
@@ -148,7 +200,8 @@
     "tags": [
       "AI"
     ],
-    "summary": "ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened."
+    "summary": "ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened.",
+    "mins": 5
   },
   {
     "slug": "maths-physics-inside-llms",
@@ -158,7 +211,28 @@
       "AI",
       "maths"
     ],
-    "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models."
+    "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models.",
+    "mins": 7
+  },
+  {
+    "slug": "notebooklm-vs-chatbot-vs-rag",
+    "title": "What is Google's NotebookLM, and how is it different from a chatbot and from RAG?",
+    "date": "2024-08-16",
+    "tags": [
+      "AI"
+    ],
+    "summary": "NotebookLM, ChatGPT, and RAG get discussed as three competing things. They are not. One is a product, one is a pattern, and the difference that actually matters is who decides what the model is allowed to read.",
+    "mins": 4
+  },
+  {
+    "slug": "what-is-rag",
+    "title": "What is RAG (retrieval augmented generation), and why does it matter so much?",
+    "date": "2024-07-15",
+    "tags": [
+      "AI"
+    ],
+    "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong.",
+    "mins": 6
   },
   {
     "slug": "jmn-magnetic-field",
@@ -167,7 +241,8 @@
     "tags": [
       "physics"
     ],
-    "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks."
+    "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks.",
+    "mins": 2
   },
   {
     "slug": "gpt-origins",
@@ -176,7 +251,8 @@
     "tags": [
       "AI"
     ],
-    "summary": "With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went."
+    "summary": "With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went.",
+    "mins": 5
   },
   {
     "slug": "chatgpt-interface",
@@ -185,7 +261,8 @@
     "tags": [
       "AI"
     ],
-    "summary": "ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is."
+    "summary": "ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is.",
+    "mins": 4
   },
   {
     "slug": "ml-black-hole-energy-extraction",
@@ -195,16 +272,18 @@
       "physics",
       "AI"
     ],
-    "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it."
+    "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it.",
+    "mins": 2
   },
   {
     "slug": "first-paper-penrose",
-    "title": "My first paper: stealing energy from spinning black holes",
+    "title": "My first paper: stealing energy from spinning black holes (and their mimickers)",
     "date": "2022-06-02",
     "tags": [
       "physics"
     ],
-    "summary": "The Penrose process in plain words, and what my first paper asked about black hole look-alikes."
+    "summary": "The Penrose process in plain words, and what my first paper found when we ran it around Kerr black hole mimickers. One family matched Kerr exactly; another was far more efficient.",
+    "mins": 4
   },
   {
     "slug": "msc-thesis",
@@ -213,6 +292,7 @@
     "tags": [
       "physics"
     ],
-    "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes."
+    "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes.",
+    "mins": 2
   }
 ]

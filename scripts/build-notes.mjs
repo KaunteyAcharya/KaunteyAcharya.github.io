@@ -13,10 +13,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
 const SITE = 'https://kaunteyacharya.com';
 const AUTHOR = 'Kauntey Acharya';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const POSTS = path.join(ROOT, 'notes', 'posts');
 const AUTHOR_ROLE = 'AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst';
 const AUTHOR_BIO = 'is an AI automation engineer and consultant with a background in theoretical physics. He builds agentic workflows, RAG systems, and research tools, and writes these notes to explain AI and quantitative ideas from first principles.';

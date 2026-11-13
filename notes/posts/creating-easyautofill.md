@@ -1,5 +1,5 @@
 ---
-title: Creating EasyAutoFill
+title: "EasyAutoFill: a browser extension that fills any form from your own profile file"
 date: 2026-07-20
 tags: [projects]
 summary: A local, open-source browser extension that fills any form from your own profile file.

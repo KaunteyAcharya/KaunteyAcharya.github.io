@@ -1,5 +1,5 @@
 ---
-title: "Experiments with AI agents: memory and retrieval"
+title: "AI agent memory: 5 research based experiments on an agent with real data"
 date: 2026-11-12
 tags: [AI, projects]
 summary: Five experiments on two months of my real coding-session history, testing ideas from the Mem0 and MemoryTax papers on a free-tier model. Overwriting memory destroyed history; facts plus raw text plus mixed keyword and embedding search did best.

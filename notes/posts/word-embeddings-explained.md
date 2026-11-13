@@ -1,5 +1,5 @@
 ---
-title: "What Are Word Embeddings? Why AI Engineering Needs Vectors"
+title: "What are word embeddings? How text becomes vectors"
 date: 2026-11-02
 tags: [AI, maths]
 summary: "A computer has no notion of meaning or context. This note builds word embeddings from nothing: why one number per word fails, why vectors work, and why the angle between two vectors tells you a cat is closer to a dog than to a car."

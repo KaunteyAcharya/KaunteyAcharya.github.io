@@ -1,5 +1,5 @@
 ---
-title: "What Is a Gradient? Loss, Slopes, and the Chain Rule"
+title: "How gradient descent works in AI: loss, slopes, and the chain rule"
 date: 2026-11-10
 tags: [AI, maths]
 summary: "A model learns by measuring how wrong it is and nudging every number towards less wrong. This note builds that from nothing: what a loss function is, what a slope really measures, why the gradient points uphill, and how the chain rule prices a weight buried ten layers deep."
