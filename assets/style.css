@@ -127,6 +127,10 @@ img { max-width: 100%; }
 .hero .roles { font-family: var(--mono); font-size: clamp(.85rem, 1.8vw, 1rem); color: var(--muted); margin-bottom: 1.8rem; }
 .hero .lede { font-size: clamp(1.1rem, 2.2vw, 1.3rem); max-width: 36em; margin-bottom: 2.2rem; }
 .hero .lede em { font-style: italic; }
+/* Second hero line: the physics background and the research habit. One step down
+   from the lede so it reads as context rather than as a second headline. */
+.hero .lede-2 { font-size: 1rem; color: var(--muted); margin-top: -1.4rem; }
+.hero .lede-2 a { color: inherit; text-underline-offset: 3px; }
 .nw { white-space: nowrap; }
 
 .links { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; font-family: var(--mono); font-size: .85rem; }
@@ -367,6 +371,11 @@ img { max-width: 100%; }
   .post-item { grid-template-columns: 1fr; gap: .1rem; }
 }
 @media (max-width: 480px) {
+  /* Phones: the hero carries a lot of copy now, so the two description lines
+     step down a size. Keeps the profile links above the fold. */
+  .hero .lede { font-size: .98rem; margin-bottom: 1.8rem; }
+  .hero .lede-2 { font-size: .88rem; margin-top: -1.1rem; }
+  .hero .roles { font-size: .85rem; }
   .nav { gap: 1rem; }
   .chat { right: 10px; left: 10px; bottom: 10px; width: auto !important; height: min(78vh, 560px) !important; }
   .chat-resize { display: none; }
