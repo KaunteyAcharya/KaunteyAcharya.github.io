@@ -168,7 +168,7 @@
 
   /* ---------- Saved choices ---------- */
   const KEY = 'konzi-v2';
-  const mem = (() => { try { return Object.assign({ off: false, done: false }, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) { return { off: false, done: false }; } })();
+  const mem = (() => { try { return Object.assign({ off: false, done: false, hushed: false }, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) { return { off: false, done: false, hushed: false }; } })();
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch (e) {} };
   const session = (() => { try { return JSON.parse(sessionStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
   const saveSession = () => { try { sessionStorage.setItem(KEY, JSON.stringify(session)); } catch (e) {} };
@@ -357,6 +357,7 @@
   function wanted() {
     if (performance.now() - t0 < 1000) return null;   // let the page settle first
     if (dozing || thrown) return null;
+    if (mem.hushed) return null;                      // closed with the × : stays quiet until Konzi is tapped
     if (override) return override;
     if (!tourOn() || closedFor === activeId) return null;
     return sectionStop(activeId);
@@ -448,18 +449,20 @@
     el.textContent = label;
     return el;
   }
-  // Close the current line: a one-off stop goes away, a section's line stays closed until the section changes
-  function close() {
+  // Close the current line: a one-off stop goes away, a section's line stays closed until the section changes.
+  // byUser is the × : that means "stop talking", and it is remembered in this browser until Konzi is tapped.
+  function close(byUser) {
     if (override) override = null; else closedFor = activeId;
+    if (byUser) { mem.hushed = true; save(); }
   }
   function skipTour() { mem.off = true; save(); override = null; }
   function restartTour() {
-    mem.off = false; save(); session.quiet = false; session.tourAgain = true; saveSession();
+    mem.off = false; mem.hushed = false; save(); session.quiet = false; session.tourAgain = true; saveSession();
     override = null; closedFor = null; Object.keys(partOf).forEach(k => delete partOf[k]);
     if (onHome) { shownId = '__restart'; scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); }
     else location.href = 'index.html';
   }
-  root.querySelector('.konzi-x').addEventListener('click', close);
+  root.querySelector('.konzi-x').addEventListener('click', () => close(true));
   function setExpression(name) {
     K.setExpr(name);
     if (EXPR[name] && EXPR[name].jump && !reduce) P.vy -= 7;
@@ -538,6 +541,7 @@
   function tap() {
     if (thrown) return;
     hop();
+    if (mem.hushed) { mem.hushed = false; save(); closedFor = null; }   // tapping Konzi is how you get him talking again
     if (!tourOn()) { override = 'tapOff'; partOf.tapOff = 0; return; }
     if (!shownId) { closedFor = null; if (!wanted()) { override = 'tap'; partOf.tap = 0; } return; }
     const prev = K.st.expr; K.setExpr('laugh'); setTimeout(() => { if (K.st.expr === 'laugh') K.setExpr(prev); }, 900);

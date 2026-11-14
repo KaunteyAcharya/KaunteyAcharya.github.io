@@ -22,7 +22,13 @@ const POSTS = path.join(ROOT, 'notes', 'posts');
 const AUTHOR_ROLE = 'AI Automation Engineer, AI Strategist & Consultant, Quantitative Analyst';
 const AUTHOR_BIO = 'is an AI automation engineer and consultant with a background in theoretical physics. He builds agentic workflows, RAG systems, and research tools, and writes these notes to explain AI and quantitative ideas from first principles.';
 const AUTHOR_LINKS = ['https://www.linkedin.com/in/kauntey-acharya', 'https://github.com/KaunteyAcharya', 'https://medium.com/@sometimes_rational', 'https://www.researchgate.net/profile/Kauntey-Acharya'];
-const EXTRA_PAGES = ['ai-stack-advisor/', 'ai-stack-advisor/about.html'];        // other sites served under this domain
+const PAPERS = [                                                                // peer-reviewed, same four as the portfolio page
+  { title: 'JMN-1 singularity in weak magnetic field', venue: 'Eur. Phys. J. C 84, 535', authors: 'M. Azreg-Aïnou, K. Acharya, P. S. Joshi', doi: '10.1140/epjc/s10052-024-12905-4' },
+  { title: 'High energy particle collision in vicinity of naked singularity', venue: 'Phys. Dark Univ. Vol. 50, 102101', authors: 'K. Acharya, P. Bambhaniya, P. S. Joshi, K. Pandey, V. Patel', doi: '10.1016/j.dark.2025.102101' },
+  { title: 'Energy extraction from Janis-Newman-Winicour naked singularity', venue: 'Phys. Rev. D 107, 064036', authors: 'V. Patel, K. Acharya, P. Bambhaniya, P. S. Joshi', doi: '10.1103/PhysRevD.107.064036' },
+  { title: "Rotational energy extraction from Kerr black hole's mimickers", venue: 'Universe 2022, 8(11), 571', authors: 'V. Patel, K. Acharya, P. Bambhaniya, P. S. Joshi', doi: '10.3390/universe8110571' }
+];
+const EXTRA_PAGES =['ai-stack-advisor/', 'ai-stack-advisor/about.html'];        // other sites served under this domain
 const require = createRequire(import.meta.url);
 const { marked } = require(path.join(ROOT, 'assets', 'vendor', 'marked.min.js'));
 
@@ -175,6 +181,9 @@ notes.forEach((n, i) => {
   const { html, math } = render(n.body, n.slug);
   const older = notes[i + 1], newer = notes[i - 1];
   const related = relatedFor(n);
+  // The three newest notes this page does not already link to, so every new note
+  // picks up inbound links from the whole archive as soon as it is published.
+  const latestOther = notes.filter(o => o.slug !== n.slug && !related.some(r => r.slug === o.slug)).slice(0, 3);
   const ld = {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: n.title, description: n.summary, datePublished: n.date, dateModified: n.updated || n.date,
@@ -239,6 +248,10 @@ ${html}    </div>
       ${related.length ? `<nav class="note-related" aria-labelledby="relatedHead">
         <h2 id="relatedHead">Related notes</h2>
         <ul>${related.map(r => `<li><a href="notes/${r.slug}/">${esc(r.title)}</a><p>${esc(r.summary)}</p></li>`).join('')}</ul>
+      </nav>` : ''}
+      ${latestOther.length ? `<nav class="note-related note-latest" aria-labelledby="latestHead">
+        <h2 id="latestHead">Latest notes</h2>
+        <ul>${latestOther.map(r => `<li><a href="notes/${r.slug}/">${esc(r.title)}</a><p>${esc(r.summary)}</p></li>`).join('')}</ul>
       </nav>` : ''}
       <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed.xml">RSS feed</a>.</p>
       <nav class="note-nav" aria-label="More notes">
@@ -315,7 +328,7 @@ for (const [f, [id, items]] of Object.entries(lists)) {
 
 /* ---------- llms.txt: a plain summary of the site for AI assistants (llmstxt.org) ---------- */
 const P = s => s.replace(/\s+/g, ' ').trim();
-write('llms.txt', `# ${AUTHOR}
+const llmsIndex = `# ${AUTHOR}
 
 > ${AUTHOR} ${AUTHOR_BIO} Based in Ahmedabad, India. Currently an AI Automation Engineer and Analyst at Innodata Inc.
 
@@ -328,6 +341,17 @@ This site is his portfolio (experience, projects, and four peer-reviewed physics
 - [AI Stack Advisor](${SITE}/ai-stack-advisor/): free build-vs-buy, TCO, and ROI calculator for AI solutions
 - [How AI Stack Advisor works](${SITE}/ai-stack-advisor/about.html): every formula, assumption, and price behind the calculator, with sources
 - [RSS feed](${SITE}/feed.xml)
+- [Full text of every note](${SITE}/llms-full.txt): this file plus the complete markdown of all ${notes.length} notes, for assistants that want the source rather than the summaries
+
+## Work he takes on
+
+Available for AI automation and agentic workflow builds, RAG and retrieval systems, LLM evaluation and benchmarking, and quantitative and research analysis, as a consultant or employee. Open to remote work and to relocation. Reachable at the contact details below; calls can be booked on the portfolio page.
+
+## Publications
+
+Four peer-reviewed papers in gravitational physics, on energy extraction, particle collisions, and naked singularities.
+
+${PAPERS.map(p => `- [${p.title}](https://doi.org/${p.doi}): ${p.authors}. ${p.venue}.`).join('\n')}
 
 ## Notes
 
@@ -340,6 +364,21 @@ ${AUTHOR_LINKS.map(u => `- ${u}`).join('\n')}
 ## Contact
 
 Email kaunteyacharya2000@gmail.com or message on LinkedIn. Calls can be booked through the assistant on the portfolio page.
+`;
+write('llms.txt', llmsIndex);
+
+/* ---------- llms-full.txt: the same index plus the full markdown of every note ---------- */
+write('llms-full.txt', llmsIndex + `
+---
+
+# Full text of every note
+
+${notes.map(n => `## ${n.title}
+
+Published ${fmtDate(n.date)}${n.updated ? `, updated ${fmtDate(n.updated)}` : ''}. ${SITE}/notes/${n.slug}/
+
+${n.body.trim()}
+`).join('\n---\n\n')}
 `);
 
 console.log(`Built ${notes.length} note pages, feed.xml and sitemap.xml`);

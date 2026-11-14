@@ -4,7 +4,7 @@ date: 2026-09-22
 updated: 2026-10-30
 tags: [AI, projects]
 summary: A document Q&A assistant that runs entirely on my machine. How it splits, embeds, and retrieves text, the prompt that stops a small model from guessing, and what would change with a cloud model, different chunk sizes, or conversation memory.
-related: [what-is-rag, ml-drift-alert-agent, automating-arxiv]
+related: [what-is-rag, notebooklm-vs-chatbot-vs-rag, ml-drift-alert-agent]
 ---
 
 I wanted a simple way to ask questions about my own documents without sending them to a cloud API. No API keys, no usage bills, and no data leaving my machine. So I built a [local RAG document Q&A assistant](https://github.com/KaunteyAcharya/RAG-doc-qa-assistant). There is a short video demo in the [README](https://github.com/KaunteyAcharya/RAG-doc-qa-assistant#readme).

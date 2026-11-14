@@ -17,5 +17,10 @@ Claude outputs/
 /feed.xml
 /sitemap.xml
 /llms.txt
+/llms-full.txt
 /notes/*/
 !/notes/posts/
+
+# Scratch preview page, not part of the site
+/_bg-demo.html
+/_color-demo.html
