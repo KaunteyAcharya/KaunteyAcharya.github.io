@@ -329,7 +329,7 @@ ${top.replace('href="#blogRoot"', 'href="feed/#blogRoot"')}<main class="wrap" id
     <div class="prose">
       <p>A feed is just an address. Hand it to a feed reader and every new note turns up there by itself: no account on this site, no newsletter list, and no email address given to me. If you would rather have them by email, Blogtrottr watches the feed and posts each note to your inbox. You own that subscription, not me, so you can stop it without asking.</p>
       <p class="feed-link">Subscribe:
-        <a href="https://feedly.com/i/subscription/feed/${encodeURIComponent(FEED_URL)}" target="_blank" rel="noopener noreferrer">Feedly</a> &middot;
+        <a href="https://feedly.com/i/discover/sources/search/feed/${encodeURIComponent(FEED_URL)}" target="_blank" rel="noopener noreferrer">Feedly</a> &middot;
         <a href="https://www.inoreader.com/?add_feed=${encodeURIComponent(FEED_URL)}" target="_blank" rel="noopener noreferrer">Inoreader</a> &middot;
         <a href="https://blogtrottr.com/?subscribe=${FEED_URL}" target="_blank" rel="noopener noreferrer">by email</a> &middot;
         <a href="${FEED_URL}">the raw feed</a>
