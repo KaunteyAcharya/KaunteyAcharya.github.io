@@ -190,3 +190,15 @@
     });
   }
 })();
+
+/* ---------- Copy the feed URL, for readers whose app wants a pasted address ---------- */
+(() => {
+  const btn = document.querySelector('.feed-copy');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const url = btn.dataset.feed, was = btn.textContent;
+    try { await navigator.clipboard.writeText(url); btn.textContent = 'Copied'; }
+    catch (e) { btn.textContent = url; }            // clipboard blocked: show it to select by hand
+    setTimeout(() => { btn.textContent = was; }, 2000);
+  });
+})();

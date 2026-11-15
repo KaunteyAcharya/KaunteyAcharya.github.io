@@ -21,7 +21,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const POSTS = path.join(ROOT, 'notes', 'posts');
 const AUTHOR_ROLE = 'AI Automation Engineer, AI Strategist & Consultant, Product & Growth';
 const AUTHOR_BIO = 'is an AI automation engineer and consultant with a background in theoretical physics. He builds agentic workflows, RAG systems, and research tools, and writes these notes to explain AI and quantitative ideas from first principles.';
-const AUTHOR_LINKS = ['https://www.linkedin.com/in/kauntey-acharya', 'https://github.com/KaunteyAcharya', 'https://medium.com/@sometimes_rational', 'https://www.researchgate.net/profile/Kauntey-Acharya'];
+const AUTHOR_LINKS = ['https://orcid.org/0000-0002-4238-2911', 'https://explainingagents.com', 'https://www.linkedin.com/in/kauntey-acharya', 'https://github.com/KaunteyAcharya', 'https://medium.com/@sometimes_rational', 'https://substack.com/@kaunteyacharya', 'https://www.researchgate.net/profile/Kauntey-Acharya', 'https://inspirehep.net/authors/2619980'];
 const PAPERS = [                                                                // peer-reviewed, same four as the portfolio page
   { title: 'JMN-1 singularity in weak magnetic field', venue: 'Eur. Phys. J. C 84, 535', authors: 'M. Azreg-Aïnou, K. Acharya, P. S. Joshi', doi: '10.1140/epjc/s10052-024-12905-4' },
   { title: 'High energy particle collision in vicinity of naked singularity', venue: 'Phys. Dark Univ. Vol. 50, 102101', authors: 'K. Acharya, P. Bambhaniya, P. S. Joshi, K. Pandey, V. Patel', doi: '10.1016/j.dark.2025.102101' },
@@ -253,7 +253,7 @@ ${html}    </div>
         <h2 id="latestHead">Latest notes</h2>
         <ul>${latestOther.map(r => `<li><a href="notes/${r.slug}/">${esc(r.title)}</a><p>${esc(r.summary)}</p></li>`).join('')}</ul>
       </nav>` : ''}
-      <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed.xml">RSS feed</a>.</p>
+      <p class="note-follow">Thanks for reading. New notes also arrive in the <a href="feed/">RSS feed</a>.</p>
       <nav class="note-nav" aria-label="More notes">
         ${newer ? `<a class="note-newer" href="notes/${newer.slug}/"><span>← Newer</span>${esc(newer.title)}</a>` : '<span></span>'}
         ${older ? `<a class="note-older" href="notes/${older.slug}/"><span>Older →</span>${esc(older.title)}</a>` : '<span></span>'}
@@ -295,10 +295,76 @@ ${n.tags.map(t => `    <category>${esc(t)}</category>`).join('\n')}
 `;
 write('feed.xml', feed);
 
+/* ---------- /feed/ : a readable page for the feed.
+   Browsers are dropping XSLT, so feed.xsl will stop styling feed.xml. Visible "RSS" links
+   point here instead; feed.xml stays the machine address that readers actually subscribe to. */
+const FEED_URL = `${SITE}/feed.xml`;
+const feedPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="../">
+<title>Follow the notes | ${AUTHOR}</title>
+<meta name="description" content="Get new notes by RSS or email. One click into Feedly, Inoreader or Blogtrottr, or copy the feed address into any reader.">
+<meta name="author" content="${AUTHOR}">
+<link rel="canonical" href="${SITE}/feed/">
+<link rel="alternate" type="application/rss+xml" title="${AUTHOR}: Notes" href="${FEED_URL}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${AUTHOR}">
+<meta property="og:url" content="${SITE}/feed/">
+<meta property="og:title" content="Follow the notes">
+<meta property="og:description" content="New notes by RSS or email, in whatever you already read.">
+<meta property="og:image" content="${SITE}/og/notes.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE}/og/notes.png">
+${headKeep}</head>
+${top.replace('href="#blogRoot"', 'href="feed/#blogRoot"')}<main class="wrap" id="blogRoot">
+  <article class="article">
+    <a class="back" href="notes.html">&larr; All notes</a>
+    <header>
+      <h1>Follow the notes</h1>
+      <p class="byline">New notes, wherever you already read things.</p>
+    </header>
+    <div class="prose">
+      <p>A feed is just an address. Hand it to a feed reader and every new note turns up there by itself: no account on this site, no newsletter list, and no email address given to me. If you would rather have them by email, Blogtrottr watches the feed and posts each note to your inbox. You own that subscription, not me, so you can stop it without asking.</p>
+      <p class="feed-link">Subscribe:
+        <a href="https://feedly.com/i/subscription/feed/${encodeURIComponent(FEED_URL)}" target="_blank" rel="noopener noreferrer">Feedly</a> &middot;
+        <a href="https://www.inoreader.com/?add_feed=${encodeURIComponent(FEED_URL)}" target="_blank" rel="noopener noreferrer">Inoreader</a> &middot;
+        <a href="https://blogtrottr.com/?subscribe=${FEED_URL}" target="_blank" rel="noopener noreferrer">by email</a> &middot;
+        <a href="${FEED_URL}">the raw feed</a>
+        <button type="button" class="feed-copy" data-feed="${FEED_URL}">Copy feed address</button>
+      </p>
+      <p>Using something else, such as NetNewsWire, Reeder or Thunderbird? Paste this in: <code>${FEED_URL}</code></p>
+    </div>
+    <footer class="note-end">
+      <nav class="note-related" aria-labelledby="latestHead">
+        <h2 id="latestHead">Latest notes</h2>
+        <ul>${notes.slice(0, 10).map(n => `<li><a href="notes/${n.slug}/">${esc(n.title)}</a><p>${esc(n.summary)}</p></li>`).join('')}</ul>
+      </nav>
+    </footer>
+  </article>
+  <script>
+  (function () {
+    var b = document.querySelector('.feed-copy');
+    if (!b) return;
+    b.addEventListener('click', function () {
+      var u = b.dataset.feed, was = b.textContent;
+      function done() { b.textContent = 'Copied'; setTimeout(function () { b.textContent = was; }, 2000); }
+      // Clipboard access is blocked in some contexts, so always leave a way to copy by hand.
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done, function () { prompt('Copy this address:', u); });
+      else prompt('Copy this address:', u);
+    });
+  })();
+  </script>
+</main>${bottom}`;
+write('feed/index.html', feedPage);
+
 const latest = notes.length ? notes[0].date : '';
 const urls = [
   { loc: SITE + '/', lastmod: latest },
   { loc: SITE + '/notes.html', lastmod: latest },
+  { loc: SITE + '/feed/', lastmod: latest },
   ...notes.map(n => ({ loc: `${SITE}/notes/${n.slug}/`, lastmod: n.updated || n.date })),
   ...EXTRA_PAGES.map(p => ({ loc: `${SITE}/${p}` }))
 ];

@@ -665,3 +665,16 @@ html { scrollbar-color: var(--line) transparent; }
 @keyframes ka-target-flash { from { background: var(--surface); } to { background: transparent; } }
 .prose .target-flash { animation: ka-target-flash 1.8s ease-out; border-radius: 3px; }
 @media (prefers-reduced-motion: reduce) { .prose .target-flash { animation: none; } }
+
+/* ORCID line above the publications list */
+.pub-orcid { font-size: .85rem; color: var(--muted); margin-bottom: 1.4rem; }
+.pub-orcid a { color: inherit; text-underline-offset: 3px; }
+
+/* Follow row under the notes heading */
+.feed-link { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .5rem; }
+.feed-copy {
+  font: inherit; font-size: .78rem; cursor: pointer;
+  background: none; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: .12rem .6rem;
+}
+.feed-copy:hover { color: var(--text); border-color: var(--text); }
