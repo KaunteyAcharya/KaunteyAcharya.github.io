@@ -1,5 +1,16 @@
 [
   {
+    "slug": "agent-memory-when-facts-change",
+    "title": "AI agent memory, part 2: what happens when facts change",
+    "date": "2026-11-18",
+    "tags": [
+      "AI",
+      "projects"
+    ],
+    "summary": "Five more experiments on my personal agent's memory. Overwriting old facts left it unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.",
+    "mins": 18
+  },
+  {
     "slug": "ai-agent-memory-experiments",
     "title": "AI agent memory: 5 research based experiments on an agent with real data",
     "date": "2026-11-12",
@@ -190,7 +201,7 @@
     "tags": [
       "AI"
     ],
-    "summary": "In 2017 Andrej Karpathy tweeted that gradient descent can write code better than you, then made the case in his Software 2.0 essay. What he actually meant, what the essay gets right, what it admitted would go wrong, and how the claim reads nine years later.",
+    "summary": "What Karpathy actually meant when he said gradient descent writes better code, what his Software 2.0 essay got right, and how it reads nine years on.",
     "mins": 10
   },
   {

@@ -3,7 +3,7 @@ title: "Why Karpathy said gradient descent writes better code than you"
 date: 2025-01-08
 updated: 2026-11-13
 tags: [AI]
-summary: In 2017 Andrej Karpathy tweeted that gradient descent can write code better than you, then made the case in his Software 2.0 essay. What he actually meant, what the essay gets right, what it admitted would go wrong, and how the claim reads nine years later.
+summary: What Karpathy actually meant when he said gradient descent writes better code, what his Software 2.0 essay got right, and how it reads nine years on.
 related: [how-gradient-descent-works, ml-vs-deep-learning, how-labs-train-ai-models, ai-benchmarks]
 ---
 

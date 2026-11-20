@@ -1,6 +1,7 @@
 ---
 title: "AI agent memory, part 2: what happens when facts change"
 date: 2026-11-18
+updated: 2026-11-19
 tags: [AI, projects]
 summary: Five more experiments on my personal agent's memory. Overwriting old facts left it unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.
 related: [ai-agent-memory-experiments, building-a-personal-ai-agent, what-is-rag]
@@ -188,6 +189,20 @@ A mishap worth admitting: midway through, network errors hit 74 of the 156 conve
 This is a case study: one person's data, one small model, and 6 to 17 questions per group, so differences under about 15 to 20 points could be chance. Only the results whose confidence intervals exclude zero are firm. An AI assistant drafted and screened the Run 6 questions and wrote the Run 8 scenarios, and an AI grader graded everything. A second AI grader checked 30 answers, and I reviewed the disagreements. The changes in my data are explicit, which makes this easier than STALE's own test. Most of Run 7c's outdated-fact questions reuse Run 6's changes. Run 8's conversations are scripted, not real use, and each was tried only 3 times.
 
 Next, I want to tackle the cross-project mix-up from Run 7c, and test memory poisoning: what happens when something false gets written into memory in the first place.
+
+## Update, 19 November 2026: Run 9, the project mix-up
+
+Run 7c left one error: asked which Python version my time-series dashboard uses, the agent gave my portfolio project's Python 3.12. The cause turned out to be simple. The stored note reads "The project uses Python 3.12 ..." with no project name, and 8 of my 259 stored notes start like that. The extraction step knew the project for every note; the stored text just didn't keep it.
+
+I tested three versions on 22 new questions. In 11 "trap" questions, the only matching note belongs to a different project, so the right answer is "the notes don't cover this" (or naming the other project). The other 11 ask the same thing about the right project. The versions: notes as before, each note shown with `[project: name]`, and labels plus a rule to use only notes about the asked project.
+
+| Questions (n) | No labels | Labels | Labels + rule |
+|---|---|---|---|
+| Traps (11) | 68% | 100% | 100% |
+| Traps on unnamed notes (7) | 50% | 100% | 100% |
+| Normal questions (11) | 91% | 100% | 100% |
+
+Labels added 32 points on the traps (95% CI +9 to +59) and cost nothing on normal questions. Every trap the agent fell for was built on a note with no project name, and the extra rule added nothing beyond the label. Same limits as above: 11 questions per group, an AI assistant drafted the questions, and the 7 unnamed-note traps reuse the store's only 8 unnamed notes. Next is putting the label into Saati's live memory.
 
 ## Sources
 
