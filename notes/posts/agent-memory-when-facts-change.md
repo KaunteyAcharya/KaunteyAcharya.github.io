@@ -1,7 +1,7 @@
 ---
 title: "AI agent memory, part 2: what happens when facts change"
 date: 2026-11-18
-updated: 2026-11-19
+updated: 2026-11-21
 tags: [AI, projects]
 summary: Five more experiments on my personal agent's memory. Overwriting old facts left it unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.
 related: [ai-agent-memory-experiments, building-a-personal-ai-agent, what-is-rag]
@@ -203,6 +203,24 @@ I tested three versions on 22 new questions. In 11 "trap" questions, the only ma
 | Normal questions (11) | 91% | 100% | 100% |
 
 Labels added 32 points on the traps (95% CI +9 to +59) and cost nothing on normal questions. Every trap the agent fell for was built on a note with no project name, and the extra rule added nothing beyond the label. Same limits as above: 11 questions per group, an AI assistant drafted the questions, and the 7 unnamed-note traps reuse the store's only 8 unnamed notes. Next is putting the label into Saati's live memory.
+
+## Update, 21 November 2026: the same tests on a much bigger model
+
+Every result above came from one small model. So I reran the answer step of Runs 1, 6, 6b, 7c, and 9 with a much larger open-weight model (about 120 billion parameters, served on Groq, low reasoning effort). Everything else stayed frozen: the same memory stores, the same search, the same prompts, and the same questions, graded blind the same way.
+
+| Result | Small model | Large model | Held? |
+|---|---|---|---|
+| Overwrite loses history (Run 1, history questions: overwrite vs labelled) | 29% vs 100% | 29% vs 96% | Yes |
+| Overwrite can't see a change (Run 6, "is the old state still true?") | 41% | 94% | No |
+| One sentence catches outdated questions (Run 6b) | 3% to 91% | 32% to 68% | Yes, smaller |
+| Tighter sentence on fresh questions (Run 7c) | 21% to 88% | 21% to 83% | Yes |
+| Project labels stop mix-ups (Run 9, trap questions) | 68% to 100% | 36% to 100% | Yes |
+
+One result in this note didn't survive. The bigger model read the new fact correctly even when the old one had been overwritten, so "overwriting left the agent unable to notice the change" is about small models, not memory design in general. Overwriting still deletes history with any model: once a fact is gone, nothing can answer a question about it.
+
+Two things surprised me. Without labels, the bigger model mixed up my projects more often than the small one did (36% against 68% on the traps). And without the prompt sentence, it caught my outdated questions no better (21% for both). Being bigger didn't fix either problem. The prompt and the labels did.
+
+Limits: one run per question at low reasoning effort, the same groups of 11 to 17 questions, and one AI grader. Runs 2 to 5 haven't been rerun yet.
 
 ## Sources
 
