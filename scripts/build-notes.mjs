@@ -29,6 +29,9 @@ const PAPERS = [                                                                
   { title: "Rotational energy extraction from Kerr black hole's mimickers", venue: 'Universe 2022, 8(11), 571', authors: 'V. Patel, K. Acharya, P. Bambhaniya, P. S. Joshi', doi: '10.3390/universe8110571' }
 ];
 const EXTRA_PAGES =['ai-stack-advisor/', 'ai-stack-advisor/about.html'];        // other sites served under this domain
+/* Retired note URLs that were live once, mapped to where they went. GitHub Pages cannot send a real
+   301, so the build leaves a canonical + meta refresh stub at the old address instead of a 404. */
+const REDIRECTS = { 'gradients-chain-rule-explained': 'how-gradient-descent-works' };
 const require = createRequire(import.meta.url);
 const { marked } = require(path.join(ROOT, 'assets', 'vendor', 'marked.min.js'));
 
@@ -263,6 +266,22 @@ ${html}    </div>
 </main>${bottom}`;
   write(`notes/${n.slug}/index.html`, page);
 });
+
+for (const [from, to] of Object.entries(REDIRECTS)) {
+  const dest = `${SITE}/notes/${to}/`;
+  write(`notes/${from}/index.html`, `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Moved</title>
+<link rel="canonical" href="${dest}">
+<meta http-equiv="refresh" content="0; url=${dest}">
+<meta name="robots" content="noindex, follow">
+</head>
+<body><p>This note moved to <a href="${dest}">${dest}</a>.</p></body>
+</html>
+`);
+}
 
 /* ---------- Notes list, feed, sitemap ---------- */
 const list = notes.map(({ slug, title, date, tags, summary, mins, series }) => ({ slug, title, date, tags, summary, mins, ...(series ? { series } : {}) }));

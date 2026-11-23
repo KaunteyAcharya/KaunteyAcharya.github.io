@@ -34,7 +34,7 @@
   },
   {
     "slug": "how-gradient-descent-works",
-    "title": "How gradient descent works in AI: loss, slopes, and the chain rule",
+    "title": "How does gradient descent work in AI? Loss, slopes, and the chain rule",
     "date": "2026-11-10",
     "tags": [
       "AI",
