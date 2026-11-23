@@ -7,8 +7,8 @@
       "AI",
       "projects"
     ],
-    "summary": "Five more experiments on my personal agent's memory. Overwriting old facts left it unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.",
-    "mins": 18
+    "summary": "Five more experiments on my personal agent's memory, checked on gpt-oss-120b. Overwriting old facts left a small model unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.",
+    "mins": 22
   },
   {
     "slug": "ai-agent-memory-experiments",

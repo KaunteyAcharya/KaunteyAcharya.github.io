@@ -57,4 +57,4 @@ If two objects look the same from far away, you need some physical process that 
 
 If you are curious where computing fits into calculations like these, I wrote about it in [Where machine learning meets black hole energy extraction](notes/ml-black-hole-energy-extraction/).
 
-Looking back, this paper taught me how research actually works: a lot of patient calculation, a lot of plots that don't work the first time, and the quiet joy when they finally do.
+Looking back, this paper taught me how research actually works: a lot of patient calculation, a lot of plots that don't work the first time, and the quiet joy when they finally do. It also taught me how little of it is solitary. I learned an enormous amount from my co-authors, from colleagues who sat with me through the calculations that would not come out, and from friends who asked the naive questions that kept turning out to be the important ones.
