@@ -415,7 +415,7 @@ for (const [f, [id, items]] of Object.entries(lists)) {
 const P = s => s.replace(/\s+/g, ' ').trim();
 const llmsIndex = `# ${AUTHOR}
 
-> ${AUTHOR} ${AUTHOR_BIO} Based in Ahmedabad, India. Currently an AI Automation Engineer and Analyst at Innodata Inc.
+> ${AUTHOR} ${AUTHOR_BIO} Based in Ahmedabad, India. Previously an AI Automation Engineer and Analyst, then acting team lead for AI training, at Innodata Inc. (Aug 2024 to Aug 2026).
 
 This site is his portfolio (experience, projects, and four peer-reviewed physics papers) and his notes on AI, automation, and research.
 

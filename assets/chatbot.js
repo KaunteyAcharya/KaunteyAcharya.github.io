@@ -73,7 +73,7 @@
       answer: '• AI Automation Engineer & Analyst, Innodata Inc. (Aug 2024 to Aug 2026)\n• Research Analyst and Writer, NetBotPro Technologies (Apr 2024 to Aug 2024)\n• Pre-Doctoral Research Fellow, Ahmedabad University (May 2022 to Mar 2024)',
       chips: ['Innodata', 'Research fellowship', 'Skills'] },
     { id: 'innodata', weight: 2, keys: ['innodata', 'automation engineer', 'ai automation', 'automations', 'ai analyst', 'prompt engineer', 'llm evaluation', 'evaluation'],
-      answer: 'At Innodata Inc. (Aug 2024 to Aug 2026) Kauntey is an AI Automation Engineer & Analyst. He designs and builds AI automations and workflows, and works on LLM evaluation, response-quality analysis, role-specific behaviour testing, and multimodal AI workflows.' },
+      answer: 'At Innodata Inc. (Aug 2024 to Aug 2026) Kauntey was an AI Automation Engineer & Analyst, and from Jan 2026 acting team lead for AI training. He designed and built AI automations and workflows, and worked on LLM evaluation, response-quality analysis, role-specific behaviour testing, and multimodal AI workflows.' },
     { id: 'netbotpro', weight: 2, keys: ['netbotpro', 'research analyst', 'writer', 'reviewer', 'seo'],
       answer: 'At NetBotPro Technologies (Apr 2024 to Aug 2024) Kauntey was a Research Analyst and Writer: research-driven technical scripts, academic content review, SEO-aware writing, and prompt engineering.' },
     { id: 'fellow', weight: 2, keys: ['fellow', 'fellowship', 'pre-doctoral', 'predoctoral', 'research fellowship', 'ahmedabad university'],

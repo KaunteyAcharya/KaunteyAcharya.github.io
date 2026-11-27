@@ -3,7 +3,7 @@ title: "How does gradient descent work in AI? Loss, slopes, and the chain rule"
 date: 2026-11-10
 tags: [AI, maths]
 summary: "A model learns by measuring how wrong it is and nudging every number towards less wrong. This note builds that from nothing: what a loss function is, what a slope really measures, why the gradient points uphill, and how the chain rule prices a weight buried ten layers deep."
-related: [neural-network-layer-explained, word-embeddings-explained, gradient-descent-better-code]
+related: [what-is-cross-entropy-loss, neural-network-layer-explained, word-embeddings-explained]
 series: token-by-token
 ---
 
@@ -592,7 +592,7 @@ It does not claim the gradient knows where the minimum is. It is a local, first-
 
 ## Next in the series
 
-This note assumed a loss and built everything on top of it. Article 4 goes back and asks what a loss *is* when the model's output is a probability rather than a number, which turns out to need a different foundation entirely.
+This note assumed a loss and built everything on top of it. [Article 4](notes/what-is-cross-entropy-loss/) goes back and asks what a loss *is* when the model's output is a probability rather than a number, which turns out to need a different foundation entirely.
 
 A language model does not predict a token. It predicts a distribution over all 50,257 of them, and the question "how wrong was that?" has no obvious answer when the prediction was a spread of possibilities and the truth was one token. **Probability** supplies the answer, and it brings with it the ideas of likelihood, surprise, and information. Out of them comes cross-entropy, the loss that essentially every modern model is actually trained on, and it turns out to be the only sensible choice rather than one option among many.
 

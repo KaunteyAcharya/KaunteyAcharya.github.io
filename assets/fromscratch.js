@@ -1337,6 +1337,218 @@
     draw();
   };
 
+  /* =========================================================
+     Article 4: probability, likelihood and cross-entropy
+     ========================================================= */
+
+  /* 20. softmax: logits to a distribution, with the temperature dial */
+  widgets.softmax = function (root) {
+    const NAMES = ['cat', 'dog', 'car'];
+    let Z = [2.0, 1.0, 0.1], T = 1;
+    const VW = 440, VH = 150, X0 = 64, BW = 344;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'Three bars showing the probability softmax assigns to each class' });
+    const out = h('div', { class: 'fs-out' });
+    const bars = sv('g', {}, svg);
+    const mk = (v, lbl) => h('input', { class: 'fs-input fs-num', type: 'number', step: '0.1', value: String(v), 'aria-label': lbl });
+    const zi = Z.map((v, i) => mk(v, 'logit for ' + NAMES[i]));
+    const temp = h('input', { class: 'fs-range', type: 'range', min: '0.25', max: '3', step: '0.05', value: '1', 'aria-label': 'temperature' });
+
+    function draw() {
+      while (bars.firstChild) bars.removeChild(bars.firstChild);
+      const m = Math.max(...Z);
+      const e = Z.map(z => Math.exp((z - m) / T));
+      const s = e.reduce((a, b) => a + b, 0);
+      const p = e.map(v => v / s);
+      // the raw exponentials, for the readout, at T = 1 and without the shift
+      const raw = Z.map(z => Math.exp(z / T)), rawSum = raw.reduce((a, b) => a + b, 0);
+      p.forEach((v, i) => {
+        const y = 26 + i * 40;
+        sv('rect', { x: X0, y, width: Math.max(1, BW * v), height: 26, class: i === 1 ? 'vb' : 'm', opacity: i === 1 ? 1 : 0.55 }, bars);
+        sv('text', { x: X0 - 8, y: y + 18, 'text-anchor': 'end', 'font-size': 12 }, bars).textContent = NAMES[i];
+        const tx = sv('text', { y: y + 18, 'font-size': 11, class: 'm' }, bars);
+        tx.textContent = fmt(v, 3);
+        tx.setAttribute('x', X0 + Math.max(1, BW * v) + 8);
+        if (X0 + BW * v + 46 > VW) { tx.setAttribute('x', X0 + BW * v - 8); tx.setAttribute('text-anchor', 'end'); }
+      });
+      out.textContent =
+        `temperature T = ${fmt(T, 2)}\n` +
+        `logits        z = (${Z.map(v => fmt(v, 2)).join(', ')})\n` +
+        `exponentials  e^(z/T) = (${raw.map(v => fmt(v, 3)).join(', ')})\n` +
+        `total                 = ${fmt(rawSum, 3)}\n` +
+        `probabilities p = (${p.map(v => fmt(v, 3)).join(', ')})   sum = ${fmt(p.reduce((a, b) => a + b, 0), 3)}\n\n` +
+        (T < 0.6 ? 'Low temperature. The gaps are stretched, so nearly all the belief sits on the winner.'
+          : T > 1.8 ? 'High temperature. The gaps are squashed, so the model is being made to treat its weaker options more seriously.'
+            : 'Try adding the same number to all three logits: nothing changes, because the extra factor cancels top and bottom.');
+    }
+    zi.forEach((el, i) => el.addEventListener('input', () => { const v = parseFloat(el.value); if (!isNaN(v)) { Z[i] = v; draw(); } }));
+    temp.addEventListener('input', () => { T = parseFloat(temp.value); draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: logits into a distribution' }),
+      h('div', { class: 'fs-hint', text: 'Three raw scores from a classifier. Softmax exponentiates them and divides by the total, so whatever goes in, three positive numbers adding to 1 come out.' }),
+      h('div', { class: 'fs-row' }, h('span', { text: 'z =' }), zi[0], zi[1], zi[2]),
+      h('div', { class: 'fs-row' }, h('span', { text: 'temperature' }), temp),
+      svg, out);
+    draw();
+  };
+
+  /* 21. bayes: the base-rate trap, as a count of people */
+  widgets.bayes = function (root) {
+    let prev = 1, sens = 90, fpr = 5;          // percentages
+    const VW = 440, VH = 92;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'A bar splitting the people who test positive into the truly ill and the false alarms' });
+    const out = h('div', { class: 'fs-out' });
+    const bar = sv('g', {}, svg);
+    const slider = (v, min, max, step, lbl) => h('input', { class: 'fs-range', type: 'range', min, max, step, value: String(v), 'aria-label': lbl });
+    const sp = slider(prev, '0.1', '50', '0.1', 'prevalence'), ss = slider(sens, '50', '100', '1', 'detection rate'), sf = slider(fpr, '0', '30', '0.5', 'false positive rate');
+    const lp = h('span', { class: 'fs-hint' }), ls = h('span', { class: 'fs-hint' }), lf = h('span', { class: 'fs-hint' });
+
+    function draw() {
+      while (bar.firstChild) bar.removeChild(bar.firstChild);
+      const ill = 1000 * prev / 100, well = 1000 - ill;
+      const tp = ill * sens / 100, fp = well * fpr / 100, pos = tp + fp;
+      const post = pos > 0 ? tp / pos : 0;
+      const W = 400, x0 = 20;
+      sv('rect', { x: x0, y: 22, width: Math.max(0.5, W * post), height: 36, class: 'vb' }, bar);
+      sv('rect', { x: x0, y: 22, width: W, height: 36, class: 'grid', fill: 'none' }, bar);
+      const t1 = sv('text', { y: 45, 'font-size': 12, class: 'tb' }, bar);
+      t1.textContent = fmt(post * 100, 1) + '%';
+      t1.setAttribute('x', x0 + Math.max(0.5, W * post) + 8);
+      sv('text', { x: x0, y: 16, 'font-size': 11, class: 'm' }, bar).textContent = 'everyone who tests positive';
+      sv('text', { x: x0, y: 76, 'font-size': 11, class: 'tb' }, bar).textContent = 'truly ill';
+      sv('text', { x: x0 + W, y: 76, 'font-size': 11, 'text-anchor': 'end', class: 'm' }, bar).textContent = 'false alarms';
+      lp.textContent = 'prevalence ' + fmt(prev, 1) + '%';
+      ls.textContent = 'detects ' + sens + '% of cases';
+      lf.textContent = 'false positives ' + fmt(fpr, 1) + '%';
+      out.textContent =
+        `Out of 1,000 people:\n` +
+        `  ${fmt(ill, 1)} are ill, and the test catches ${sens}% of them  ->  ${fmt(tp, 2)} true positives\n` +
+        `  ${fmt(well, 1)} are well, and the test flags ${fmt(fpr, 1)}% of them  ->  ${fmt(fp, 2)} false positives\n` +
+        `  ${fmt(pos, 2)} positives in total, of which ${fmt(tp, 2)} are real\n\n` +
+        `p(ill | positive) = ${fmt(tp, 2)} / ${fmt(pos, 2)} = ${fmt(post, 4)}\n\n` +
+        (post < 0.3 ? 'Most positives are false alarms. The detection rate is not the problem: there are simply far more well people to get wrong.'
+          : post > 0.8 ? 'Now a positive result means something, because the condition is common enough or the false-positive rate low enough.'
+            : 'A positive result is now worth acting on, but it is still a long way from certainty.');
+    }
+    [[sp, v => prev = v], [ss, v => sens = v], [sf, v => fpr = v]].forEach(([el, set]) => {
+      el.addEventListener('input', () => { set(parseFloat(el.value)); draw(); });
+    });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: what a positive result is worth' }),
+      h('div', { class: 'fs-hint', text: 'Move the false-positive rate and then the detection rate, and watch which one actually changes the answer when the condition is rare.' }),
+      h('div', { class: 'fs-row' }, lp, sp),
+      h('div', { class: 'fs-row' }, ls, ss),
+      h('div', { class: 'fs-row' }, lf, sf),
+      svg, out);
+    draw();
+  };
+
+  /* 22. likelihood: which coin bias makes the data most probable */
+  widgets.likelihood = function (root) {
+    let H = 7, Tl = 3, th = 0.7;
+    const VW = 420, VH = 210, X0 = 40, X1 = 400, Y0 = 180, Y1 = 24;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'The likelihood of the observed flips, plotted against the assumed probability of heads' });
+    const out = h('div', { class: 'fs-out' });
+    const g = sv('g', {}, svg);
+    const mk = (v, lbl) => h('input', { class: 'fs-input fs-num', type: 'number', step: '1', min: '0', value: String(v), 'aria-label': lbl });
+    const hi = mk(H, 'heads'), ti = mk(Tl, 'tails');
+    const range = h('input', { class: 'fs-range', type: 'range', min: '0.01', max: '0.99', step: '0.01', value: '0.7', 'aria-label': 'assumed probability of heads' });
+    const sx = t => X0 + (X1 - X0) * t;
+
+    function draw() {
+      while (g.firstChild) g.removeChild(g.firstChild);
+      const L = t => Math.pow(t, H) * Math.pow(1 - t, Tl);
+      const mle = (H + Tl) > 0 ? H / (H + Tl) : 0.5;
+      const Lmax = L(mle) || 1;
+      const sy = v => Y0 - (Y0 - Y1) * (v / Lmax);
+      sv('line', { x1: X0, y1: Y0, x2: X1, y2: Y0, class: 'axis' }, g);
+      sv('line', { x1: X0, y1: Y1 - 6, x2: X0, y2: Y0, class: 'axis' }, g);
+      [0, 0.25, 0.5, 0.75, 1].forEach(t => {
+        sv('line', { x1: sx(t), y1: Y0, x2: sx(t), y2: Y0 + 4, class: 'axis' }, g);
+        sv('text', { x: sx(t), y: Y0 + 17, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, g).textContent = String(t);
+      });
+      const pts = [];
+      for (let i = 0; i <= 200; i++) { const t = i / 200; pts.push(`${sx(t)},${sy(L(t))}`); }
+      sv('polyline', { points: pts.join(' '), class: 'va', 'stroke-width': 2 }, g);
+      sv('line', { x1: sx(mle), y1: Y0, x2: sx(mle), y2: sy(Lmax), class: 'axis dash' }, g);
+      sv('text', { x: sx(mle), y: Y1 - 10, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, g).textContent = 'best = ' + fmt(mle, 2);
+      sv('line', { x1: sx(th), y1: Y0, x2: sx(th), y2: sy(L(th)), class: 'vb dash', 'stroke-width': 1.4 }, g);
+      sv('circle', { cx: sx(th), cy: sy(L(th)), r: 6, class: 'vb' }, g);
+      sv('text', { x: X0 - 6, y: Y1, 'text-anchor': 'end', 'font-size': 11, class: 'm' }, g).textContent = 'L';
+      const ll = H * Math.log(th) + Tl * Math.log(1 - th);
+      out.textContent =
+        `${H} heads and ${Tl} tails\n\n` +
+        `assume p(heads) = ${fmt(th, 2)}\n` +
+        `likelihood  L = ${fmt(th, 2)}^${H} x ${fmt(1 - th, 2)}^${Tl} = ${L(th).toPrecision(3)}\n` +
+        `log-likelihood  = ${fmt(ll, 3)}\n\n` +
+        `The peak sits at ${H}/${H + Tl} = ${fmt(mle, 3)}, which is just the observed frequency.\n` +
+        (Math.abs(th - mle) < 0.02 ? 'You are at the maximum. No other assumed bias makes this result more probable.'
+          : `At ${fmt(mle, 2)} the data would be ${fmt(L(mle) / (L(th) || 1e-300), 2)} times more probable than at ${fmt(th, 2)}.`);
+    }
+    [[hi, v => H = v], [ti, v => Tl = v]].forEach(([el, set]) => {
+      el.addEventListener('input', () => { const v = parseInt(el.value, 10); if (!isNaN(v) && v >= 0 && v < 200) { set(v); draw(); } });
+    });
+    range.addEventListener('input', () => { th = parseFloat(range.value); draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: which bias explains the flips best' }),
+      h('div', { class: 'fs-hint', text: 'The curve is how probable the observed flips are, for every assumption you could make about the coin. Maximum likelihood picks the top of it.' }),
+      h('div', { class: 'fs-row' }, h('span', { text: 'heads' }), hi, h('span', { text: 'tails' }), ti),
+      h('div', { class: 'fs-row' }, h('span', { text: 'assumed p(heads)' }), range),
+      svg, out);
+    draw();
+  };
+
+  /* 23. surprise: the loss as a function of the probability given to the truth */
+  widgets.surprise = function (root) {
+    let p = 0.5;
+    const VW = 420, VH = 220, X0 = 44, X1 = 404, Y0 = 182, Y1 = 22, LMAX = 5;
+    const svg = sv('svg', { viewBox: `0 0 ${VW} ${VH}`, class: 'fs-svg', role: 'img', 'aria-label': 'The curve of minus log p, rising steeply as the probability given to the truth falls' });
+    const out = h('div', { class: 'fs-out' });
+    const g = sv('g', {}, svg);
+    const range = h('input', { class: 'fs-range', type: 'range', min: '0.01', max: '1', step: '0.01', value: '0.5', 'aria-label': 'probability given to the correct answer' });
+    const sx = v => X0 + (X1 - X0) * v;
+    const sy = v => Y0 - (Y0 - Y1) * Math.min(LMAX, v) / LMAX;
+
+    function draw() {
+      while (g.firstChild) g.removeChild(g.firstChild);
+      sv('line', { x1: X0, y1: Y0, x2: X1, y2: Y0, class: 'axis' }, g);
+      sv('line', { x1: X0, y1: Y1 - 4, x2: X0, y2: Y0, class: 'axis' }, g);
+      [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+        sv('line', { x1: sx(v), y1: Y0, x2: sx(v), y2: Y0 + 4, class: 'axis' }, g);
+        sv('text', { x: sx(v), y: Y0 + 17, 'text-anchor': 'middle', 'font-size': 11, class: 'm' }, g).textContent = String(v);
+      });
+      [1, 2, 3, 4].forEach(v => {
+        sv('line', { x1: X0 - 4, y1: sy(v), x2: X0, y2: sy(v), class: 'axis' }, g);
+        sv('text', { x: X0 - 8, y: sy(v) + 4, 'text-anchor': 'end', 'font-size': 10, class: 'm' }, g).textContent = String(v);
+      });
+      const pts = [];
+      for (let i = 1; i <= 300; i++) { const v = i / 300; const L = -Math.log(v); if (L <= LMAX) pts.push(`${sx(v)},${sy(L)}`); }
+      sv('polyline', { points: pts.join(' '), class: 'va', 'stroke-width': 2 }, g);
+      const L = -Math.log(p);
+      if (L <= LMAX) {
+        sv('line', { x1: sx(p), y1: Y0, x2: sx(p), y2: sy(L), class: 'vb dash', 'stroke-width': 1.4 }, g);
+        sv('line', { x1: X0, y1: sy(L), x2: sx(p), y2: sy(L), class: 'vb dash', 'stroke-width': 1.4 }, g);
+        sv('circle', { cx: sx(p), cy: sy(L), r: 6, class: 'vb' }, g);
+      }
+      sv('text', { x: X1, y: Y0 + 34, 'text-anchor': 'end', 'font-size': 11, class: 'm' }, g).textContent = 'p given to the truth';
+      sv('text', { x: X0 - 8, y: Y1, 'text-anchor': 'end', 'font-size': 11, class: 'm' }, g).textContent = 'loss';
+      const half = p / 2 >= 0.005 ? -Math.log(p / 2) : null;
+      out.textContent =
+        `the model gave the correct answer  p = ${fmt(p, 2)}\n\n` +
+        `loss = -ln(${fmt(p, 2)}) = ${fmt(L, 4)} nats\n` +
+        `     = -log2(${fmt(p, 2)}) = ${fmt(L / Math.LN2, 4)} bits\n\n` +
+        (half != null ? `Halve it to ${fmt(p / 2, 3)} and the loss becomes ${fmt(half, 4)}, which is ${fmt(half - L, 4)} more. Halving always costs the same 0.6931 nats, or exactly one bit.\n\n` : '') +
+        (p > 0.95 ? 'Almost no loss. The model was right and it knew it.'
+          : p < 0.1 ? 'A confident mistake, and the curve has no ceiling. This is the case cross-entropy exists to punish.'
+            : 'Being unsure is cheap. The steep part of the curve is further left.');
+    }
+    range.addEventListener('input', () => { p = parseFloat(range.value); draw(); });
+    root.append(
+      h('div', { class: 'fs-title', text: 'Try it: the whole of cross-entropy loss' }),
+      h('div', { class: 'fs-hint', text: 'For one example with one right answer, the loss depends on nothing except the probability the model gave to that answer. Drag it towards zero.' }),
+      range, svg, out);
+    draw();
+  };
+
   /* ---------- Start ---------- */
   function init() {
     document.querySelectorAll('.fs-widget[data-widget]').forEach(root => {

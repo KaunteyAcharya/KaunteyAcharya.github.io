@@ -54,7 +54,7 @@
     ] },
 
     experience: { parts: [
-      ['happy', 'Ah yes, the professional era! Physics research first, then research writing, and now AI automation and LLM evaluation at Innodata.'],
+      ['happy', 'Ah yes, the professional era! Physics research first, then research writing, then AI automation and LLM evaluation at Innodata.'],
       ['neutral', 'From studying the universe to building AI systems. Same curiosity, different playground!'],
       ['puppy', "But between us, he's not satisfied yet. He wants to grow! If you have an interesting opportunity, do reach out to him. 🥹"]
     ], actions: [A.email, A.linkedin] },

@@ -7,7 +7,7 @@
     "image": "https://kaunteyacharya.com/assets/icons/icon-512.png",
     "email": "kaunteyacharya2000@gmail.com",
     "url": "https://kaunteyacharya.com/",
-    "summary": "I am an AI Automation Engineer and Analyst, and I also work as an AI strategist and consultant. I help identify where AI can create practical leverage, translate business problems into AI solutions, and build working prototypes for real workflows: agentic workflows, RAG systems, research agents, API automations, and human-in-the-loop systems using n8n, Python, LLMs, and local AI. Evaluation is a big part of my work. I test LLM behaviour, retrieval quality, workflow reliability, and automation performance to understand where and why AI systems succeed or fail. I bring the same quantitative toolkit (statistics, time-series modelling, and Bayesian inference) to quantitative analysis and finance. Beyond building, I work across product, growth, and scale: deciding what is worth building, sizing the business case behind it, and leading a team of AI trainers as acting team lead. I think from first principles, and I still run research-paper-based experiments, now on AI agents and the systems built around them. Before industry, I was a pre-doctoral research fellow in theoretical physics at Ahmedabad University. My research focused on compact objects in general relativity, including naked singularities, black-hole mimickers, energy extraction, and high-energy particle collisions, and led to four peer-reviewed papers in journals such as Physical Review D and the European Physical Journal C.",
+    "summary": "I am an AI automation engineer, AI strategist, and consultant. Until August 2026 I worked at Innodata Inc. as an AI Automation Engineer and Analyst, and from January 2026 as acting team lead for AI training. I help identify where AI can create practical leverage, translate business problems into AI solutions, and build working prototypes for real workflows: agentic workflows, RAG systems, research agents, API automations, and human-in-the-loop systems using n8n, Python, LLMs, and local AI. Evaluation is a big part of my work. I test LLM behaviour, retrieval quality, workflow reliability, and automation performance to understand where and why AI systems succeed or fail. I bring the same quantitative toolkit (statistics, time-series modelling, and Bayesian inference) to quantitative analysis and finance. Beyond building, I work across product, growth, and scale: deciding what is worth building, sizing the business case behind it, and leading a team of AI trainers as acting team lead. I think from first principles, and I still run research-paper-based experiments, now on AI agents and the systems built around them. Before industry, I was a pre-doctoral research fellow in theoretical physics at Ahmedabad University. My research focused on compact objects in general relativity, including naked singularities, black-hole mimickers, energy extraction, and high-energy particle collisions, and led to four peer-reviewed papers in journals such as Physical Review D and the European Physical Journal C.",
     "location": {
       "city": "Ahmedabad",
       "region": "Gujarat",
@@ -30,9 +30,10 @@
       "linkedin": "https://www.linkedin.com/in/kauntey-acharya",
       "github": "https://github.com/KaunteyAcharya",
       "website": "https://kaunteyacharya.com/",
-      "bookingUrl": null,
-      "preferred": "kaunteyacharya2000@gmail.com",
-      "note": "Ping me for opportunities related to AI roles, agent builds, research collabs, or just a good paper to discuss."
+      "bookingUrl": "https://kaunteyacharya.com/",
+      "preferred": "email",
+      "note": "Ping me for opportunities related to AI roles, agent builds, research collabs, or just a good paper to discuss.",
+      "bookingNote": "Use the Book a call button on kaunteyacharya.com, which opens the booking assistant."
     },
     "profiles": [
       {
@@ -69,21 +70,34 @@
         "network": "ResearchGate",
         "username": "Kauntey-Acharya",
         "url": "https://www.researchgate.net/profile/Kauntey-Acharya"
+      },
+      {
+        "network": "Substack",
+        "username": "kaunteyacharya",
+        "url": "https://substack.com/@kaunteyacharya"
+      },
+      {
+        "network": "INSPIRE-HEP",
+        "username": "2619980",
+        "url": "https://inspirehep.net/authors/2619980"
       }
-    ]
+    ],
+    "tagline": "A first principles thinker, combining agentic AI engineering, automation, and quantitative analysis with the product and growth judgement to decide what is worth building.",
+    "currentFocus": "Building and managing AI agents and automations, managing AI products, and running research-based experiments on AI agents and the systems built around them."
   },
   "work": [
     {
       "name": "Innodata Inc.",
-      "position": "Acting Team Lead - AI training",
+      "position": "Acting Team Lead, AI Training",
       "startDate": "2026-01",
       "endDate": "2026-08",
-      "summary": "Managing a team of AI trainers, Analyzing KPIs and Quality Data, Built automated performance reports and dashboards, Conducting RCA, Tool Use & Agentic Integration, Parameter-Efficient Fine-Tuning, Designing and building AI automations and Agents, Supervised Fine-Tuning, Preference Optimization & Alignment.",
+      "summary": "Led a team of AI trainers: KPI and quality-data analysis, automated performance reports and dashboards, and root-cause analysis, alongside hands-on work on tool use and agentic integration, AI automations and agents, supervised fine-tuning, parameter-efficient fine-tuning, and preference optimization and alignment.",
       "highlights": [
-        "AI automations and workflows",
-        "LLM evaluation and response-quality analysis",
-        "Role-specific behaviour testing",
-        "Multimodal AI workflows"
+        "Managed a team of AI trainers",
+        "Analysed KPIs and quality data; ran root-cause analysis",
+        "Built automated performance reports and dashboards",
+        "Tool use and agentic integration; built AI automations and agents",
+        "Supervised fine-tuning, parameter-efficient fine-tuning, and preference optimization and alignment"
       ]
     },
     {
@@ -150,15 +164,18 @@
         "Prompt engineering",
         "LLM evaluation",
         "Human-in-the-loop design",
-        "Reasoning & Planning Enhancements",
-        "Structured Prompt Engineering & Context Design",
-        "RESTful APIs",
-        "asynchronous programming",
-        "authentication protocols",
-        "LangGraph, CrewAI, and AutoGen",
-        "Model Context Protocol",
-        "LLMOps & Agent Observability",
-        "Security & Injection Defense"
+        "Reasoning and planning",
+        "Context engineering",
+        "LangGraph",
+        "CrewAI",
+        "AutoGen",
+        "Model Context Protocol (MCP)",
+        "LLMOps and agent observability",
+        "Prompt-injection defence",
+        "Agent memory",
+        "Tool calling",
+        "Voice AI (Pipecat)",
+        "Fine-tuning (SFT, PEFT, preference optimization)"
       ]
     },
     {
@@ -170,7 +187,23 @@
         "FastAPI",
         "Docker",
         "Git",
-        "CI/CD (GitHub Actions)"
+        "CI/CD (GitHub Actions)",
+        "REST APIs",
+        "Asynchronous programming",
+        "Authentication protocols",
+        "WebRTC",
+        "SQLite"
+      ]
+    },
+    {
+      "name": "Product & growth",
+      "keywords": [
+        "Deciding what is worth building",
+        "Business-case sizing",
+        "Product metrics",
+        "Team leadership",
+        "KPI and quality analysis",
+        "Root-cause analysis"
       ]
     },
     {
@@ -231,6 +264,41 @@
       "type": "application"
     },
     {
+      "name": "Aditi: Hindi + English Real Estate Voice Agent",
+      "description": "A real-time voice agent for a fictional Ahmedabad real estate agency. The LLM decides which of ten tools to use: it searches listings, works out home-loan EMIs, books, moves, or cancels site visits, and texts the caller a follow-up SMS. Callers can interrupt mid-sentence or switch between Hindi and English mid-call, and it runs on free tiers with backup models and voices.",
+      "keywords": [
+        "Pipecat",
+        "Voice AI",
+        "Tool calling",
+        "Groq",
+        "WebRTC",
+        "SQLite"
+      ],
+      "url": "https://github.com/KaunteyAcharya/voice-ai-agent",
+      "repository": "https://github.com/KaunteyAcharya/voice-ai-agent",
+      "note": "https://kaunteyacharya.com/notes/voice-ai-agent/",
+      "type": "application"
+    },
+    {
+      "name": "Saati: Personal AI Agent with Long-Term Memory",
+      "description": "A personal AI agent on Telegram that tracks projects, ideas, and decisions, follows coding sessions and voice notes, and sends morning, evening, and weekly briefings. It runs in the cloud on a Gemini model. Its memory design was tested in two rounds of research-paper-based experiments on real session history.",
+      "keywords": [
+        "AI agents",
+        "Agent memory",
+        "Gemini",
+        "Telegram Bot API",
+        "Whisper",
+        "Hybrid search"
+      ],
+      "url": "https://kaunteyacharya.com/notes/building-a-personal-ai-agent/",
+      "note": "https://kaunteyacharya.com/notes/building-a-personal-ai-agent/",
+      "links": {
+        "memoryExperiments": "https://kaunteyacharya.com/notes/ai-agent-memory-experiments/",
+        "memoryExperimentsPart2": "https://kaunteyacharya.com/notes/agent-memory-when-facts-change/"
+      },
+      "type": "application"
+    },
+    {
       "name": "TickerBrief: Automated Equity Research Reports",
       "description": "Type a ticker and get a full equity research report as an interactive web page and a PDF. An n8n workflow pulls prices, fundamentals, peers, SEC filings, and news in parallel; Python computes ratios, technical indicators, and sentiment; and a local LLM writes the narrative in three structured passes, with rule-based fallbacks.",
       "keywords": [
@@ -247,7 +315,7 @@
       "type": "application"
     },
     {
-      "name": "Model Monitoring + Drift Alert Agent",
+      "name": "Model Monitoring + Drift Alert System",
       "description": "A local MLOps stack that watches a deployed model. An n8n workflow scores new traffic, logs predictions to Postgres, and measures data, prediction, and target drift with Evidently AI. When a threshold is crossed, a local LLM explains the likely root cause in plain English and posts it to Slack, with a Grafana dashboard for the history.",
       "keywords": [
         "MLOps",
@@ -257,13 +325,13 @@
         "Postgres",
         "Grafana"
       ],
-      "url": "https://github.com/KaunteyAcharya/ML-model-drift-alert-agent",
-      "repository": "https://github.com/KaunteyAcharya/ML-model-drift-alert-agent",
+      "url": "https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor",
+      "repository": "https://github.com/KaunteyAcharya/ML-model-drift-alert-monitor",
       "note": "https://kaunteyacharya.com/notes/ml-drift-alert-agent/",
       "type": "application"
     },
     {
-      "name": "ArXiv Research Analysis Agent",
+      "name": "ArXiv Research Analysis Workflow",
       "description": "Monitors arXiv every morning (gr-qc and q-fin by default), filters new papers by keyword, and sends a Telegram brief with a yes/no prompt. On “yes” it downloads the PDF, has a local LLM walk through the paper from first principles, and returns a Markdown report.",
       "keywords": [
         "n8n",
@@ -277,7 +345,7 @@
       "type": "application"
     },
     {
-      "name": "Local RAG Document Q&A Agent",
+      "name": "Local RAG Document Q&A Assistant",
       "description": "A fully local retrieval-augmented generation pipeline. Upload a PDF, TXT, DOCX, or MD file; it is chunked, embedded with nomic-embed-text, and stored in ChromaDB, and questions are answered by llama3.2 under a strict answer-only-from-context prompt. No cloud APIs, and no data leaves the machine.",
       "keywords": [
         "RAG",
@@ -286,8 +354,8 @@
         "ChromaDB",
         "Docker"
       ],
-      "url": "https://github.com/KaunteyAcharya/RAG-doc-qa-agent",
-      "repository": "https://github.com/KaunteyAcharya/RAG-doc-qa-agent",
+      "url": "https://github.com/KaunteyAcharya/RAG-doc-qa-assistant",
+      "repository": "https://github.com/KaunteyAcharya/RAG-doc-qa-assistant",
       "note": "https://kaunteyacharya.com/notes/local-rag-agent/",
       "type": "application"
     },
@@ -412,7 +480,7 @@
       ]
     },
     {
-      "name": "Agentic workflows and automation",
+      "name": "AI agents and workflow automation",
       "description": "n8n and Python workflows that connect your tools and APIs, use an LLM where it helps, and keep a human approval step where it matters.",
       "evidence": [
         {
@@ -420,7 +488,7 @@
           "url": "https://kaunteyacharya.com/notes/tickerbrief/"
         },
         {
-          "name": "arXiv research agent",
+          "name": "arXiv research workflow",
           "url": "https://kaunteyacharya.com/notes/automating-arxiv/"
         }
       ]
@@ -430,7 +498,7 @@
       "description": "Assistants that answer from your own documents and say so when the answer is not there, including fully local setups where no data leaves your machines.",
       "evidence": [
         {
-          "name": "Local RAG agent",
+          "name": "Local RAG assistant",
           "url": "https://kaunteyacharya.com/notes/local-rag-agent/"
         }
       ]
@@ -440,8 +508,12 @@
       "description": "Testing LLM behaviour, retrieval quality, and workflow reliability before launch, and monitoring models after it, so problems show up before your users notice them.",
       "evidence": [
         {
-          "name": "Drift alert agent",
+          "name": "Model drift monitor",
           "url": "https://kaunteyacharya.com/notes/ml-drift-alert-agent/"
+        },
+        {
+          "name": "Voice AI agent",
+          "url": "https://kaunteyacharya.com/notes/voice-ai-agent/"
         }
       ]
     }
@@ -466,6 +538,86 @@
   ],
   "notes": [
     {
+      "title": "AI agent memory, part 2: what happens when facts change",
+      "date": "2026-11-18",
+      "tags": [
+        "AI",
+        "projects"
+      ],
+      "url": "https://kaunteyacharya.com/notes/agent-memory-when-facts-change/",
+      "summary": "Five more experiments on my personal agent's memory, checked on gpt-oss-120b. Overwriting old facts left a small model unable to notice changes, no memory design caught my outdated questions until one prompt sentence took that from 3% to 91%, and a fix for invented projects took them from 3 to 0.",
+      "readingMinutes": 22
+    },
+    {
+      "title": "AI agent memory: 5 research based experiments on an agent with real data",
+      "date": "2026-11-12",
+      "tags": [
+        "AI",
+        "projects"
+      ],
+      "url": "https://kaunteyacharya.com/notes/ai-agent-memory-experiments/",
+      "summary": "Five experiments on two months of my real coding-session history, testing ideas from the Mem0 and MemoryTax papers on a free-tier model. Overwriting memory destroyed history; facts plus raw text plus mixed keyword and embedding search did best.",
+      "readingMinutes": 19
+    },
+    {
+      "title": "Building a personal AI agent that keeps track of everything I work on",
+      "date": "2026-11-12",
+      "tags": [
+        "AI",
+        "projects"
+      ],
+      "url": "https://kaunteyacharya.com/notes/building-a-personal-ai-agent/",
+      "summary": "Saati is a personal AI agent I talk to on Telegram. It tracks my projects, ideas, and decisions, follows my coding sessions and voice notes, and runs in the cloud on a Gemini model.",
+      "readingMinutes": 5
+    },
+    {
+      "title": "How does gradient descent work in AI? Loss, slopes, and the chain rule",
+      "date": "2026-11-10",
+      "tags": [
+        "AI",
+        "maths"
+      ],
+      "url": "https://kaunteyacharya.com/notes/how-gradient-descent-works/",
+      "summary": "A model learns by measuring how wrong it is and nudging every number towards less wrong. This note builds that from nothing: what a loss function is, what a slope really measures, why the gradient points uphill, and how the chain rule prices a weight buried ten layers deep.",
+      "readingMinutes": 47,
+      "series": "token-by-token"
+    },
+    {
+      "title": "Building Aditi, a Hindi and English voice agent with Pipecat and tool calling",
+      "date": "2026-11-07",
+      "tags": [
+        "AI",
+        "projects"
+      ],
+      "url": "https://kaunteyacharya.com/notes/voice-ai-agent/",
+      "summary": "A real-time voice agent for a fictional Ahmedabad real estate agency. She searches listings, works out EMIs, books site visits, and texts a follow-up, in Hindi or English, on a laptop CPU and free tiers.",
+      "readingMinutes": 5
+    },
+    {
+      "title": "How a neural network layer works: matrices, bias, and ReLU",
+      "date": "2026-11-05",
+      "tags": [
+        "AI",
+        "maths"
+      ],
+      "url": "https://kaunteyacharya.com/notes/neural-network-layer-explained/",
+      "summary": "A neural network layer is a matrix, a bias, and a nonlinearity. This note builds it from nothing: what a matrix does to a vector, why stacking linear layers collapses into a single layer, and why ReLU is what makes depth worth having.",
+      "readingMinutes": 46,
+      "series": "token-by-token"
+    },
+    {
+      "title": "What are word embeddings? How text becomes vectors",
+      "date": "2026-11-02",
+      "tags": [
+        "AI",
+        "maths"
+      ],
+      "url": "https://kaunteyacharya.com/notes/word-embeddings-explained/",
+      "summary": "A computer has no notion of meaning or context. This note builds word embeddings from nothing: why one number per word fails, why vectors work, and why the angle between two vectors tells you a cat is closer to a dog than to a car.",
+      "readingMinutes": 39,
+      "series": "token-by-token"
+    },
+    {
       "title": "Building AI Stack Advisor, a build-vs-buy calculator for AI",
       "date": "2026-10-21",
       "tags": [
@@ -473,55 +625,51 @@
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/ai-stack-advisor/",
-      "summary": "Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI."
+      "summary": "Should a business buy a SaaS tool, build on APIs, or run its own model? A free browser tool that answers with costs, TCO, break-even, and ROI, in your own currency and with your country's tax rules.",
+      "readingMinutes": 12
     },
     {
-      "title": "Building TickerBrief, an equity research agent",
+      "title": "Building TickerBrief, an automated equity research pipeline with n8n, Python, and a local LLM",
       "date": "2026-10-01",
       "tags": [
         "AI",
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/tickerbrief/",
-      "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. All local and free."
+      "summary": "Type a ticker, get a full equity research report with charts, filings, news sentiment, and an LLM-written narrative. How the data, the scorecard, and the three LLM passes work, and why the LLM never touches a number.",
+      "readingMinutes": 8
     },
     {
-      "title": "Building a model drift alert agent",
+      "title": "Building a model drift monitor with Evidently, n8n, and a local LLM",
       "date": "2026-09-29",
       "tags": [
         "AI",
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/ml-drift-alert-agent/",
-      "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack."
+      "summary": "A local MLOps stack that notices when a model starts going wrong and explains why, in plain English, on Slack. The metrics, the alert rules, four failure scenarios, and what the test runs showed.",
+      "readingMinutes": 6
     },
     {
-      "title": "Building a fully local RAG agent",
+      "title": "Building a fully local RAG document assistant with n8n, Ollama, and ChromaDB",
       "date": "2026-09-22",
       "tags": [
         "AI",
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/local-rag-agent/",
-      "summary": "Asking questions about my own documents with n8n, Ollama, and ChromaDB, with nothing leaving my machine."
+      "summary": "A document Q&A assistant that runs entirely on my machine. How it splits, embeds, and retrieves text, the prompt that stops a small model from guessing, and what would change with a cloud model, different chunk sizes, or conversation memory.",
+      "readingMinutes": 7
     },
     {
-      "title": "What is RAG, and why does it matter so much?",
-      "date": "2026-08-24",
-      "tags": [
-        "AI"
-      ],
-      "url": "https://kaunteyacharya.com/notes/what-is-rag/",
-      "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong."
-    },
-    {
-      "title": "Creating FocusPulse",
+      "title": "FocusPulse: a Chrome extension for tracking your own focus",
       "date": "2026-08-17",
       "tags": [
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/creating-focuspulse/",
-      "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome."
+      "summary": "A Chrome extension where you track your own focus in four colours. Ideas to make it more addictive are welcome.",
+      "readingMinutes": 1
     },
     {
       "title": "How AI benchmarks are actually designed, from first principles",
@@ -530,16 +678,18 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/ai-benchmarks/",
-      "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work."
+      "summary": "Benchmarks look like simple tables of percentages. Underneath, each one is a measuring instrument with design choices about tasks, scoring, statistics, and leakage. Here is how they work.",
+      "readingMinutes": 9
     },
     {
-      "title": "Creating EasyAutoFill",
+      "title": "EasyAutoFill: a browser extension that fills any form from your own profile file",
       "date": "2026-07-20",
       "tags": [
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/creating-easyautofill/",
-      "summary": "A local, open-source browser extension that fills any form from your own profile file."
+      "summary": "A local, open-source browser extension that fills any form from your own profile file.",
+      "readingMinutes": 1
     },
     {
       "title": "Starting a statistics series on Medium",
@@ -548,17 +698,19 @@
         "maths"
       ],
       "url": "https://kaunteyacharya.com/notes/stats-with-first-principles/",
-      "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time."
+      "summary": "Stats_with_FirstPrinciples: rebuilding statistical thinking from the ground up, one intuitive post at a time.",
+      "readingMinutes": 1
     },
     {
-      "title": "Automating my morning arXiv routine",
+      "title": "Automating my morning arXiv routine with n8n, Telegram, and an LLM",
       "date": "2026-06-02",
       "tags": [
         "AI",
         "projects"
       ],
       "url": "https://kaunteyacharya.com/notes/automating-arxiv/",
-      "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n agent to do it."
+      "summary": "Checking arXiv every day and feeding papers to an LLM ate my mornings, so I built an n8n workflow to do it. How it works, the bugs that made it silently return nothing, and how it went from a small local model to full-paper derivations.",
+      "readingMinutes": 5
     },
     {
       "title": "How machine learning and deep learning are different",
@@ -567,7 +719,8 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/ml-vs-deep-learning/",
-      "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation."
+      "summary": "Not \"deep learning is ML with neural networks,\" but why. A first-principles look at what each one is really doing, and why the difference comes down to who builds the representation.",
+      "readingMinutes": 7
     },
     {
       "title": "How AI labs actually train their models",
@@ -576,16 +729,18 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/how-labs-train-ai-models/",
-      "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently."
+      "summary": "From raw web text to a helpful assistant: the stages every big lab goes through, and how OpenAI, Anthropic, Google, Meta, and DeepSeek each do it differently.",
+      "readingMinutes": 7
     },
     {
-      "title": "Karpathy in 2017: “Gradient descent can write better code than you”",
+      "title": "Why Karpathy said gradient descent writes better code than you",
       "date": "2025-01-08",
       "tags": [
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/gradient-descent-better-code/",
-      "summary": "In 2017, Andrej Karpathy joked that gradient descent writes better code than us. Seven years later, it doesn't feel like much of a joke."
+      "summary": "What Karpathy actually meant when he said gradient descent writes better code, what his Software 2.0 essay got right, and how it reads nine years on.",
+      "readingMinutes": 10
     },
     {
       "title": "How Claude overtook GPT (where it matters)",
@@ -594,7 +749,8 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/claude-overtook-gpt/",
-      "summary": "ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened."
+      "summary": "ChatGPT is still the household name, but in coding and enterprise use, Anthropic's Claude has caught up and pulled ahead this year. Here is how that happened.",
+      "readingMinutes": 5
     },
     {
       "title": "The maths and physics hiding inside LLMs",
@@ -604,7 +760,28 @@
         "maths"
       ],
       "url": "https://kaunteyacharya.com/notes/maths-physics-inside-llms/",
-      "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models."
+      "summary": "Like many others, I was surprised the physics Nobel went to Geoffrey Hinton. So I went looking for the physics and maths inside large language models.",
+      "readingMinutes": 7
+    },
+    {
+      "title": "What is Google's NotebookLM, and how is it different from a chatbot and from RAG?",
+      "date": "2024-08-16",
+      "tags": [
+        "AI"
+      ],
+      "url": "https://kaunteyacharya.com/notes/notebooklm-vs-chatbot-vs-rag/",
+      "summary": "NotebookLM, ChatGPT, and RAG get discussed as three competing things. They are not. One is a product, one is a pattern, and the difference that actually matters is who decides what the model is allowed to read.",
+      "readingMinutes": 4
+    },
+    {
+      "title": "What is RAG (retrieval augmented generation), and why does it matter so much?",
+      "date": "2024-07-15",
+      "tags": [
+        "AI"
+      ],
+      "url": "https://kaunteyacharya.com/notes/what-is-rag/",
+      "summary": "Retrieval-augmented generation lets an AI answer from your own documents instead of its memory. Here is how it works, why it has become so important, and where it goes wrong.",
+      "readingMinutes": 6
     },
     {
       "title": "My quickest paper, and an unexpected collaboration",
@@ -613,7 +790,8 @@
         "physics"
       ],
       "url": "https://kaunteyacharya.com/notes/jmn-magnetic-field/",
-      "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks."
+      "summary": "How a comment in a research meeting turned into a paper with Mustapha Azreg-Aïnou in about six weeks.",
+      "readingMinutes": 2
     },
     {
       "title": "GPT: the model that started it all",
@@ -622,7 +800,8 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/gpt-origins/",
-      "summary": "With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went."
+      "summary": "With GPT-4 out, I went back to where the GPT series began. The surprising part is how simple the core idea is, and how far scaling it went.",
+      "readingMinutes": 5
     },
     {
       "title": "ChatGPT: the interface that changed everything",
@@ -631,7 +810,8 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/chatgpt-interface/",
-      "summary": "ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is."
+      "summary": "ChatGPT is two weeks old and everyone around me is talking to it. The model behind it is not brand new. The way we get to use it is.",
+      "readingMinutes": 4
     },
     {
       "title": "Where machine learning meets black hole energy extraction",
@@ -641,16 +821,18 @@
         "AI"
       ],
       "url": "https://kaunteyacharya.com/notes/ml-black-hole-energy-extraction/",
-      "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it."
+      "summary": "Machine learning doesn't calculate the Penrose process for us, but it is quietly becoming essential to everything around it.",
+      "readingMinutes": 2
     },
     {
-      "title": "My first paper: stealing energy from spinning black holes",
+      "title": "My first paper: stealing energy from spinning black holes (and their mimickers)",
       "date": "2022-06-02",
       "tags": [
         "physics"
       ],
       "url": "https://kaunteyacharya.com/notes/first-paper-penrose/",
-      "summary": "The Penrose process in plain words, and what my first paper asked about black hole look-alikes."
+      "summary": "The Penrose process in plain words, and what my first paper found when we ran it around Kerr black hole mimickers. One family matched Kerr exactly; another was far more efficient.",
+      "readingMinutes": 4
     },
     {
       "title": "My MSc thesis: following light and matter around black holes",
@@ -659,7 +841,8 @@
         "physics"
       ],
       "url": "https://kaunteyacharya.com/notes/msc-thesis/",
-      "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes."
+      "summary": "Five months of learning how light and particles move around black holes, naked singularities, and wormholes.",
+      "readingMinutes": 2
     }
   ],
   "interests": [
@@ -681,9 +864,9 @@
   ],
   "meta": {
     "canonical": "https://kaunteyacharya.com/resume.json",
-    "version": "1.0.0",
-    "lastModified": "2026-11-03",
-    "source": "Generated from https://kaunteyacharya.com/ (index.html and notes/posts.json)",
+    "version": "1.1.0",
+    "lastModified": "2026-11-26",
+    "source": "Built from https://kaunteyacharya.com/ (index.html and notes/posts.json), plus details maintained by hand",
     "consumers": [
       "kauntey-mcp (npm)"
     ]
