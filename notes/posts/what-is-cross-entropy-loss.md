@@ -1,6 +1,7 @@
 ---
 title: "What is cross-entropy loss in AI? Probability, likelihood, and surprise"
 date: 2026-11-25
+draft: true
 tags: [AI, maths]
 summary: "Almost every model is trained on cross-entropy, and almost nobody is told why. This note builds it from nothing: what a probability distribution is, how softmax makes one, why the right score for a prediction is how surprised the model was by the truth, and why that score is forced rather than chosen."
 related: [how-gradient-descent-works, neural-network-layer-explained, word-embeddings-explained]

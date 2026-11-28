@@ -158,6 +158,13 @@ const notes = fs.readdirSync(POSTS)
 /* ---------- Related notes: the slugs listed in front matter (related: [a, b]) first,
    then notes sharing the most tags, newest first, up to three ---------- */
 const bySlug = Object.fromEntries(notes.map(n => [n.slug, n]));
+
+/* A note may link forward to one that is still a draft. Rather than ship a 404, unwrap those links
+   to plain text; the link comes back by itself on the build after the draft is published. */
+const unlinkDrafts = html => html.replace(
+  /<a href="notes\/([\w.-]+)\/"[^>]*>([\s\S]*?)<\/a>/g,
+  (m, slug, text) => (bySlug[slug] ? m : text)
+);
 function relatedFor(n) {
   const picked = n.related.filter(s => bySlug[s] && s !== n.slug);
   const rest = notes
@@ -181,7 +188,8 @@ const bottom = shell.slice(shell.indexOf('</main>') + 7)
 notes.forEach((n, i) => {
   const url = `${SITE}/notes/${n.slug}/`;
   const img = `${SITE}/og/${n.slug}.png`;
-  const { html, math } = render(n.body, n.slug);
+  const { html: rawHtml, math } = render(n.body, n.slug);
+  const html = unlinkDrafts(rawHtml);
   const older = notes[i + 1], newer = notes[i - 1];
   const related = relatedFor(n);
   // The three newest notes this page does not already link to, so every new note
@@ -307,7 +315,7 @@ ${notes.map(n => `  <item>
     <pubDate>${rfc822(n.date)}</pubDate>
     <description>${esc(n.summary)}</description>
 ${n.tags.map(t => `    <category>${esc(t)}</category>`).join('\n')}
-    <content:encoded>${cdata(absolute(render(n.body, n.slug).html))}</content:encoded>
+    <content:encoded>${cdata(absolute(unlinkDrafts(render(n.body, n.slug).html)))}</content:encoded>
   </item>`).join('\n')}
 </channel>
 </rss>
