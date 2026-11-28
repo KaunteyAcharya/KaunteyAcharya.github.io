@@ -736,7 +736,9 @@
     toggle.setAttribute('aria-expanded', 'true');
     if (!greeted) {
       greeted = true;
-      add('Hi, I’m Kauntey’s portfolio assistant. Ask me about his work, projects, papers, or notes' + (BOOKING_ON ? ', or book a call with him.' : '.'), 'bot');
+      add(AI_ON
+        ? 'Hi, I’m Kauntey’s AI assistant. Ask me anything about his projects, papers, notes, or how he works with teams' + (BOOKING_ON ? ', or book a call with him.' : '.')
+        : 'Hi, I’m Kauntey’s portfolio assistant. Ask me about his work, projects, papers, or notes' + (BOOKING_ON ? ', or book a call with him.' : '.'), 'bot');
       addChips(START_CHIPS);
     }
     setTimeout(() => input.focus(), 50);
