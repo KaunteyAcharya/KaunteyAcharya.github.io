@@ -450,6 +450,8 @@ html { scrollbar-color: var(--line) transparent; }
 .bk-bar[hidden] { display: none; }
 .bk-cancel { font-family: var(--mono); font-size: .72rem; background: none; color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: .2rem .7rem; cursor: pointer; }
 .bk-cancel:hover { border-color: var(--text); }
+.chat-note { padding: 0 .8rem .5rem; margin-top: -.3rem; font-family: var(--mono); font-size: .66rem; letter-spacing: .02em; color: var(--muted); text-align: right; }
+.chips.ai-action { margin-top: -.25rem; }
 .chat-form input:disabled { opacity: .55; cursor: not-allowed; }
 .chat-form button:disabled { opacity: .4; cursor: not-allowed; }
 

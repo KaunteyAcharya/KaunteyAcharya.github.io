@@ -31,6 +31,23 @@
     demoOnLiveSite: false
   };
   const BOOKING_ON = !!BOOKING.endpoint || BOOKING.demoOnLiveSite || !/\.github\.io$/i.test(location.hostname);
+
+  /* ---------- AI answers (Cloudflare Workers AI) ----------
+     Only free-form typed questions go to the Worker. Preset chips, booking,
+     and the keyword answers below never call it. If the Worker is down,
+     slow, or rate-limited, the keyword matcher answers instead.
+     While prodUrl still contains YOUR-SUBDOMAIN, AI stays off on the live
+     site and the assistant behaves exactly as before. */
+  const AI = {
+    prodUrl: 'https://k-assistant-api.kaunteyacharya02.workers.dev',
+    localUrl: 'http://localhost:8787',
+    firstByteMs: 12000,     // give up and use the keyword matcher if nothing arrives by then
+    historyTurns: 6
+  };
+  const IS_LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  const WORKER_URL = IS_LOCAL ? AI.localUrl : AI.prodUrl;
+  const AI_ON = IS_LOCAL || !/YOUR-SUBDOMAIN/.test(AI.prodUrl);
+  const BOOK_MARKER = '[[ACTION:BOOK_CALL]]';
   const CONTACT = `Email: [${EMAIL}](mailto:${EMAIL})\nLinkedIn: [linkedin.com/in/kauntey-acharya](${LINKEDIN})`;
 
   const KB = [
@@ -56,7 +73,7 @@
       chips: ['Projects', 'Skills', 'How to contact'] },
     { id: 'resume', keys: ['resume', 'cv', 'curriculum vitae', 'portfolio pdf'],
       answer: `A CV is available on request. Email [${EMAIL}](mailto:${EMAIL}) or message him on [LinkedIn](${LINKEDIN}).` },
-    { id: 'location', keys: ['where is he', 'where does he live', 'where is kauntey', 'location', 'based', 'city', 'ahmedabad', 'india', 'timezone', 'time zone', 'relocate', 'remote'],
+    { id: 'location', keys: ['where is he', 'where does he live', 'where is kauntey', 'lives', 'where he live*', 'where does he stay', 'hometown', 'based in', 'location', 'based', 'city', 'ahmedabad', 'india', 'timezone', 'time zone', 'relocate', 'remote'],
       answer: 'Kauntey is based in Ahmedabad, India (IST, UTC+5:30). For questions about remote work or relocation, it’s best to ask him directly by email or LinkedIn.' },
 
     /* ---------- About ---------- */
@@ -230,7 +247,8 @@
     return d;
   }
 
-  function ask(q) {
+  // typed: true only for text the visitor typed into the box (chips and page links pass nothing)
+  function ask(q, typed) {
     if (busy || booking) return;
     if (isBookingIntent(q)) {
       add(q, 'user');
@@ -242,14 +260,147 @@
     }
     busy = true;
     add(q, 'user');
+    if (typed && AI_ON && !isPreset(q)) { askAI(q); return; }
     const e = answer(CHIP_ALIASES[q.toLowerCase()] || q);
     const t = showTyping();
     setTimeout(() => {
       t.remove();
       add(e.answer, 'bot');
       addChips(e.chips);
+      remember(q, e.answer);
       busy = false;
     }, TYPING_MS);
+  }
+
+  /* ---------- AI chat (typed questions only) ---------- */
+  // Every chip label is answered locally, even when typed by hand.
+  const PRESETS = new Set([].concat(START_CHIPS, FALLBACK.chips, ['Book a call'], Object.keys(CHIP_ALIASES),
+    ...KB.map(e => e.chips || [])).map(s => s.toLowerCase().trim()));
+  const isPreset = q => PRESETS.has(q.toLowerCase().trim());
+
+  // Recent turns sent to the Worker for context (it keeps at most 6)
+  const history = [];
+  let aiNote = null;    // caption under the input; says when answers are offline
+  const setAiState = online => { if (aiNote) aiNote.textContent = online ? 'Workers AI · grounded in site content' : 'Offline answers · AI unavailable right now'; };
+  function remember(userText, botText) {
+    history.push({ role: 'user', content: userText.slice(0, 500) }, { role: 'assistant', content: String(botText).replace(BOOK_MARKER, '').trim().slice(0, 1200) });
+    while (history.length > AI.historyTurns) history.shift();
+  }
+
+  // Links the AI may render: site pages, and https links to these hosts. Anything else stays plain text.
+  const LINK_HOSTS = /^(www\.)?(kaunteyacharya\.com|github\.com|doi\.org|linkedin\.com|medium\.com|kaunteyacharya\.wordpress\.com|substack\.com|orcid\.org|researchgate\.net|inspirehep\.net|explainingagents\.com)$/i;
+  function safeHref(u) {
+    if (/^\/(?!\/)[\w\-./#?=&%]*$/.test(u)) return u;                       // site-relative, e.g. /notes/x/
+    if (/^mailto:[^\s@]+@[^\s@]+$/i.test(u)) return u;
+    try { const x = new URL(u); if (x.protocol === 'https:' && LINK_HOSTS.test(x.hostname)) return x.href; } catch (e) {}
+    return null;
+  }
+
+  // Render AI text as DOM nodes only (never innerHTML). [label](url) becomes a link if the URL is safe.
+  function renderAI(el, text, bad) {
+    el.textContent = '';
+    const body = text.replace(BOOK_MARKER, '').replace(/\[\[[A-Z:_]*$/, '').replace(/\n{3,}/g, '\n\n').trim();
+    // [label](url), or a bare https URL (trailing punctuation left outside the link)
+    const re = /\[([^\]\n]{1,120})\]\(([^)\s]{1,300})\)|(https:\/\/[^\s<>()\]]{4,300}?)(?=[.,;:!?]?(?:\s|$))/g;
+    let last = 0, m;
+    while ((m = re.exec(body))) {
+      el.appendChild(document.createTextNode(body.slice(last, m.index)));
+      const url = m[2] || m[3], label = m[1] || m[3].replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '');
+      const href = (bad && bad.includes(url)) ? null : safeHref(url);
+      if (href) {
+        const a = document.createElement('a');
+        a.textContent = label;
+        a.href = href;
+        if (/^https:/.test(href)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+        el.appendChild(a);
+      } else el.appendChild(document.createTextNode(label));
+      last = re.lastIndex;
+    }
+    el.appendChild(document.createTextNode(body.slice(last)));
+  }
+
+  function addBookButton(after) {
+    if (!BOOKING_ON) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'chips ai-action';
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = 'Open calendar picker';
+    b.addEventListener('click', () => { if (busy || booking) return; wrap.remove(); ask('Book a call'); });
+    wrap.appendChild(b);
+    after.after(wrap);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  async function askAI(q) {
+    const typing = showTyping();
+    const messages = history.concat({ role: 'user', content: q.slice(0, 500) });
+    const ctrl = new AbortController();
+    let timer = setTimeout(() => ctrl.abort(), AI.firstByteMs);
+    let bubble = null, text = '', done = null;
+
+    const finishLocal = () => {           // keyword answer, exactly like a chip
+      setAiState(false);
+      typing.remove();
+      if (bubble && !text) bubble.remove();
+      const e = answer(q);
+      add(e.answer, 'bot');
+      addChips(e.chips);
+      remember(q, e.answer);
+      busy = false;
+    };
+
+    try {
+      const res = await fetch(WORKER_URL + '/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+        signal: ctrl.signal
+      });
+      if (!res.ok || !res.body || !/text\/event-stream/.test(res.headers.get('Content-Type') || '')) throw new Error('worker ' + res.status);
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      for (;;) {
+        const { value, done: end } = await reader.read();
+        if (end) break;
+        buf += dec.decode(value, { stream: true });
+        let i;
+        while ((i = buf.indexOf('\n\n')) >= 0) {
+          const block = buf.slice(0, i); buf = buf.slice(i + 2);
+          const ev = (block.match(/^event:\s*(.+)$/m) || [])[1];
+          const data = (block.match(/^data:\s*(.*)$/m) || [])[1];
+          if (!data) continue;
+          let j; try { j = JSON.parse(data); } catch (e) { continue; }
+          if (ev === 'done') { done = j; continue; }
+          if (typeof j.t === 'string' && j.t) {
+            if (!bubble) {
+              clearTimeout(timer); timer = null;
+              typing.remove();
+              bubble = document.createElement('div');
+              bubble.className = 'msg bot ai';
+              bubble.setAttribute('aria-busy', 'true');
+              log.appendChild(bubble);
+            }
+            text += j.t;
+            renderAI(bubble, text);
+            log.scrollTop = log.scrollHeight;
+          }
+        }
+      }
+    } catch (err) {
+      if (!text) { clearTimeout(timer); return finishLocal(); }
+      // stream broke midway: keep what arrived
+    }
+    if (timer) clearTimeout(timer);
+    if (!text) return finishLocal();
+
+    setAiState(true);
+    renderAI(bubble, text, done && done.bad);
+    bubble.removeAttribute('aria-busy');
+    if (text.includes(BOOK_MARKER)) addBookButton(bubble);
+    remember(q, text);
+    busy = false;
   }
 
   /* =========================================================
@@ -639,10 +790,18 @@
   form.addEventListener('submit', e => {
     e.preventDefault();
     const q = input.value.trim();
-    if (!q) return;
+    if (!q || busy || booking) return;    // keep the text while an answer is still arriving
     input.value = '';
-    ask(q);
+    ask(q, true);
   });
+
+  // Small source note under the input, only when AI answers are on
+  if (AI_ON) {
+    aiNote = document.createElement('div');
+    aiNote.className = 'chat-note';
+    setAiState(true);
+    form.after(aiNote);
+  }
 
   // Exposed for quick testing in the console: kaAsk("what's his phone number")
   window.kaAsk = q => isBookingIntent(q) ? 'booking' : (answer(q).id || 'fallback');
